@@ -7,5 +7,5 @@
 ---
 
 <p align="center">
-  <img src="https://i.ibb.co/gMRCBVx/New-Project-1.png"/>
+  <img src="https://i.ibb.co/sw0N4xK/New-Project-1.png"/>
 </p>
