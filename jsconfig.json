@@ -1,5 +1,7 @@
 {
+  "include": ["./typed-router.d.ts"],
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"]
     }
