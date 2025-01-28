@@ -10,6 +10,7 @@ const props = defineProps({
   },
   type: {
     type: String,
+    default: 'text',
     required: true,
   },
   name: {
