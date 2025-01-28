@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
-import Button from '@/components/Button.vue';
-import Input from '@/components/Input.vue';
-import { goTo } from '../scripts/helper';
+import { ref } from "vue";
+import axios from "axios";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+import Button from "@/components/Button.vue";
+import Input from "@/components/Input.vue";
+import { goTo } from "../scripts/helper";
 
 const toast = useToast();
-const code = ref('');
+const code = ref("");
 
 function codeRegex(code) {
   return /^[a-zA-Z0-9]{6}$/.test(code);
@@ -17,9 +17,9 @@ function codeRegex(code) {
 function codeValid() {
   if (!codeRegex(code.value)) {
     toast.add({
-      severity: 'error',
-      summary: 'Errore',
-      detail: 'Formato del codice non valido',
+      severity: "error",
+      summary: "Errore",
+      detail: "Formato del codice non valido",
     });
     return;
   }
@@ -34,16 +34,16 @@ function codeValid() {
     .then((res) => {
       if (res.status === 200) {
         toast.add({
-          severity: 'success',
-          summary: 'Successo',
-          detail: 'Modulo trovato',
+          severity: "success",
+          summary: "Successo",
+          detail: "Modulo trovato",
         });
         //redirect al modulo
       }
       toast.add({
-        severity: 'error',
-        summary: 'Errore',
-        detail: 'Errore durante la ricerca del modulo',
+        severity: "error",
+        summary: "Errore",
+        detail: "Errore durante la ricerca del modulo",
       });
     });
 }
