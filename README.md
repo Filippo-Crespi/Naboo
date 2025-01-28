@@ -1,6 +1,6 @@
 # Forms
 
-"La piattaforma consente la creazione e la compilazione di moduli online, garantendo un’esperienza
+" La piattaforma consente la creazione e la compilazione di moduli online, garantendo un’esperienza
 semplice e sicura. Gli utenti registrati possono progettare questionari personalizzati, con la
 possibilità di rendere le risposte anonime. Ognuno di essi è accessibile tramite un codice univoco
 dove poi i risultati saranno consultabili tramite email o in un file scaricabile. L’interfaccia
