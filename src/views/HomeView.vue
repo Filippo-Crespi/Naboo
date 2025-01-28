@@ -1,16 +1,21 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import router from '@/router';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import Button from '@/components/Button.vue';
 import Input from '@/components/Input.vue';
-import { goTo } from '../scripts/helper';
 
 const toast = useToast();
 const code = ref('');
 
+function goTo(path) {
+  router.push(path);
+}
+
 function codeRegex(code) {
+  return false;
   return false;
 }
 function codeValid() {
@@ -32,11 +37,6 @@ function codeValid() {
     })
     .then((res) => {
       if (res.status === 200) {
-        toast.add({
-          severity: 'success',
-          summary: 'Successo',
-          detail: 'Modulo trovato',
-        });
         //redirect al modulo
         return;
       }
@@ -66,6 +66,7 @@ function codeValid() {
           icon="material-symbols:add-diamond-rounded" />
         <p class="mt-4">
           Gi&agrave; registrato?
+          <router-link to="/login" class="text-white">Entra</router-link>
           <router-link to="/login" class="text-white">Entra</router-link>
         </p>
       </div>
