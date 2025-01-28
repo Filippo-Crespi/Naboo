@@ -1,18 +1,22 @@
 <script setup>
-import { Icon } from '@iconify/vue';
+import { Icon } from "@iconify/vue";
 
 const props = defineProps({
   text: {
     type: String,
-    default: '',
+    default: "",
   },
   dim: {
     type: String,
-    default: 'r',
+    default: "r",
   },
   icon: {
     type: String,
-    default: '',
+    default: "",
+  },
+  color: {
+    type: String,
+    default: "#000",
   },
 });
 </script>
@@ -21,7 +25,7 @@ const props = defineProps({
   <div>
     <button
       :class="[
-        `bg-violet-700 border-none text-white cursor-pointer font-semibold ${
+        `bg-[${color}] border-none text-white cursor-pointer font-semibold ${
           dim == 's' ? 'h-8 rounded-md' : dim == 'r' ? 'h-11 rounded-lg' : 'h-13 rounded-lg'
         } ${
           icon && text
