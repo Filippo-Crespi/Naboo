@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --font-sans: 'Rubik', sans-serif;
+  --p-toast-error-background: #ffffff;
+}
+
+#app {
+  font-size: 16px;
+  color: #333;
+  min-height: 100vh;
+}
+
+iconify-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
