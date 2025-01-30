@@ -13,7 +13,7 @@ email o download."
 ## Modello ER
 
 <p align="center">
-  <img src="https://i.ibb.co/DCMBFGL/406675356-49853a03-fb37-4e0c-ac16-6de480b85fe5.jpg"/>
+  <img src="https://i.ibb.co/B5sPqCjV/Modello-ER.jpg" alt="Modello-ER" border="0">
 </p>
 
 ## Funzionalità principali
