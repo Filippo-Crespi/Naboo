@@ -18,6 +18,10 @@ const props = defineProps({
     type: String,
     default: "#000",
   },
+  border: {
+    type: String,
+    default: "none",
+  },
 });
 </script>
 
@@ -25,23 +29,24 @@ const props = defineProps({
   <div>
     <button
       :class="[
-        `bg-[${color}] border-none text-white cursor-pointer font-semibold ${
+        `bg-[${color}] text-white cursor-pointer font-semibold ${
           dim == 's' ? 'h-8 rounded-md' : dim == 'r' ? 'h-11 rounded-lg' : 'h-13 rounded-lg'
-        } ${
-          icon && text
-            ? dim == 's'
-              ? 'pl-3 pr-4 gap-1'
-              : dim == 'r'
-              ? 'pl-3 pr-4 gap-2'
-              : 'pl-7 pr-8 gap-2'
-            : icon
-            ? dim == 's'
-              ? 'py-2 pl-2 pr-2'
-              : dim == 'r'
-              ? 'py-3 pl-3 pr-3'
-              : 'py-3.5 pl-3.5 pr-3.5'
-            : 'px-4'
-        }`,
+        } ${border == 'none' ? 'border-none' : `border-2 border-[${border}]`}
+  ${
+    icon && text
+      ? dim == 's'
+        ? 'pl-3 pr-4 gap-1'
+        : dim == 'r'
+        ? 'pl-3 pr-4 gap-2'
+        : 'pl-7 pr-8 gap-2'
+      : icon
+      ? dim == 's'
+        ? 'py-2 pl-2 pr-2'
+        : dim == 'r'
+        ? 'py-3 pl-3 pr-3'
+        : 'py-3.5 pl-3.5 pr-3.5'
+      : 'px-4'
+  }`,
         icon ? 'flex flex-row items-center' : '',
       ]"
       type="button">

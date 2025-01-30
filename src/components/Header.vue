@@ -1,11 +1,11 @@
 <script setup>
-import AppearIcon from './AppearIcon.vue';
-import { goTo } from '../scripts/helper';
+import AppearIcon from "./AppearIcon.vue";
+import { goTo } from "../scripts/helper";
 </script>
 
 <template>
   <div
-    class="absolute top-6 left-[50%] transform -translate-x-1/2 flex justify-center gap-4 p-4 rounded-4xl bg-amber-300 backdrop-blur-2xl">
+    class="absolute top-6 left-[50%] transform -translate-x-1/2 flex justify-center gap-4 p-4 rounded-4xl bg-pink-300 backdrop-blur-2xl">
     <div class="appear-icon">
       <AppearIcon
         text="Home"
