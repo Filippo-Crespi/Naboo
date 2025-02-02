@@ -1,34 +1,40 @@
 <script setup>
-import Input from "@/components/Input.vue";
-import Button from "@/components/Button.vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
+import InputText from "primevue/inputtext";
+import Password from "primevue/password";
+import Button from "primevue/button";
+import FloatLabel from "primevue/floatlabel";
 import $ from "jquery";
-import { ref } from "vue";
 window.$ = $;
-
 const toast = useToast();
 </script>
 
 <template>
   <Toast />
   <div class="flex items-center justify-center h-screen w-full">
-    <div class="bg-[#83d4c0] p-12 flex flex-col items-center gap-4 rounded-3xl">
-      <h1 class="text-center font-bold text-3xl">Registrati</h1>
-      <!-- divider -->
-      <div>
-        <Input type="text" placeholder="Nome" />
-      </div>
-      <div>
-        <Input type="text" placeholder="Cognome" />
-      </div>
-      <div>
-        <Input type="email" placeholder="Email" />
-      </div>
-      <div>
-        <Input type="password" placeholder="Password" />
-      </div>
-      <Button text="Invia" dim="r" icon="material-symbols:send-rounded" />
+    <div class="flex flex-col gap-2">
+      <FloatLabel variant="on">
+        <InputText inputId="Nome" />
+        <label for="Nome">Nome</label>
+      </FloatLabel>
+      <FloatLabel variant="on">
+        <InputText inputId="Cognome" />
+        <label for="Cognome">Cognome</label>
+      </FloatLabel>
+      <FloatLabel variant="on">
+        <InputText inputId="username" />
+        <label for="username">Nome utente</label>
+      </FloatLabel>
+      <FloatLabel variant="on">
+        <InputText inputId="Email" type="email" />
+        <label for="Email">Email</label>
+      </FloatLabel>
+      <FloatLabel variant="on">
+        <Password inputId="Password" />
+        <label for="Password">Password</label>
+      </FloatLabel>
+      <Button type="button" label="Registrati" icon="pi pi-user-plus" />
     </div>
   </div>
 </template>
