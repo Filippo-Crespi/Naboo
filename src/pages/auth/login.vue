@@ -1,6 +1,6 @@
 <script setup>
-import InputText from "primevue/inputtext";
 import Password from "primevue/password";
+import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import FloatLabel from "primevue/floatlabel";
 </script>
