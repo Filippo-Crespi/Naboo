@@ -1,27 +1,33 @@
 <script setup>
-import Password from "primevue/password";
-import InputText from "primevue/inputtext";
-import Button from "primevue/button";
-import FloatLabel from "primevue/floatlabel";
+import { InputText, Password, Button, FloatLabel, Divider, Toast, Card } from "primevue";
+import { ref } from "vue";
+
+const password = ref("");
+const username = ref("");
 </script>
 
 <template>
   <Toast />
   <div class="flex items-center justify-center h-screen w-full">
-    <div class="flex flex-col gap-2">
-      <FloatLabel variant="on">
-        <InputText inputId="username" />
-        <label for="username">Nome utente</label>
-      </FloatLabel>
-      <FloatLabel variant="on">
-        <InputText inputId="Email" type="email" />
-        <label for="Email">Email</label>
-      </FloatLabel>
-      <FloatLabel variant="on">
-        <Password inputId="Password" />
-        <label for="Password">Password</label>
-      </FloatLabel>
-      <Button type="button" label="Entra" icon="pi pi-sign-in" />
-    </div>
+    <Card class="p-4">
+      <template #title
+        ><span class="font-bold text-4xl">Accesso</span>
+        <Divider />
+      </template>
+      <template #content>
+        <div class="m-0 flex flex-col gap-2">
+          <FloatLabel variant="on">
+            <InputText inputId="Email" type="email" class="w-full" v-model="email" />
+            <label for="Email">Email</label>
+          </FloatLabel>
+          <FloatLabel variant="on">
+            <Password inputId="Password" v-model="password" />
+            <label for="Password">Password</label>
+          </FloatLabel>
+        </div>
+        <Divider />
+        <Button type="button" label="Accedi" icon="pi pi-sign-in" class="w-full" />
+      </template>
+    </Card>
   </div>
 </template>
