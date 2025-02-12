@@ -3,9 +3,12 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { InputText, Button, Password, FloatLabel, Card, Divider } from "primevue";
 import { ref } from "vue";
-const toast = useToast();
+import AuthAPI from "../../services/AuthAPI";
 
-function register() {
+const toast = useToast();
+const loading = ref(false);
+
+async function register() {
   for (const key in user.value) {
     if (!user.value[key]) {
       toast.add({
@@ -16,6 +19,30 @@ function register() {
       });
       return;
     }
+  }
+
+  try {
+    loading.value = true;
+    const res = await AuthAPI.postRegister({ user: user.value });
+    if (!res.data.success) {
+      toast.add({
+        severity: "error",
+        summary: "Errore",
+        detail: "Utente giá registrato",
+        life: 2500,
+      });
+    } else {
+      goTo(`/login`);
+    }
+  } catch (err) {
+    toast.add({
+      severity: "error",
+      summary: "Errore",
+      detail: "Errore del server, riprovare",
+      life: 2500,
+    });
+  } finally {
+    loading.value = false;
   }
 }
 
@@ -71,7 +98,12 @@ const user = ref({
             </FloatLabel>
           </div>
           <Divider />
-          <Button type="button" label="Registrati" icon="pi pi-user-plus" @click="register()" />
+          <Button
+            type="button"
+            label="Registrati"
+            icon="pi pi-user-plus"
+            @click="register()"
+            :loading="loading" />
         </div>
       </template>
     </Card>

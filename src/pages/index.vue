@@ -2,7 +2,7 @@
 import { Button, FloatLabel, InputText, Toast, Card, Divider, useToast } from "primevue";
 import { ref } from "vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-import { goTo } from "../scripts/helper";
+import { goTo } from "@/scripts/helper";
 
 import FormAPI from "../services/FormAPI";
 
