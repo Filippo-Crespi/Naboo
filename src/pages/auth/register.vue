@@ -2,9 +2,7 @@
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { InputText, Button, Password, FloatLabel, Card, Divider } from "primevue";
-import $ from "jquery";
 import { ref } from "vue";
-window.$ = $;
 const toast = useToast();
 
 const user = ref({});
@@ -14,25 +12,6 @@ const surname = ref("");
 const email = ref("");
 const password = ref("");
 const username = ref("");
-
-$.ajax({
-  url: "http://localhost/Forms/src/api/services/register.php",
-  type: "POST",
-  data: {
-    name: name.value,
-    surname: surname.value,
-    email: email.value,
-    password: password.value,
-    username: username.value,
-  },
-  success: function (data) {
-    // get token
-    // start session
-  },
-  error: function () {
-    // unvalid data
-  },
-});
 </script>
 
 <template>
