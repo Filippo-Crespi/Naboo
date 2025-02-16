@@ -6,7 +6,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
-import Material from "@primevue/themes/material";
+import Lara from "@primevue/themes/lara";
 
 const app = createApp(App);
 
@@ -14,7 +14,7 @@ app.use(createPinia());
 app.use(router);
 app.use(PrimeVue, {
   theme: {
-    preset: Material,
+    preset: Lara,
     options: {
       prefix: "p",
       darkModeSelector: "system",
