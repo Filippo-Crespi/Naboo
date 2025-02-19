@@ -2,12 +2,12 @@ import API from "./API";
 
 export default {
   postLogin(data) {
-    return API().post("/auth/login.php", data);
+    return API().post("/services/login.php", data);
   },
   postRegister(data) {
-    return API().post("/auth/register.php", data);
+    return API().post("/services/register.php", data);
   },
   getUser(token) {
-    return API().get(`/auth/getUser.php?token=${token}`);
+    return API().get(`/services/getUser.php?token=${token}`);
   },
 };

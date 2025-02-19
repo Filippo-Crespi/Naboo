@@ -1,46 +1,34 @@
 <?php
-require_once('database.php');
+require_once 'connection.php';
 
-if (isset($_POST['register'])) {
-  $username = $_POST['username'] ?? '';
-  $password = $_POST['password'] ?? '';
-  $name = $_POST['name'];
-  $email = $_POST['email'];
-  $cognome = $_POST['surname'];
+if (isset($_POST)) {
+  $dati = json_decode(file_get_contents("php://input"), true);
+
+  $username = $dati['username'];
+  $password = $dati['password'];
+  $name = $dati['name'];
+  $email = $dati['email'];
+  $cognome = $dati['surname'];
 
   $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-  $query = "
-            SELECT id
-            FROM users
-            WHERE username = :username
-        ";
-
-  $check = $pdo->prepare($query);
-  $check->bindParam(':username', $username, PDO::PARAM_STR);
-  $check->execute();
-
-  $user = $check->fetchAll(PDO::FETCH_ASSOC);
-
-  if (count($user) > 0) {
-    $msg = 'Username già in uso %s';
+  $sql = "SELECT id FROM users WHERE email = '$email'";
+  $result = mysqli_query($conn, $sql);
+  if (mysqli_num_rows($result) > 0) {
+    $msg = "Utente già registrato";
+    $risposta = array(
+      "success" => false,
+      "msg" => $msg,
+    );
   } else {
-    $query = "
-                INSERT INTO users
-                VALUES (0, :username, :password)
-            ";
-
-    $check = $pdo->prepare($query);
-    $check->bindParam(':username', $username, PDO::PARAM_STR);
-    $check->bindParam(':password', $password_hash, PDO::PARAM_STR);
-    $check->execute();
-
-    if ($check->rowCount() > 0) {
-      $msg = 'Registrazione eseguita con successo';
-    } else {
-      $msg = 'Problemi con l\'inserimento dei dati %s';
-    }
+    $sql = "INSERT INTO users(username, password, name, email, surname) VALUES ( '$username', '$password_hash', '$name', '$email', '$cognome');";
+    $result = mysqli_query($conn, $sql);
+    $msg = " ";
+    $risposta = array(
+      "success" => true,
+      "msg" => $msg,
+    );
   }
+  echo json_encode($risposta);
+  $conn->close();
 }
-
-printf($msg, '<a href="../register.html">torna indietro</a>');

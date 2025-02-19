@@ -1,9 +1,8 @@
 <script setup>
-import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
-import { InputText, Button, Password, FloatLabel, Card, Divider } from "primevue";
+import { InputText, Button, Password, FloatLabel, Card, Divider, Toast, useToast } from "primevue";
 import { ref } from "vue";
 import AuthAPI from "../../services/AuthAPI";
+import { goTo } from "@/scripts/helper";
 
 const toast = useToast();
 const loading = ref(false);
@@ -23,12 +22,19 @@ async function register() {
 
   try {
     loading.value = true;
-    const res = await AuthAPI.postRegister({ user: user.value });
+    let data = {
+      name: user.value.name,
+      surname: user.value.surname,
+      email: user.value.email,
+      username: user.value.username,
+      password: user.value.password,
+    };
+    const res = await AuthAPI.postRegister(data);
     if (!res.data.success) {
       toast.add({
         severity: "error",
         summary: "Errore",
-        detail: "Utente giá registrato",
+        detail: res.data.msg,
         life: 2500,
       });
     } else {
@@ -43,6 +49,7 @@ async function register() {
     });
   } finally {
     loading.value = false;
+    goTo(`/auth/login`);
   }
 }
 

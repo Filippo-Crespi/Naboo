@@ -2,6 +2,7 @@
 import { InputText, Password, Button, FloatLabel, Divider, Toast, Card, useToast } from "primevue";
 import { ref } from "vue";
 import AuthAPI from "../../services/AuthAPI";
+import { goTo } from "@/scripts/helper";
 
 const loading = ref(false);
 const toast = useToast();
@@ -21,12 +22,16 @@ async function login() {
 
   try {
     loading.value = true;
-    const res = await AuthAPI.postLogin({ user: user.value });
+    const data = {
+      email: user.value.email,
+      password: user.value.password,
+    };
+    const res = await AuthAPI.postLogin(data);
     if (!res.data.success) {
       toast.add({
         severity: "error",
         summary: "Errore",
-        detail: "Utente non registrato",
+        detail: res.data.msg,
         life: 2500,
       });
     } else {

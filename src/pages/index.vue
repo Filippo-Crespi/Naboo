@@ -53,7 +53,8 @@ async function codeValid() {
 
 <template>
   <Toast />
-  <div class="flex sm:flex-row flex-col-reverse h-screen">
+  <div
+    class="flex sm:flex-row flex-col-reverse h-screen bg-[url('/imgs/home/background.png')] bg-cover bg-center">
     <div class="w-full h-1/2 sm:h-full bg-blue-200 sm:flex sm:items-center sm:justify-center">
       <Card
         class="flex items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
