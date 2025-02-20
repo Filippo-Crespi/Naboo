@@ -7,7 +7,7 @@ export default {
   postRegister(data) {
     return API().post("/services/register.php", data);
   },
-  getUser(token) {
-    return API().get(`/services/getUser.php?token=${token}`);
+  postUser(data) {
+    return API().post(`/services/postUser.php`, data);
   },
 };

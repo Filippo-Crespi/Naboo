@@ -12,6 +12,6 @@ watch(route, (newRoute) => {
 </script>
 
 <template>
-  <Header v-if="!isDashboard" />
+  <!-- <Header v-if="!isDashboard" /> -->
   <RouterView />
 </template>

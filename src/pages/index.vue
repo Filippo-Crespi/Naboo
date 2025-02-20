@@ -54,60 +54,52 @@ async function codeValid() {
 <template>
   <Toast />
   <div
-    class="flex sm:flex-row flex-col-reverse h-screen bg-[url('/imgs/home/background.png')] bg-cover bg-center">
-    <div class="w-full h-1/2 sm:h-full bg-blue-200 sm:flex sm:items-center sm:justify-center">
-      <Card
-        class="flex items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
-        <template #title>
-          <span class="text-center font-black text-4xl uppercase">Crea un modulo</span>
-        </template>
-        <template #content>
-          <Divider align="center" type="solid">
-            <p>Registrazione necessaria</p>
-          </Divider>
-          <div class="flex flex-col gap-2 w-full">
-            <Button
-              icon="pi pi-user-plus"
-              label="Registrati"
-              as="router-link"
-              to="/auth/register"
-              class="w-full" />
-            <Button
-              class="w-full"
-              variant="outlined"
-              as="router-link"
-              to="/auth/login"
-              icon="pi pi-sign-in"
-              label="Entra" />
-          </div>
-        </template>
-      </Card>
+    class="flex sm:w-[170vw] sm:flex-row flex-col-reverse h-screen bg-[url('/imgs/home/background.png')] bg-cover bg-center">
+    <div class="w-full h-1/2 sm:h-full sm:flex sm:items-center sm:justify-center">
+      <div
+        class="container flex flex-col !bg-center !bg-contain bg-no-repeat !bg-[url('/imgs/home/box-1.png')] items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
+        <span class="text-center font-black text-4xl uppercase">Crea un modulo</span>
+        <Divider align="center" type="solid">
+          <p>Registrazione necessaria</p>
+        </Divider>
+        <div class="flex flex-col gap-2 w-full">
+          <Button
+            icon="pi pi-user-plus"
+            label="Registrati"
+            as="router-link"
+            to="/auth/register"
+            class="w-full" />
+          <Button
+            class="w-full"
+            variant="outlined"
+            as="router-link"
+            to="/auth/login"
+            icon="pi pi-sign-in"
+            label="Entra" />
+        </div>
+      </div>
     </div>
     <Divider v-if="dim.isSmaller('sm')" />
-    <div class="w-full h-1/2 sm:h-full bg-emerald-200 sm:flex sm:items-center sm:justify-center">
-      <Card
-        class="flex items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
-        <template #title>
-          <span class="text-center font-black text-4xl uppercase">Compila un modulo</span>
-        </template>
-        <template #content>
-          <Divider align="center" type="solid">
-            <p>Inserisci il codice fornito</p>
-          </Divider>
-          <div class="flex flex-col items-center gap-2">
-            <FloatLabel variant="on" class="w-full">
-              <label for="code">Codice</label>
-              <InputText id="code" v-model="code" class="w-full" />
-            </FloatLabel>
-            <Button
-              class="w-full"
-              :loading="loading"
-              icon="pi pi-search"
-              label="Cerca modulo"
-              @click="codeValid()" />
-          </div>
-        </template>
-      </Card>
+    <div class="flex w-full h-1/2 sm:h-full sm:flex sm:items-center sm:justify-center">
+      <div
+        class="container flex flex-col !bg-center !bg-contain bg-no-repeat !bg-[url('/imgs/home/box-2.png')] items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
+        <span class="text-center font-black text-4xl uppercase">Compila un modulo</span>
+        <Divider align="center" type="solid">
+          <p>Inserisci il codice fornito</p>
+        </Divider>
+        <div class="flex flex-col items-center gap-2">
+          <FloatLabel variant="on" class="w-full">
+            <label for="code">Codice</label>
+            <InputText id="code" v-model="code" class="w-full" />
+          </FloatLabel>
+          <Button
+            class="w-full"
+            :loading="loading"
+            icon="pi pi-search"
+            label="Cerca modulo"
+            @click="codeValid()" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
