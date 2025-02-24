@@ -2,66 +2,37 @@
 import { Button, FloatLabel, InputText, Toast, Card, Divider, useToast } from "primevue";
 import { ref } from "vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-import { goTo } from "@/scripts/helper";
-
+import { goTo, compileForm } from "../scripts/helper.js";
 import FormAPI from "../services/FormAPI";
 
 const dim = useBreakpoints(breakpointsTailwind);
 const toast = useToast();
 const code = ref("");
 const loading = ref(false);
-
-function codeRegex(code) {
-  return /^[a-zA-Z0-9]{6}$/.test(code);
-}
-
-async function codeValid() {
-  if (!codeRegex(code.value)) {
-    toast.add({
-      severity: "error",
-      summary: "Errore",
-      detail: "Formato del codice non valido",
-      life: 2500,
-    });
-    return;
-  }
-  loading.value = true;
-  try {
-    const res = await FormAPI.getForm({ code: code.value });
-    if (!res.data.success) {
-      toast.add({
-        severity: "error",
-        summary: "Errore",
-        detail: "Modulo non trovato",
-        life: 2500,
-      });
-    } else {
-      goTo(`/modules/${res.data.code}`);
-    }
-  } catch (err) {
-    toast.add({
-      severity: "error",
-      summary: "Errore",
-      detail: "Errore del server, riprovare",
-      life: 2500,
-    });
-  } finally {
-    loading.value = false;
-  }
-}
 </script>
 
 <template>
   <Toast />
-  <div
-    class="flex sm:w-[170vw] sm:flex-row flex-col-reverse h-screen bg-[url('/imgs/home/background.png')] bg-cover bg-center">
-    <div class="w-full h-1/2 sm:h-full sm:flex sm:items-center sm:justify-center">
-      <div
-        class="container flex flex-col !bg-center !bg-contain bg-no-repeat !bg-[url('/imgs/home/box-1.png')] items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
+  <div class="w-[170vw] h-screen bg-[url('/imgs/home/background.png')] bg-cover bg-center relative">
+    <div class="absolute top-1/2 transform -translate-y-1/2 translate-x-1/2 max-w-[40vw]">
+      <img src="/imgs/home/box-1.png" alt="box-1" />
+      <div class="absolute top-1/2 transform -translate-y-1/2 translate-x-1/2">
         <span class="text-center font-black text-4xl uppercase">Crea un modulo</span>
         <Divider align="center" type="solid">
           <p>Registrazione necessaria</p>
         </Divider>
+      </div>
+    </div>
+
+    <div class="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2 max-w-[35vw]">
+      <img src="/imgs/home/box-2.png" alt="box-2" />
+    </div>
+  </div>
+
+  <!-- <div class="w-full h-1/2 sm:h-full sm:flex sm:items-center sm:justify-center">
+      <div
+        class="container flex flex-col !bg-center !bg-contain bg-no-repeat !bg-[url('/imgs/home/box-1.png')] items-center justify-center p-4 sm:p-12 h-full sm:h-auto !rounded-none sm:!rounded-2xl">
+        
         <div class="flex flex-col gap-2 w-full">
           <Button
             icon="pi pi-user-plus"
@@ -97,9 +68,8 @@ async function codeValid() {
             :loading="loading"
             icon="pi pi-search"
             label="Cerca modulo"
-            @click="codeValid()" />
+            @click="compileForm" />
         </div>
       </div>
-    </div>
-  </div>
+    </div> -->
 </template>
