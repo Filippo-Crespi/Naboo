@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+::root {
+  --font-sans: "Rubik", sans-serif;
+  --p-toast-error-background: #ffffff;
+}
+
+#app {
+  font-size: 16px;
+  color: #333;
+  min-height: 100vh;
+}

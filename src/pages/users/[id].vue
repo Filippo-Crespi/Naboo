@@ -1,5 +1,5 @@
 <script setup></script>
 
 <template>
-  <main>main view</main>
+  <div>{{ $route.params.id }}</div>
 </template>
