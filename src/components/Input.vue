@@ -1,12 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
-const model = ref('');
+const model = ref("");
 
 const props = defineProps({
   placeholder: {
     type: String,
-    default: 'placeholder',
+    default: "placeholder",
   },
   type: {
     type: String,
@@ -14,11 +14,11 @@ const props = defineProps({
   },
   name: {
     type: String,
-    default: '',
+    default: "",
   },
   id: {
     type: String,
-    default: '',
+    default: "",
   },
 });
 </script>
@@ -26,7 +26,7 @@ const props = defineProps({
 <template>
   <input
     :class="
-      type == 'text'
+      type
         ? 'w-full h-11 rounded-lg border-2 border-violet-300 bg-violet-100 bg py-[1.125rem] outline-0 pl-4'
         : ''
     "
