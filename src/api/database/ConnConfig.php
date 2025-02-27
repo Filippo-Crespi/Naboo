@@ -1,6 +1,5 @@
 <?php
-$dbname = "Naboo";
+$dbname = "naboo";
 $dbuser = "root";
 $dbpassword = "";
 $dbhost = "localhost";
-?>

@@ -7,6 +7,14 @@ import { goTo } from "@/scripts/helper";
 const toast = useToast();
 const loading = ref(false);
 
+const user = ref({
+  name: "",
+  surname: "",
+  email: "",
+  password: "",
+  username: "",
+});
+
 async function register() {
   for (const key in user.value) {
     if (!user.value[key]) {
@@ -22,7 +30,7 @@ async function register() {
 
   try {
     loading.value = true;
-    let data = {
+    const data = {
       name: user.value.name,
       surname: user.value.surname,
       email: user.value.email,
@@ -49,17 +57,9 @@ async function register() {
     });
   } finally {
     loading.value = false;
-    goTo(`/auth/login`);
+    // goTo(`/auth/login`);
   }
 }
-
-const user = ref({
-  name: "",
-  surname: "",
-  email: "",
-  password: "",
-  username: "",
-});
 </script>
 
 <template>
