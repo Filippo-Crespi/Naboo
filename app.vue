@@ -1,10 +1,5 @@
-<script setup>
-const val = ref("");
-</script>
+<script setup></script>
 
 <template>
-  <div class="p-10">
-    <UInput v-model="val" />
-    {{ val }}
-  </div>
+  <div></div>
 </template>
