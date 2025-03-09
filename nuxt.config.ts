@@ -6,6 +6,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/icon", "@nuxtjs/google-fonts", "@vueuse/nuxt", "@primevue/nuxt-module"],
   css: ["~/assets/css/main.css"],
+  routeRules: {
+    "/pages/**": {
+      cors: true,
+    },
+  },
   googleFonts: {
     families: {
       Rubik: true,
