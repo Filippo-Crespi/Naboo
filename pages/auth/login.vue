@@ -54,8 +54,8 @@ const user = ref<User>({
 
 <template>
   <Toast />
-  <div class="flex items-center justify-center h-screen w-full">
-    <Card class="p-4">
+  <div class="flex items-center justify-center h-screen w-full bg-[#68d4bc]">
+    <Card class="!py-8 !px-4">
       <template #title
         ><span class="font-bold text-4xl">Accesso</span>
         <Divider />

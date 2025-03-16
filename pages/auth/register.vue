@@ -60,8 +60,8 @@ async function register() {
 
 <template>
   <Toast />
-  <div class="flex items-center justify-center h-screen w-full">
-    <Card class="p-4">
+  <div class="flex items-center justify-center h-screen w-full bg-[#88b4d4]">
+    <Card class="!py-8 !px-4">
       <template #title
         ><span class="font-bold text-4xl">Registrati</span>
         <Divider />
