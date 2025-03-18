@@ -18,17 +18,14 @@ async function login() {
 
   try {
     loading.value = true;
-    const res: Response = await $fetch("https://andrellaveloise.it/api/autenticazione/login.php", {
+    const res = await $fetch("https://andrellaveloise.it/login", {
       method: "POST",
-      body: JSON.stringify(user.value),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: user.value,
     });
-    if (res.ok) {
-      // setta il token
-      const data = await res.json();
-      // data.token
-      // reindirzza alla dashboard
-      router.push("/dashboard");
-    }
+    console.log(res);
   } catch (err) {
     toast.add({
       severity: "error",

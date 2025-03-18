@@ -4,7 +4,10 @@ definePageMeta({
 });
 </script>
 <template>
-  <div></div>
+  <div>
+    <DashboardToolbar />
+    <FormContainer class="!p-8" />
+  </div>
 </template>
 
 <style></style>

@@ -34,13 +34,14 @@ async function register() {
 
   try {
     loading.value = true;
-    const res: Response = await $fetch(
-      "https://andrellaveloise.it/api/autenticazione/register.php",
-      {
-        method: "POST",
-        body: JSON.stringify(user.value),
-      }
-    );
+    const res = await $fetch("https://andrellaveloise.it/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: user.value,
+    });
+
     if (res.ok) {
       // reindirizza alla dashboard
       router.push("/auth/login");
