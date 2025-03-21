@@ -2,6 +2,17 @@
 const loading = ref(false);
 const toast = useToast();
 const router = useRouter();
+let token = "";
+
+interface User {
+  email: string;
+  password: string;
+}
+
+const user = ref<User>({
+  email: "",
+  password: "",
+});
 
 async function login() {
   for (const key in user.value) {
@@ -25,7 +36,11 @@ async function login() {
       },
       body: user.value,
     });
-    console.log(res);
+    token = JSON.parse(res).token;
+    router.push("/dashboard");
+    if (token) {
+      document.cookie = `token=${token}; path=/;`;
+    }
   } catch (err) {
     toast.add({
       severity: "error",
@@ -37,16 +52,6 @@ async function login() {
     loading.value = false;
   }
 }
-
-interface User {
-  email: string;
-  password: string;
-}
-
-const user = ref<User>({
-  email: "",
-  password: "",
-});
 </script>
 
 <template>

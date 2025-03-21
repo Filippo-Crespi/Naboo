@@ -42,10 +42,8 @@ async function register() {
       body: user.value,
     });
 
-    if (res.ok) {
-      // reindirizza alla dashboard
-      router.push("/auth/login");
-    }
+    // reindirizza alla dashboard
+    router.push("/auth/login");
   } catch (err) {
     toast.add({
       severity: "error",
