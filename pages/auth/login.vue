@@ -29,15 +29,14 @@ async function login() {
 
   try {
     loading.value = true;
-    const { data, error, refresh } = await useFetch("https://andrellaveloise.it/login", {
+    const res = await $fetch("https://andrellaveloise.it/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: user.value,
     });
-
-    token = JSON.parse(data.value).token;
+    token = JSON.parse(res).token;
     const cookie = useCookie("token", {
       maxAge: 60 * 60 * 24 * 30, // 30 giorni
       path: "/",

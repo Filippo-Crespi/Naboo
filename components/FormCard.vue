@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 const props = defineProps({
   id: {
-    type: String,
+    type: Number,
     required: true,
   },
   title: {
