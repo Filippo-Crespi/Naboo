@@ -29,18 +29,22 @@ async function login() {
 
   try {
     loading.value = true;
-    const res = await $fetch("https://andrellaveloise.it/login", {
+    const { data, error, refresh } = await useFetch("https://andrellaveloise.it/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: user.value,
     });
-    token = JSON.parse(res).token;
+
+    token = JSON.parse(data.value).token;
+    const cookie = useCookie("token", {
+      maxAge: 60 * 60 * 24 * 30, // 30 giorni
+      path: "/",
+      watch: true,
+    });
+    cookie.value = token;
     router.push("/dashboard");
-    if (token) {
-      document.cookie = `token=${token}; path=/;`;
-    }
   } catch (err) {
     toast.add({
       severity: "error",
