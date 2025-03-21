@@ -58,6 +58,12 @@ async function login() {
 </script>
 
 <template>
+  <Button
+    icon="pi pi-crown"
+    class="!absolute top-4 left-4 z-10"
+    as="router-link"
+    to="/admin"
+    severity="danger" />
   <Toast />
   <div class="flex items-center justify-center h-screen w-full bg-[#68d4bc]">
     <Card class="!py-8 !px-4">
