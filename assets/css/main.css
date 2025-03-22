@@ -1,12 +1,16 @@
 @import "tailwindcss";
-@import "tailwindcss/preflight";
 @import "primeicons/primeicons.css";
 
-#__nuxt {
+body {
   min-height: 100dvh;
   min-width: 100dvw;
 }
 
 * {
   font-family: Rubik;
+}
+
+.p-tablist-tab-list {
+  flex-direction: column;
+  gap: 1rem;
 }

@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <nav class="flex items-center justify-between bg-gray-300 !p-4 rounded-b-2xl">
-      <span class="text-3xl font-bold">Naboo</span>
-      <span class="text-3xl font-bold">Admin</span>
-      <Button to="/auth/login" as="router-link" icon="pi pi-sign-out" severity="secondary" />
-    </nav>
+  <div class="w-full h-15 p-4 flex justify-end border-b-1 border-gray-200">
+    <div class="flex items-center gap-2">
+      <span class="text-gray-500">Nome cognome</span>
+      <Avatar shape="circle" image="https://placehold.co/32" />
+    </div>
   </div>
 </template>
 
