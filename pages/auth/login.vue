@@ -36,7 +36,7 @@ async function login() {
       },
       body: user.value,
     });
-    token = JSON.parse(res).token;
+    token = JSON.parse(res).data.token;
     const cookie = useCookie("token", {
       maxAge: 60 * 60 * 24 * 30, // 30 giorni
       path: "/",

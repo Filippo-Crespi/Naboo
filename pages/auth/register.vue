@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { Error, Response } from "~/types";
+
 const toast = useToast();
 const loading = ref(false);
 const router = useRouter();
@@ -34,21 +36,22 @@ async function register() {
 
   try {
     loading.value = true;
-    const res = await $fetch("https://andrellaveloise.it/register", {
+    const res: Response = await $fetch("https://andrellaveloise.it/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: user.value,
     });
-
-    // reindirizza alla dashboard
     router.push("/auth/login");
+
+    // if (JSON.(res).success) {
+    // }
   } catch (err) {
     toast.add({
       severity: "error",
-      summary: (err as Error).name,
-      detail: (err as Error).message,
+      summary: "Errore",
+      detail: "Utente già registrato",
       life: 2500,
     });
   } finally {
