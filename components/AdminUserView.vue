@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+import type { Response } from "~/types";
+
+const users = ref();
+const selectedUser = ref();
+const res: Response = await $fetch("https://andrellaveloise.it/users");
+users.value = res.data;
+</script>
 <template>
   <div class="flex">
     <Dialog modal>
@@ -26,34 +34,20 @@
       <DataTable
         v-model:selection="selectedUser"
         selection-mode="single"
-        dataKey="id"
-        sort-field="id"
+        dataKey="ID_Utente"
+        sort-field="ID_Utente"
         striped-rows
         :value="users"
         paginator
         :rows="20">
-        <Column sortable field="id" header="ID" />
+        <Column sortable field="ID_Utente" header="ID" />
         <Column sortable field="nome" header="Nome" />
         <Column sortable field="cognome" header="Cognome" />
-        <Column field="mail" header="Email" />
+        <Column field="email" header="Email" />
       </DataTable>
     </ScrollPanel>
     <AdminUserDetail v-if="selectedUser" :user="selectedUser" />
   </div>
 </template>
-
-<script lang="ts" setup>
-const users = ref();
-const selectedUser = ref();
-
-users.value = Array.from({ length: 20 }, (_, i) => ({
-  id: i + 1,
-  nome: `Nome${i + 1}`,
-  cognome: `Cognome${i + 1}`,
-  mail: `utente${i + 1}@example.com`,
-  username: `user${i + 1}`,
-  dataRegistrazione: new Date().toLocaleString(),
-}));
-</script>
 
 <style></style>

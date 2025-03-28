@@ -9,7 +9,9 @@
         <Button icon="pi pi-upload" severity="secondary" text />
         <Button icon="pi pi-file-pdf" class="mr-2" severity="secondary" text />
       </template>
-      <template #end><Avatar icon="pi pi-user" shape="circle" /> </template>
+      <template #end
+        ><Avatar @click="$emit('open-drawer')" icon="pi pi-user" shape="circle" />
+      </template>
     </Toolbar>
   </div>
 </template>

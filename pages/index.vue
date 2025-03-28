@@ -3,6 +3,11 @@ import { breakpointsTailwind } from "@vueuse/core";
 const bp = useBreakpoints(breakpointsTailwind);
 const toast = useToast();
 
+onMounted(() => {
+  useCookie("user").value = null;
+  useCookie("token").value = null;
+});
+
 const code = ref("");
 const loading = ref(false);
 async function search() {

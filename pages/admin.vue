@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { AdminUserView, AdminSessionView, AdminFormsView, AdminReportsView } from "#components";
-
 const dic = {
   AdminUserView: AdminUserView,
   AdminSessionView: AdminSessionView,
   AdminFormsView: AdminFormsView,
   AdminReportsView: AdminReportsView,
 };
-
 const tab = shallowRef(AdminUserView);
-
 const update = (name: string) => {
   tab.value = dic[name];
 };
@@ -31,5 +28,3 @@ const update = (name: string) => {
     </div>
   </div>
 </template>
-
-<style></style>

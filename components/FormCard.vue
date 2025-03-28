@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card class="max-w-64">
     <template #header><NuxtImg :src="image" /></template>
     <template #title>{{ title }}</template>
     <template #subtitle>{{ subtitle }}</template>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   id: {
     type: Number,
     required: true,
@@ -28,7 +28,7 @@ const props = defineProps({
   },
   image: {
     type: String,
-    default: "https://placehold.co/200x150",
+    default: "https://placehold.co/600x400",
   },
 });
 </script>

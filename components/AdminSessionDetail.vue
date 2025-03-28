@@ -7,19 +7,31 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div class="w-1/5 flex flex-col items-center gap-4 py-10 px-2 border-l-1 border-gray-200">
+  <div class="w-1/5 flex flex-col items-center gap-2 py-10 px-2 border-l-1 border-gray-200">
     <div class="flex flex-col items-center gap-2">
-      <span class="text-gray-400">{{ session.id }}</span>
+      <span class="text-gray-400">{{ session.ID_Sessione }}</span>
+      <Avatar
+        shape="circle"
+        size="xlarge"
+        :alt="`${session.nome} ${session.cognome}`"
+        :image="`https://ui-avatars.com/api/?name=${session.nome}+${session.cognome}&rounded=true&bold=true&background=random`"
+        class="w-24 h-24 rounded-full"
+        style="background-color: #f3f4f6" />
     </div>
     <div class="flex flex-col items-center">
       <span class="text-xl font-bold">{{ session.nome }} {{ session.cognome }}</span>
       <span class="text-gray-400 font-thin">@{{ session.username }}</span>
     </div>
-    <div class="flex flex-col items-center gap-2">
+    <Divider />
+    <div class="flex flex-col items-center">
+      <span class="text-gray-600">Creata il</span>
+      <span class="text-gray-400 font-thin">{{ session.DataInizio }}</span>
+    </div>
+    <div class="flex flex-col items-center">
       <Button
-        @click="$emit('deleteSession', session.id)"
+        @click="$emit('delete-session', session.Token)"
         icon="pi pi-trash"
-        class="w-full"
+        class="w-full mt-4"
         size="small"
         label="Sospendi"
         severity="warn"
@@ -27,5 +39,3 @@ const props = defineProps({
     </div>
   </div>
 </template>
-
-<style></style>

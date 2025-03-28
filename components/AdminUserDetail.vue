@@ -13,7 +13,7 @@ const sendMail = () => {
 <template>
   <div class="w-1/5 flex flex-col items-center gap-4 py-10 px-2 border-l-1 border-gray-200">
     <div class="flex flex-col items-center gap-2">
-      <span class="text-gray-400">{{ user.id }}</span>
+      <span class="text-gray-400">{{ user.ID_Utente }}</span>
       <Avatar
         shape="circle"
         size="xlarge"
