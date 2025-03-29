@@ -42,16 +42,22 @@ async function register() {
         "Content-Type": "application/json",
       },
       body: user.value,
+      onResponseError({ response }) {
+        throw new Error(response._data.message);
+      },
     });
+    toast.add({
+      severity: "success",
+      summary: res.message,
+      life: 2500,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     router.push("/auth/login");
-
-    // if (JSON.(res).success) {
-    // }
   } catch (err) {
     toast.add({
       severity: "error",
       summary: "Errore",
-      detail: "Utente già registrato",
+      detail: (err as Error).message,
       life: 2500,
     });
   } finally {
@@ -61,6 +67,7 @@ async function register() {
 </script>
 
 <template>
+  <HomeButton class="!absolute top-4 left-4" />
   <Toast />
   <div class="flex items-center justify-center h-screen w-full bg-[#88b4d4]">
     <Card class="!py-8 !px-4">

@@ -3,7 +3,7 @@ import type { Response, User } from "~/types";
 
 const router = useRouter();
 definePageMeta({
-  layout: "no-header",
+  layout: "header",
 });
 const isDrawerVisible = ref(false);
 

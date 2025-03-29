@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { breakpointsTailwind } from "@vueuse/core";
-const bp = useBreakpoints(breakpointsTailwind);
+definePageMeta({
+  layout: "header",
+});
 const toast = useToast();
 
 onMounted(() => {
@@ -11,27 +12,12 @@ onMounted(() => {
 const code = ref("");
 const loading = ref(false);
 async function search() {
-  // try {
-  //   loading.value = true;
-  //   const res = await useFetch("/api/forms/codeValidation", {
-  //     method: "POST",
-  //     body: JSON.stringify({ code: code.value }),
-  //   });
-  //   // reindirizza al form
-  // } catch (err) {
-  //   toast.add({
-  //     severity: "error",
-  //     summary: "Errore",
-  //     detail: (err as Error).message,
-  //   });
-  // } finally {
-  //   loading.value = false;
-  // }
   if (!code.value.match(/^[a-z0-9]{6,6}$/i)) {
     toast.add({
       severity: "error",
       summary: "Errore",
       detail: "Il codice deve essere di 6 caratteri alfanumerici",
+      life: 3000,
     });
   }
 }
@@ -40,12 +26,12 @@ async function search() {
 <template>
   <Toast />
   <div
-    class="h-[100dvh] flex flex-col sm:flex-row justify-around bg-[url('/imgs/home/background.png')] bg-cover bg-center"
-    style="background-size: cover">
-    <div class="h-1/2 sm:w-1/2 sm:h-auto flex flex-col items-center justify-center">
-      <Card class="!p-4 sm:!p-8 sm:max-w-3/4">
+    class="h-[100dvh] flex flex-col-reverse sm:flex-row bg-white sm:bg-[url('/imgs/home/background.png')] bg-cover bg-center">
+    <div class="h-4/9 sm:w-1/2 sm:h-auto flex flex-col items-center justify-center">
+      <Card
+        class="px-2 sm:p-8 h-full sm:h-auto w-full sm:w-auto !rounded-none sm:!rounded justify-start">
         <template #title>
-          <span class="sm:text-4xl text-3xl font-bold">Crea un modulo</span></template
+          <span class="sm:text-4xl text-2xl font-bold">Crea un modulo</span></template
         >
         <template #subtitle> <span>Account richiesto</span></template>
         <template #content
@@ -59,18 +45,19 @@ async function search() {
         ></template>
       </Card>
     </div>
-    <div class="h-1/2 sm:w-1/2 sm:h-auto flex flex-col items-center justify-center">
-      <Card class="sm:!p-8 !p-4 sm:max-w-3/4">
+    <div class="h-4/9 sm:w-1/2 sm:h-auto flex flex-col items-center justify-center">
+      <Card
+        class="px-2 sm:p-8 h-full sm:h-auto w-full sm:w-auto !rounded-none sm:!rounded justify-center">
         <template #title>
-          <span class="sm:text-4xl text-3xl font-bold">Compila un modulo</span></template
+          <span class="sm:text-4xl text-2xl font-bold">Compila un modulo</span></template
         >
         <template #subtitle> <span>Codice richiesto</span></template>
         <template #content
-          ><div class="flex flex-col sm:flex-row gap-2">
-            <InputText v-model="code" placeholder="Inserisci il codice" fluid /><Button
+          ><div class="flex flex-col gap-2">
+            <InputText v-model="code" placeholder="Inserisci il codice" /><Button
               icon="pi pi-search"
-              :label="bp.current().value.length === 0 ? 'Cerca' : ''"
               @click="search()"
+              label="Cerca"
               :loading="loading" /></div
         ></template>
       </Card>
