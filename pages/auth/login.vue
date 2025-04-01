@@ -3,7 +3,7 @@ import type { Response } from "~/types";
 import { breakpointsTailwind } from "@vueuse/core";
 
 const bp = useBreakpoints(breakpointsTailwind);
-const isMobile = bp.isSmaller("sm");
+const isMobile = ref(bp.isSmaller("sm"));
 
 const loading = ref(false);
 const toast = useToast();
@@ -67,7 +67,7 @@ async function login() {
 </script>
 
 <template>
-  <HomeButton class="!absolute bottom-8 right-8" />
+  <HomeButton class="!absolute top-4 left-4" />
   <Toast />
   <div class="flex items-center justify-center h-[100dvh] w-[100dvw] bg-[#68d4bc]">
     <div v-if="!isMobile">
@@ -76,24 +76,26 @@ async function login() {
           ><span class="font-bold text-4xl">Accesso</span>
           <Divider />
         </template>
-        <div class="m-0 flex flex-col gap-2">
-          <FloatLabel variant="on">
-            <InputText inputId="Email" type="email" v-model="user.email" />
-            <label for="Email">Email</label>
-          </FloatLabel>
-          <FloatLabel variant="on">
-            <Password inputId="Password" v-model="user.password" :feedback="false" />
-            <label for="Password">Password</label>
-          </FloatLabel>
-        </div>
-        <Divider />
-        <Button
-          type="button"
-          label="Accedi"
-          icon="pi pi-sign-in"
-          class="w-full"
-          @click="login()"
-          :loading="loading" />
+        <template #content>
+          <div class="flex flex-col gap-2">
+            <FloatLabel variant="on">
+              <InputText inputId="Email" type="email" v-model="user.email" />
+              <label for="Email">Email</label>
+            </FloatLabel>
+            <FloatLabel variant="on">
+              <Password inputId="Password" v-model="user.password" :feedback="false" />
+              <label for="Password">Password</label>
+            </FloatLabel>
+          </div>
+          <Divider />
+          <Button
+            type="button"
+            label="Accedi"
+            icon="pi pi-sign-in"
+            class="w-full"
+            @click="login()"
+            :loading="loading" />
+        </template>
       </Card>
     </div>
     <div v-else>
