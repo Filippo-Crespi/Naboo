@@ -2,7 +2,7 @@
   <div>
     <Toolbar>
       <template #start>
-        <span class="text-2xl font-bold">Naboo</span>
+        <Logo />
       </template>
       <template #center>
         <Button icon="pi pi-plus" class="mr-2" severity="secondary" text />

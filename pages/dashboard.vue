@@ -2,9 +2,7 @@
 import type { Response, User } from "~/types";
 
 const router = useRouter();
-definePageMeta({
-  layout: "header",
-});
+
 const isDrawerVisible = ref(false);
 
 onBeforeMount(() => {

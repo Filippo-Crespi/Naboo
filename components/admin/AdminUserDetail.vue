@@ -28,7 +28,7 @@ const sendMail = () => {
     </div>
     <div class="flex flex-col items-center">
       <span class="font-medium">Data registrazione</span>
-      <span class="text-gray-400 font-thin">{{ user.dataRegistrazione }}</span>
+      <span class="text-gray-400 font-thin">{{ user.dataReg }}</span>
     </div>
     <div class="flex flex-col items-center gap-2">
       <ButtonGroup>

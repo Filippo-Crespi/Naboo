@@ -18,18 +18,21 @@ try {
 const updateUser = async () => {
   try {
     loading.value = true;
-    const { data, error } = await useFetch("https://andrellaveloise.it/users?token=" + token, {
+    const res: Response = await $fetch("https://andrellaveloise.it/users?token=" + token, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: newUser.value,
+      onResponseError({ response }) {
+        throw new Error(response._data.message);
+      },
     });
-    if (!(data.value as Response).success) {
+    if (!res.success) {
       toast.add({
         severity: "error",
         summary: "Errore",
-        detail: (data.value as Response).message,
+        detail: res.message,
         life: 3000,
       });
     } else {
@@ -37,10 +40,16 @@ const updateUser = async () => {
         severity: "success",
         summary: "Successo",
         detail: "Utente aggiornato con successo",
+        life: 3000,
       });
     }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Errore",
+      detail: (error as Error).message,
+      life: 3000,
+    });
   } finally {
     loading.value = false;
   }
