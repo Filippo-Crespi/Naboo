@@ -38,6 +38,6 @@ try {
   <AccountDrawer v-model:visible="isDrawerVisible" />
   <div>
     <DashboardToolbar @open-drawer="isDrawerVisible = true" />
-    <FormContainer class="!p-8" />
+    <FormContainer />
   </div>
 </template>

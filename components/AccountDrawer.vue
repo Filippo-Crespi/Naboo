@@ -10,10 +10,21 @@ const loading = ref(false);
 try {
   const { data } = await useFetch("https://andrellaveloise.it/users?token=" + token, {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    onResponseError({ response }) {
+      throw new Error(response._data.message);
+    },
   });
   user.value = (data.value as Response).data[0] as User;
 } catch (error) {
-  console.error(error);
+  toast.add({
+    severity: "error",
+    summary: "Errore",
+    detail: (error as Error).message,
+    life: 3000,
+  });
 }
 const updateUser = async () => {
   try {
@@ -121,5 +132,3 @@ const newUser = ref<User>({
     </template>
   </Drawer>
 </template>
-
-<style></style>

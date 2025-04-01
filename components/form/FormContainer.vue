@@ -1,6 +1,27 @@
 <script lang="ts" setup>
-import type { User } from "~/types";
+import type { User, Response } from "~/types";
 const user = useCookie("user") as Ref<User>;
+const token = useCookie("token") as Ref<string>;
+const userForms = ref();
+const toast = useToast();
+
+// try {
+//   const { data } = useFetch("https://andrellaveloise.it/forms&token=" + token.value, {
+//     method: "GET",
+//     onResponseError({ response }) {
+//       throw new Error(response._data.message);
+//     },
+//   });
+//   userForms.value = (data.value as Response).data;
+// } catch (err) {
+//   toast.add({
+//     severity: "error",
+//     summary: "Errore",
+//     detail: (err as Error).message,
+//     life: 3000,
+//   });
+// }
+
 const forms = ref([
   {
     id: 1,
@@ -15,7 +36,8 @@ const forms = ref([
 ]);
 </script>
 <template>
-  <div>
+  <Toast />
+  <div class="!p-8">
     <span class="text-3xl font-bold"
       >Bentornato, {{ user !== undefined ? user.nome : "utente" }}
       {{ user !== undefined ? user.cognome : "utente" }}</span
@@ -30,5 +52,3 @@ const forms = ref([
     </div>
   </div>
 </template>
-
-<style></style>
