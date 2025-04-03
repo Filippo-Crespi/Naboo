@@ -1,10 +1,6 @@
 <template>
-  <div class="flex items-center gap-4">
-    <!-- <Icon name="charm:menu-hamburger" size="2rem" /> -->
+  <div class="flex items-center gap-4 h-20 w-full">
+    <img src="/imgs/logo.png" class="h-3/5" />
     <span class="text-4xl font-black uppercase">Naboo</span>
   </div>
 </template>
-
-<script lang="ts" setup></script>
-
-<style></style>

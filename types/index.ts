@@ -11,17 +11,17 @@ export interface Error {
 
 export interface User {
   ID_Utente: number;
-  nome: string;
-  cognome: string;
-  email: string;
-  password: string;
-  username: string;
+  Nome: string;
+  Cognome: string;
+  Email: string;
+  Password: string;
+  Username: string;
   DataReg: string;
 }
 
 export interface Session {
   ID_Sessione: number;
-  token: string;
+  Token: string;
   DataInizio: string;
   DataFine: string;
 }

@@ -1,9 +1,26 @@
 <script lang="ts" setup>
 import type { Response } from "~/types";
-
+const toast = useToast();
 const sessions = ref();
-const res: Response = await $fetch("https://andrellaveloise.it/sessions");
-sessions.value = res.data;
+try {
+  const res: Response = await $fetch("https://andrellaveloise.it/sessions?conferma=true", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    onResponseError({ response }) {
+      throw new Error(response._data.message);
+    },
+  });
+  sessions.value = res.data;
+} catch (error) {
+  toast.add({
+    severity: "error",
+    summary: "Errore",
+    detail: (error as Error).message,
+    life: 2500,
+  });
+}
 const selectedSession = ref(null);
 const deleteSession = async (token: string) => {
   try {
@@ -22,6 +39,7 @@ const deleteSession = async (token: string) => {
 };
 </script>
 <template>
+  <Toast />
   <div class="flex">
     <ScrollPanel class="w-4/5" style="height: calc(100vh - 60px)">
       <DataTable

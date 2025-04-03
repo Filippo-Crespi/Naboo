@@ -67,11 +67,11 @@ const updateUser = async () => {
 };
 
 const newUser = ref<User>({
-  nome: user.value?.nome!,
-  cognome: user.value?.cognome!,
-  username: user.value?.username!,
-  email: user.value?.email!,
-  password: user.value?.password!,
+  Nome: user.value?.Nome!,
+  Cognome: user.value?.Cognome!,
+  Username: user.value?.Username!,
+  Email: user.value?.Email!,
+  Password: user.value?.Password!,
   DataReg: user.value?.DataReg!,
   ID_Utente: user.value?.ID_Utente!,
 });
@@ -82,9 +82,9 @@ const newUser = ref<User>({
     <template #header>
       <div class="flex items-center gap-2">
         <Avatar
-          :image="`https://ui-avatars.com/api/?name=${user?.nome}+${user?.cognome}&rounded=true&bold=true&background=random`"
+          :image="`https://ui-avatars.com/api/?name=${user?.Nome}+${user?.Cognome}&rounded=true&bold=true&background=random`"
           shape="circle" />
-        <span class="font-bold">@{{ user?.username }}</span>
+        <span class="font-bold">@{{ user?.Username }}</span>
       </div>
     </template>
     <span class="text-sm text-gray-500 text-center w-full flex justify-center"
@@ -93,19 +93,19 @@ const newUser = ref<User>({
     <Divider>Modifica i tuoi dati</Divider>
     <div class="flex flex-col gap-4 py-4">
       <FloatLabel variant="on">
-        <InputText class="w-full" inputId="Nome" v-model="newUser.nome" />
+        <InputText class="w-full" inputId="Nome" v-model="newUser.Nome" />
         <label for="Nome">Nome</label>
       </FloatLabel>
       <FloatLabel variant="on">
-        <InputText class="w-full" inputId="Cognome" v-model="newUser.cognome" />
+        <InputText class="w-full" inputId="Cognome" v-model="newUser.Cognome" />
         <label for="Cognome">Cognome</label>
       </FloatLabel>
       <FloatLabel variant="on">
-        <InputText class="w-full" inputId="Email" v-model="newUser.email" />
+        <InputText class="w-full" inputId="Email" v-model="newUser.Email" />
         <label for="Email">Email</label>
       </FloatLabel>
       <FloatLabel variant="on">
-        <InputText class="w-full" inputId="Username" v-model="newUser.username" />
+        <InputText class="w-full" inputId="Username" v-model="newUser.Username" />
         <label for="Username">Username</label>
       </FloatLabel>
       <Button label="Salva" @click="updateUser" :loading="loading" icon="pi pi-save" />
