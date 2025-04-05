@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   min-height: 100dvh;
   min-width: 100dvw;

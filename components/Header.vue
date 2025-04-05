@@ -7,7 +7,7 @@
     </div>
     <div v-else>
       <div
-        class="fixed top-5 left-5 flex items-center justify-center gap-4 px-8 py-2 bg-[#ecfbf7] rounded-[4rem] shadow-2xl">
+        class="fixed top-5 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 px-8 py-2 bg-[#ecfbf7] rounded-[4rem] shadow-2xl">
         <Logo />
         <ButtonGroup>
           <Button icon="pi pi-home" label="Home" as="router-link" to="/" rounded />
