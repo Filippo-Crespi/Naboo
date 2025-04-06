@@ -7,7 +7,7 @@ const props = defineProps({
 });
 
 const sendMail = () => {
-  window.open(`mailto:${props.user.mail}`, "_blank");
+  window.open(`mailto:${props.user.Mail}`, "_blank");
 };
 </script>
 <template>
@@ -18,17 +18,17 @@ const sendMail = () => {
         shape="circle"
         size="xlarge"
         :alt="`${user.nome} ${user.cognome}`"
-        :image="`https://ui-avatars.com/api/?name=${user.nome}+${user.cognome}&rounded=true&bold=true&background=random`"
+        :image="`https://ui-avatars.com/api/?name=${user.Nome}+${user.Cognome}&rounded=true&bold=true&background=random`"
         class="w-24 h-24 rounded-full"
         style="background-color: #f3f4f6" />
     </div>
     <div class="flex flex-col items-center">
-      <span class="text-xl font-bold">{{ user.nome }} {{ user.cognome }}</span>
-      <span class="text-gray-400 font-thin">@{{ user.username }}</span>
+      <span class="text-xl font-bold">{{ user.Nome }} {{ user.Cognome }}</span>
+      <span class="text-gray-400 font-thin">@{{ user.Username }}</span>
     </div>
     <div class="flex flex-col items-center">
       <span class="font-medium">Data registrazione</span>
-      <span class="text-gray-400 font-thin">{{ user.dataReg }}</span>
+      <span class="text-gray-400 font-thin">{{ user.DataReg }}</span>
     </div>
     <div class="flex flex-col items-center gap-2">
       <ButtonGroup>
@@ -41,7 +41,7 @@ const sendMail = () => {
           severity="primary"
           rounded />
         <Button
-          @click="$emit('deleteUser', user.id)"
+          @click="$emit('deleteUser', user.ID_Utente)"
           icon="pi pi-trash"
           class="w-full"
           size="small"

@@ -1,29 +1,29 @@
 <script lang="ts" setup>
+import { ref } from "vue";
 import { AdminUserView, AdminSessionView, AdminFormsView, AdminReportsView } from "#components";
+
+// Mapping dei componenti
 const dic = {
-  AdminUserView: AdminUserView,
-  AdminSessionView: AdminSessionView,
-  AdminFormsView: AdminFormsView,
-  AdminReportsView: AdminReportsView,
+  AdminUserView,
+  AdminSessionView,
+  AdminFormsView,
+  AdminReportsView,
 };
-const tab = shallowRef(AdminUserView);
-const update = (name: string) => {
+
+const tab = ref(AdminUserView);
+
+const updateTab = (name: string) => {
   tab.value = dic[name];
 };
-// controlli su validità token admin
 </script>
+
 <template>
   <div class="flex">
-    <AdminNav
-      @update-tab="
-        (name) => {
-          update(name);
-        }
-      " />
+    <AdminNav @update-tab="updateTab" />
     <div class="w-full">
       <AdminHeader />
       <div>
-        <component :is="tab"></component>
+        <component :is="tab" />
       </div>
     </div>
   </div>

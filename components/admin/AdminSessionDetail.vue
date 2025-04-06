@@ -14,13 +14,13 @@ const props = defineProps({
         shape="circle"
         size="xlarge"
         :alt="`${session.nome} ${session.cognome}`"
-        :image="`https://ui-avatars.com/api/?name=${session.nome}+${session.cognome}&rounded=true&bold=true&background=random`"
+        :image="`https://ui-avatars.com/api/?name=${session.Nome}+${session.Cognome}&rounded=true&bold=true&background=random`"
         class="w-24 h-24 rounded-full"
         style="background-color: #f3f4f6" />
     </div>
     <div class="flex flex-col items-center">
-      <span class="text-xl font-bold">{{ session.nome }} {{ session.cognome }}</span>
-      <span class="text-gray-400 font-thin">@{{ session.username }}</span>
+      <span class="text-xl font-bold">{{ session.Nome }} {{ session.Cognome }}</span>
+      <span class="text-gray-400 font-thin">@{{ session.Username }}</span>
     </div>
     <Divider />
     <div class="flex flex-col items-center">
@@ -29,6 +29,7 @@ const props = defineProps({
     </div>
     <div class="flex flex-col items-center">
       <Button
+        v-if="session.Sospeso == 0"
         @click="$emit('delete-session', session.Token)"
         icon="pi pi-trash"
         class="w-full mt-4"

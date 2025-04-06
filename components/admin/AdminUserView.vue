@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Response } from "~/types";
+import type { Response, User } from "~/types";
 
 const users = ref();
 const selectedUser = ref();
@@ -41,9 +41,9 @@ users.value = res.data;
         paginator
         :rows="20">
         <Column sortable field="ID_Utente" header="ID" />
-        <Column sortable field="nome" header="Nome" />
-        <Column sortable field="cognome" header="Cognome" />
-        <Column field="email" header="Email" />
+        <Column sortable field="Nome" header="Nome" />
+        <Column sortable field="Cognome" header="Cognome" />
+        <Column sortable field="Email" header="Email" />
       </DataTable>
     </ScrollPanel>
     <AdminUserDetail v-if="selectedUser" :user="selectedUser" />

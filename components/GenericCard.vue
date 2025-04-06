@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col gap-6 items-start justify-start rounded-2xl shadow-2xl p-6 max-w-100 bg-white">
+    class="card flex flex-col gap-6 items-start justify-start rounded-2xl shadow-lg p-6 max-w-100 bg-white">
     <span class="text-4xl">{{ emoji }}</span>
     <div class="flex flex-col gap-1">
       <span class="text-xl font-bold">{{ title }}</span>
@@ -17,4 +17,9 @@ defineProps({
 });
 </script>
 
-<style></style>
+<style scoped>
+.card:hover {
+  transform: rotate(1deg);
+  transition: all 0.4s ease-in-out;
+}
+</style>
