@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { AdminUserView, AdminSessionView, AdminFormsView, AdminReportsView } from "#components";
+import {
+  AdminUserView, AdminSessionView, AdminFormsView, AdminReportsView
+} from "#components";
 
 // Mapping dei componenti
 const dic = {
@@ -19,11 +21,11 @@ const updateTab = (name: string) => {
 
 <template>
   <div class="flex">
-    <AdminNav @update-tab="updateTab" />
+    <AdminNav @update-tab="updateTab"/>
     <div class="w-full">
-      <AdminHeader />
+      <AdminHeader/>
       <div>
-        <component :is="tab" />
+        <component :is="tab"/>
       </div>
     </div>
   </div>

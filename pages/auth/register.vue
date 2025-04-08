@@ -1,29 +1,21 @@
 <script lang="ts" setup>
-import type { Error, Response } from "~/types";
+import type { Error, Response, UserRegister } from "~/types";
 
 const toast = useToast();
 const loading = ref(false);
 const router = useRouter();
 
-interface User {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  username: string;
-}
-
-const user = ref(<User>{
-  name: "",
-  surname: "",
-  email: "",
-  password: "",
-  username: "",
+const user = ref(<UserRegister>{
+  Nome: "",
+  Cognome: "",
+  Email: "",
+  Password: "",
+  Username: "",
 });
 
 async function register() {
   for (const key in user.value) {
-    if (!user.value[key as keyof User]) {
+    if (!user.value[key as keyof UserRegister]) {
       toast.add({
         severity: "error",
         summary: "Errore",
@@ -79,29 +71,29 @@ async function register() {
         <div class="m-0 flex flex-col gap-2">
           <div class="flex flex-col sm:flex-row gap-4">
             <FloatLabel variant="on">
-              <InputText inputId="Nome" v-model="user.name" />
+              <InputText inputId="Nome" v-model="user.Nome" />
               <label for="Nome">Nome</label>
             </FloatLabel>
             <FloatLabel variant="on">
-              <InputText inputId="Cognome" v-model="user.surname" />
+              <InputText inputId="Cognome" v-model="user.Cognome" />
               <label for="Cognome">Cognome</label>
             </FloatLabel>
           </div>
           <div>
             <FloatLabel variant="on">
-              <InputText inputId="Email" type="email" class="w-full" v-model="user.email" />
+              <InputText inputId="Email" type="email" class="w-full" v-model="user.Email" />
               <label for="Email">Email</label>
             </FloatLabel>
           </div>
           <div class="flex flex-col sm:flex-row gap-4">
             <FloatLabel variant="on">
-              <InputText inputId="username" v-model="user.username" />
+              <InputText inputId="username" v-model="user.Username" />
               <label for="username">Nome utente</label>
             </FloatLabel>
             <FloatLabel variant="on">
               <Password
                 inputId="Password"
-                v-model="user.password"
+                v-model="user.Password"
                 promptLabel="Scegli una password"
                 weakLabel="Troppo semplice"
                 mediumLabel="Normale"

@@ -19,9 +19,28 @@ export interface User {
   DataReg: string;
 }
 
+export interface UserLogin {
+  Email: string;
+  Password: string;
+}
+
+export interface UserRegister {
+  Nome: string;
+  Cognome: string;
+  Email: string;
+  Password: string;
+  Username: string;
+}
+
 export interface Session {
   ID_Sessione: number;
   Token: string;
   DataInizio: string;
   DataFine: string;
+}
+
+export interface Form {
+  Token: string;
+  Titolo: string;
+  Descrizione: string;
 }

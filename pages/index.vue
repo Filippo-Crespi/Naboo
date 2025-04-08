@@ -114,13 +114,13 @@ const howItWorks = [
           variant="link"
           as="a"
           href="#funzionalita"
-          icon="pi-cog"
+          icon="pi pi-cog"
           label="Funzionalit&agrave;" />
         <Button
           variant="link"
           as="a"
           href="#comefunziona"
-          icon="pi-question-circle"
+          icon="pi pi-question-circle"
           label="Come funziona" />
       </nav>
       <div class="flex-1 flex justify-end">
@@ -229,9 +229,9 @@ const howItWorks = [
 
         <!-- Social (placeholder) -->
         <div class="flex justify-end gap-4 flex-1">
-          <a href="#" class="hover:text-gray-400">FB</a>
-          <a href="#" class="hover:text-gray-400">IG</a>
-          <a href="#" class="hover:text-gray-400">TW</a>
+          <a href="#" class="hover:text-gray-400"><i class="pi pi-facebook"></i></a>
+          <a href="#" class="hover:text-gray-400"><i class="pi pi-instagram"></i></a>
+          <a href="#" class="hover:text-gray-400"><i class="pi pi-twitter"></i></a>
         </div>
       </div>
 

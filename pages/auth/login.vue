@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Response } from "~/types";
+import type { Response, User, UserLogin } from "~/types";
 import { breakpointsTailwind } from "@vueuse/core";
 
 const bp = useBreakpoints(breakpointsTailwind);
@@ -10,19 +10,14 @@ const toast = useToast();
 const router = useRouter();
 let token = "";
 
-interface User {
-  email: string;
-  password: string;
-}
-
-const user = ref<User>({
-  email: "",
-  password: "",
+const user = ref<UserLogin>({
+  Email: "",
+  Password: "",
 });
 
 async function login() {
   for (const key in user.value) {
-    if (!user.value[key as keyof User]) {
+    if (!user.value[key as keyof UserLogin]) {
       toast.add({
         severity: "error",
         summary: "Errore",
@@ -79,11 +74,11 @@ async function login() {
         <template #content>
           <div class="flex flex-col gap-2">
             <FloatLabel variant="on">
-              <InputText inputId="Email" type="email" v-model="user.email" />
+              <InputText inputId="Email" type="email" v-model="user.Email" />
               <label for="Email">Email</label>
             </FloatLabel>
             <FloatLabel variant="on">
-              <Password inputId="Password" v-model="user.password" :feedback="false" />
+              <Password inputId="Password" v-model="user.Password" :feedback="false" />
               <label for="Password">Password</label>
             </FloatLabel>
           </div>
@@ -107,11 +102,11 @@ async function login() {
       <div class="flex flex-col items-center justify-center gap-8">
         <div class="flex flex-col gap-2">
           <FloatLabel variant="on">
-            <InputText inputId="Email" type="email" class="w-[80vw]" v-model="user.email" />
+            <InputText inputId="Email" type="email" class="w-[80vw]" v-model="user.Email" />
             <label for="Email">Email</label>
           </FloatLabel>
           <FloatLabel variant="on">
-            <Password inputId="Password" :fluid="true" v-model="user.password" :feedback="false" />
+            <Password inputId="Password" :fluid="true" v-model="user.Password" :feedback="false" />
             <label for="Password">Password</label>
           </FloatLabel>
         </div>
