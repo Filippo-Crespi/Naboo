@@ -3,10 +3,41 @@ import type { Response, User } from "~/types";
 
 const users = ref();
 const selectedUser = ref();
-const res: Response = await $fetch("https://andrellaveloise.it/users");
-users.value = res.data;
+const toast = useToast();
+const dbUsers: Response = await $fetch("https://andrellaveloise.it/users");
+users.value = dbUsers.data;
+
+const deleteUser = async (id: string) => {
+  try {
+    let res: Response = await $fetch(`https://andrellaveloise.it/users?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      onResponseError({ response }) {
+        throw new Error(response._data.message);
+      },
+    });
+    toast.add({
+      severity: "success",
+      summary: "Successo",
+      detail: res.message,
+      life: 3000,
+    });
+    res = await $fetch("https://andrellaveloise.it/users");
+    users.value = res.data;
+  } catch (err) {
+    toast.add({
+      severity: "error",
+      summary: "Errore",
+      detail: (err as Error).message,
+      life: 3000,
+    });
+  }
+};
 </script>
 <template>
+  <Toast />
   <div class="flex">
     <Dialog modal>
       <template #header>
@@ -46,7 +77,14 @@ users.value = res.data;
         <Column sortable field="Email" header="Email" />
       </DataTable>
     </ScrollPanel>
-    <AdminUserDetail v-if="selectedUser" :user="selectedUser" />
+    <AdminUserDetail
+      v-if="selectedUser"
+      :user="selectedUser"
+      @delete-user="
+        (id) => {
+          deleteUser(id);
+        }
+      " />
   </div>
 </template>
 

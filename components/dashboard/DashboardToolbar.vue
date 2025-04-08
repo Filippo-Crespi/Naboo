@@ -1,5 +1,8 @@
-<script lang="ts">
-import { type User } from "~/types";
+<script setup lang="ts">
+import type { User } from "~/types";
+
+// @ts-ignore
+const user = useCookie("user").value as User;
 </script>
 
 <template>
@@ -16,14 +19,18 @@ import { type User } from "~/types";
           severity="primary"
           raised
           @click="$emit('create-form')" />
-        <Button label="Carica" icon="pi pi-upload" severity="secondary" text />
-        <Button label="Esporta" icon="pi pi-file-pdf" class="mr-2" severity="secondary" text />
+        <Button label="Carica" icon="pi pi-upload" severity="secondary" text disabled />
+        <Button label="Esporta" icon="pi pi-file-pdf" severity="secondary" text disabled />
       </template>
       <template #end>
-        <div class="flex items-center gap-2">
-          <span>Nome Cognome</span>
-          <Avatar @click="$emit('open-drawer')" icon="pi pi-user" shape="circle" />
-        </div>
+        <Avatar
+          class="hover:cursor-pointer"
+          @click="$emit('open-drawer')"
+          size="large"
+          shape="circle"
+          :image="`https://ui-avatars.com/api/?name=${user.Nome || ''}+${
+            user.Cognome || ''
+          }&rounded=true&bold=true&background=random`" />
       </template>
     </Toolbar>
   </div>

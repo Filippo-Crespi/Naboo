@@ -47,6 +47,32 @@ async function login() {
       watch: true,
     });
     cookieToken.value = token;
+    try {
+      const { data } = await useFetch(
+        "https://andrellaveloise.it/users?Token=" +
+          token +
+          "&stringa=Nome+Cognome+Username+Email+DataReg",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          onResponseError({ response }) {
+            throw new Error(response._data.message);
+          },
+        }
+      );
+      const userData = data.value as Response;
+      // memorizza nel cookie
+      const cookieUser = useCookie("user", {
+        maxAge: 60 * 60 * 24 * 30, // 30 giorni
+        path: "/",
+        watch: true,
+      });
+      cookieUser.value = userData.data[0];
+    } catch (err) {
+      console.error(err);
+    }
     router.push("/dashboard");
   } catch (error) {
     toast.add({
@@ -66,7 +92,7 @@ async function login() {
   <Toast />
   <div class="flex items-center justify-center h-[100dvh] w-[100dvw] bg-[#68d4bc]">
     <div v-if="!isMobile">
-      <Card class="!py-8 !px-4">
+      <Card class="!py-8 !px-4 !min-w-100">
         <template #title
           ><span class="font-bold text-4xl">Accesso</span>
           <Divider />
@@ -74,11 +100,11 @@ async function login() {
         <template #content>
           <div class="flex flex-col gap-2">
             <FloatLabel variant="on">
-              <InputText inputId="Email" type="email" v-model="user.Email" />
+              <InputText inputId="Email" fluid type="email" v-model="user.Email" />
               <label for="Email">Email</label>
             </FloatLabel>
             <FloatLabel variant="on">
-              <Password inputId="Password" v-model="user.Password" :feedback="false" />
+              <Password inputId="Password" fluid v-model="user.Password" :feedback="false" />
               <label for="Password">Password</label>
             </FloatLabel>
           </div>

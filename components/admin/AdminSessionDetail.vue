@@ -5,10 +5,13 @@ const props = defineProps({
     required: true,
   },
 });
+// @ts-ignore
+const token = useCookie("token").value;
 </script>
 <template>
   <div class="w-1/5 flex flex-col items-center gap-2 py-10 px-2 border-l-1 border-gray-200">
     <div class="flex flex-col items-center gap-2">
+      <span class="text-red-400" v-if="token == session.Token">Sei tu!</span>
       <span class="text-gray-400">{{ session.ID_Sessione }}</span>
       <Avatar
         shape="circle"
@@ -30,13 +33,25 @@ const props = defineProps({
     <div class="flex flex-col items-center">
       <Button
         v-if="session.Sospeso == 0"
+        :disabled="token == session.Token"
         @click="$emit('delete-session', session.Token)"
         icon="pi pi-trash"
         class="w-full mt-4"
         size="small"
         label="Sospendi"
         severity="warn"
-        rounded />
+        rounded
+        v-tooltip.left="{
+          value: 'Non puoi sospenderti da solo',
+          pt: {
+            arrow: {
+              style: {
+                borderBottomColor: '!bg-primary',
+              },
+            },
+            text: '!bg-primary !text-primary-contrast',
+          },
+        }" />
     </div>
   </div>
 </template>

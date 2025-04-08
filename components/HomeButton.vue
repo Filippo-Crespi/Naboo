@@ -1,3 +1,3 @@
 <template>
-  <Button icon="pi pi-home" to="/" as="router-link" />
+  <Button icon="pi pi-home" to="/home" as="router-link" />
 </template>

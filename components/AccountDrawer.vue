@@ -3,29 +3,17 @@ import type { Response, User } from "~/types";
 
 const visible = defineModel<boolean>("visible", { required: true });
 const token = useCookie("token").value;
-const user = ref<User>();
+// @ts-ignore
+const user = useCookie("user").value as User;
+const newUser = ref({
+  Nome: user?.Nome || "",
+  Cognome: user?.Cognome || "",
+  Email: user?.Email || "",
+  Username: user?.Username || "",
+});
 const toast = useToast();
 const loading = ref(false);
 
-try {
-  const { data } = await useFetch("https://andrellaveloise.it/users?token=" + token, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    onResponseError({ response }) {
-      throw new Error(response._data.message);
-    },
-  });
-  user.value = (data.value as Response).data[0] as User;
-} catch (error) {
-  toast.add({
-    severity: "error",
-    summary: "Errore",
-    detail: (error as Error).message,
-    life: 3000,
-  });
-}
 const updateUser = async () => {
   try {
     loading.value = true;
@@ -49,8 +37,8 @@ const updateUser = async () => {
     } else {
       toast.add({
         severity: "success",
-        summary: "Successo",
-        detail: "Utente aggiornato con successo",
+        summary: "Aggiornamento riuscito",
+        detail: "Effettuare nuovamente il login per visualizzare le modifiche",
         life: 3000,
       });
     }
@@ -65,16 +53,6 @@ const updateUser = async () => {
     loading.value = false;
   }
 };
-
-const newUser = ref<User>({
-  Nome: user.value?.Nome!,
-  Cognome: user.value?.Cognome!,
-  Username: user.value?.Username!,
-  Email: user.value?.Email!,
-  Password: user.value?.Password!,
-  DataReg: user.value?.DataReg!,
-  ID_Utente: user.value?.ID_Utente!,
-});
 </script>
 <template>
   <Toast />
@@ -82,13 +60,13 @@ const newUser = ref<User>({
     <template #header>
       <div class="flex items-center gap-2">
         <Avatar
-          :image="`https://ui-avatars.com/api/?name=${user?.Nome}+${user?.Cognome}&rounded=true&bold=true&background=random`"
+          :image="`https://ui-avatars.com/api/?name=${user.Nome}+${user.Cognome}&rounded=true&bold=true&background=random`"
           shape="circle" />
-        <span class="font-bold">@{{ user?.Username }}</span>
+        <span class="font-bold">@{{ user.Username }}</span>
       </div>
     </template>
     <span class="text-sm text-gray-500 text-center w-full flex justify-center"
-      >Registrato il: {{ user?.DataReg }}</span
+      >Registrato il: {{ user.DataReg }}</span
     >
     <Divider>Modifica i tuoi dati</Divider>
     <div class="flex flex-col gap-4 py-4">

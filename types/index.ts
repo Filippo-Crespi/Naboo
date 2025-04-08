@@ -44,3 +44,8 @@ export interface Form {
   Titolo: string;
   Descrizione: string;
 }
+
+export interface FormData {
+  Titolo: string;
+  Descrizione: string;
+}

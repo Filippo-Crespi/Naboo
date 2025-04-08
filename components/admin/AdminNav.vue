@@ -36,10 +36,12 @@ const items = ref([
       </div>
     </div>
     <Button
-      to="/auth/login"
+      to="/dashboard"
       as="router-link"
+      label="Torna alla dashboard"
+      fluid
       icon="pi pi-sign-out"
-      severity="danger"
+      severity="warn"
       class="!w-full" />
   </nav>
 </template>

@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { type Form, type Response, type User } from "~/types";
+import { type Form, type Response } from "~/types";
+definePageMeta({
+  middleware: ["auth"],
+});
 
 const router = useRouter();
 const toast = useToast();
@@ -10,35 +13,6 @@ const modulo = ref<Form>({
   Descrizione: "",
   Token: "",
 });
-
-onBeforeMount(() => {
-  const isLogged = useCookie("token").value ?? false;
-  // contollo validita token
-
-  if (!isLogged) {
-    router.push("/auth/login");
-    return;
-  }
-});
-
-const token = useCookie("token").value;
-const user = useCookie("user") as Ref<User>;
-
-try {
-  const { data } = await useFetch(
-    "https://andrellaveloise.it/users?token=" + token + "&stringa=nome+cognome",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const userData = data.value as Response;
-  user.value = userData.data[0];
-} catch (err) {
-  console.log(err);
-}
 
 const creaModulo = async () => {
   const token = useCookie("token").value;

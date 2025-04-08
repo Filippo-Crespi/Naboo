@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+onMounted(() => {
+  useCookie("user").value = null;
+  useCookie("token").value = null;
+});
+
 const op = ref();
 
 const toggle = (event: any) => {
@@ -83,24 +88,40 @@ const howItWorks = [
       </span>
       <div class="flex flex-col gap-2">
         <label for="name" class="font-medium">Name</label>
-        <input type="text" id="name" class="border rounded p-2" placeholder="Your name" />
+        <InputText type="text" id="name" class="border rounded p-2" placeholder="Il tuo nome" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label for="email" class="font-medium">Email</label>
-        <input type="email" id="email" class="border rounded p-2" placeholder="your@email.com" />
+        <InputText type="email" id="email" placeholder="tua@email.com" />
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="message" class="font-medium">Message</label>
-        <textarea
+        <label for="message" class="font-medium">Messaggio</label>
+        <Textarea
           id="message"
           rows="4"
           class="border rounded p-2"
-          placeholder="Your message..."></textarea>
+          placeholder="Your message..."></Textarea>
       </div>
 
-      <Button label="Send" rounded raised class="w-full" />
+      <Button
+        label="Invia"
+        disabled
+        rounded
+        raised
+        class="w-full"
+        v-tooltip.right="{
+          value: 'Non ancora disponibile',
+          pt: {
+            arrow: {
+              style: {
+                borderBottomColor: '!bg-primary',
+              },
+            },
+            text: '!bg-primary !text-primary-contrast',
+          },
+        }" />
     </form>
   </Popover>
   <div class="min-h-[100dvh] w-screen">
@@ -123,16 +144,17 @@ const howItWorks = [
           icon="pi pi-question-circle"
           label="Come funziona" />
       </nav>
-      <div class="flex-1 flex justify-end">
+      <div class="flex-1 flex justify-end items-center gap-4">
+        <span class="text-gray-400">Hai gi&agrave; un account?</span>
         <Button asChild v-slot="slotProps" rounded raised>
-          <RouterLink to="/home" v-bind="slotProps">Entra</RouterLink>
+          <RouterLink to="/auth/login" v-bind="slotProps">Accedi</RouterLink>
         </Button>
       </div>
     </div>
     <div class="flex mt-16 pt-24 items-start justify-start px-16 h-[calc(100dvh-11.5rem)]">
       <div class="flex flex-col gap-6 items-start w-2/3">
         <Button
-          label="Facile da usare"
+          label="User Friendly"
           icon="pi pi-sparkles"
           rounded
           raised
@@ -155,7 +177,7 @@ const howItWorks = [
             >
           </div>
           <div>
-            <Button asChild v-slot="slotProps" rounded raised>
+            <Button asChild v-slot="slotProps" rounded raised size="large">
               <RouterLink to="/home" v-bind="slotProps">Inizia subito</RouterLink>
             </Button>
           </div>

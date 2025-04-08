@@ -1,26 +1,8 @@
 <script lang="ts" setup>
-import type { User, Response } from "~/types";
-const user = useCookie("user") as Ref<User>;
-const token = useCookie("token") as Ref<string>;
-const userForms = ref();
-const toast = useToast();
+import type { User } from "~/types";
 
-// try {
-//   const { data } = useFetch("https://andrellaveloise.it/forms&token=" + token.value, {
-//     method: "GET",
-//     onResponseError({ response }) {
-//       throw new Error(response._data.message);
-//     },
-//   });
-//   userForms.value = (data.value as Response).data;
-// } catch (err) {
-//   toast.add({
-//     severity: "error",
-//     summary: "Errore",
-//     detail: (err as Error).message,
-//     life: 3000,
-//   });
-// }
+// @ts-ignore
+const user = useCookie("user").value as User;
 
 const forms = ref([
   {
@@ -39,8 +21,8 @@ const forms = ref([
   <Toast />
   <div class="!p-8">
     <span class="text-3xl font-bold"
-      >Bentornato, {{ user !== undefined ? user.nome : "utente" }}
-      {{ user !== undefined ? user.cognome : "utente" }}</span
+      >Siamo felici di riverderti
+      <span class="text-[#68d4bc]">{{ user != undefined ? user.Nome : "" }}</span></span
     >
     <div class="flex gap-4 flex-wrap mt-8">
       <FormCard
