@@ -4,7 +4,8 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-const router = useRouter();
+const reloadKey = ref(0);
+
 const toast = useToast();
 const isDrawerVisible = ref(false);
 const isDialogVisible = ref(false);
@@ -30,11 +31,11 @@ const creaModulo = async () => {
         }
       },
     });
+    const code = res.data.ID_Modulo;
     toast.add({
       severity: "success",
       summary: "Modulo creato",
-      detail: "Il modulo è stato creato con successo",
-      life: 2500,
+      detail: "Usa il codice: " + code + " per condividere il modulo",
     });
   } catch (error) {
     toast.add({
@@ -43,38 +44,34 @@ const creaModulo = async () => {
       detail: (error as Error).message,
       life: 2500,
     });
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.push("/auth/login");
     isDialogVisible.value = false;
   } finally {
     isDialogVisible.value = false;
+    reloadKey.value++;
   }
 };
 </script>
 <template>
   <Dialog class="m-w-50" modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm">
-    <div class="px-4 py-8 flex flex-col gap-6">
+    <div class="px-4 pb-8 flex flex-col gap-6">
       <span class="text-3xl font-medium">Crea un nuovo modulo</span>
-      <FloatLabel variant="on"
-        ><InputText type="text" fluid v-model="modulo.Titolo" />
-        <label>Titolo modulo</label></FloatLabel
-      >
-      <FloatLabel variant="on"
-        ><Textarea v-model="modulo.Descrizione" fluid />
-        <label>Descrizione modulo</label></FloatLabel
-      >
-      <Button
-        class="w-full"
-        label="Crea"
-        icon="pi pi-plus"
-        severity="primary"
-        raised
-        @click="creaModulo" />
+      <FloatLabel variant="on">
+        <InputText type="text" fluid v-model="modulo.Titolo" />
+        <label>Titolo modulo</label>
+      </FloatLabel>
+      <FloatLabel variant="on"><Textarea v-model="modulo.Descrizione" fluid />
+        <label>Descrizione modulo</label>
+      </FloatLabel>
+      <Button class="w-full" label="Crea" icon="pi pi-plus" severity="primary" raised @click="creaModulo" />
     </div>
   </Dialog>
   <AccountDrawer v-model:visible="isDrawerVisible" />
-  <div>
-    <DashboardToolbar @open-drawer="isDrawerVisible = true" @create-form="isDialogVisible = true" />
-    <FormContainer />
+  <div class="flex flex-col justify-between min-h-[calc(100vh)]">
+    <div>
+      <DashboardToolbar @open-drawer="isDrawerVisible = true" @create-form="isDialogVisible = true" />
+      <FormContainer :key="reloadKey" @refresh="reloadKey++" />
+    </div>
+    <Button class="w-full absolute bottom-0 left-0" label="Sincronizza" icon="pi pi-refresh" severity="secondary"
+      @click="reloadKey++" />
   </div>
 </template>

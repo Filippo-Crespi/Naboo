@@ -62,19 +62,8 @@ const howItWorks = [
 </script>
 
 <template>
-  <Button
-    class="!fixed bottom-5 right-5 z-50"
-    icon="pi pi-arrow-up"
-    as="a"
-    href="#"
-    rounded
-    raised />
-  <Button
-    class="!fixed bottom-5 left-5 z-50"
-    icon="pi pi-question-circle"
-    severity="help"
-    rounded
-    raised
+  <Button class="!fixed bottom-5 right-5 z-50" icon="pi pi-arrow-up" as="a" href="#" rounded raised />
+  <Button class="!fixed bottom-5 left-5 z-50" icon="pi pi-question-circle" severity="help" rounded raised
     @click="toggle" />
 
   <Popover ref="op" target="toggle" position="bottom" class="w-100">
@@ -98,30 +87,20 @@ const howItWorks = [
 
       <div class="flex flex-col gap-2">
         <label for="message" class="font-medium">Messaggio</label>
-        <Textarea
-          id="message"
-          rows="4"
-          class="border rounded p-2"
-          placeholder="Your message..."></Textarea>
+        <Textarea id="message" rows="4" class="border rounded p-2" placeholder="Your message..."></Textarea>
       </div>
 
-      <Button
-        label="Invia"
-        disabled
-        rounded
-        raised
-        class="w-full"
-        v-tooltip.right="{
-          value: 'Non ancora disponibile',
-          pt: {
-            arrow: {
-              style: {
-                borderBottomColor: '!bg-primary',
-              },
+      <Button label="Invia" disabled rounded raised class="w-full" v-tooltip.right="{
+        value: 'Non ancora disponibile',
+        pt: {
+          arrow: {
+            style: {
+              borderBottomColor: '!bg-primary',
             },
-            text: '!bg-primary !text-primary-contrast',
           },
-        }" />
+          text: '!bg-primary !text-primary-contrast',
+        },
+      }" />
     </form>
   </Popover>
   <div class="min-h-[100dvh] w-screen">
@@ -131,18 +110,8 @@ const howItWorks = [
         <span class="text-3xl font-extrabold">NABOO</span>
       </div>
       <nav class="flex gap-2 my-0 mx-auto">
-        <Button
-          variant="link"
-          as="a"
-          href="#funzionalita"
-          icon="pi pi-cog"
-          label="Funzionalit&agrave;" />
-        <Button
-          variant="link"
-          as="a"
-          href="#comefunziona"
-          icon="pi pi-question-circle"
-          label="Come funziona" />
+        <Button variant="link" as="a" href="#funzionalita" icon="pi pi-cog" label="Funzionalit&agrave;" />
+        <Button variant="link" as="a" href="#comefunziona" icon="pi pi-question-circle" label="Come funziona" />
       </nav>
       <div class="flex-1 flex justify-end items-center gap-4">
         <span class="text-gray-400">Hai gi&agrave; un account?</span>
@@ -153,28 +122,15 @@ const howItWorks = [
     </div>
     <div class="flex mt-16 pt-24 items-start justify-start px-16 h-[calc(100dvh-11.5rem)]">
       <div class="flex flex-col gap-6 items-start w-2/3">
-        <Button
-          label="User Friendly"
-          icon="pi pi-sparkles"
-          rounded
-          raised
-          outlined
-          severity="secondary"
-          disabled />
+        <Button label="User Friendly" icon="pi pi-sparkles" rounded raised outlined severity="secondary" disabled />
         <div class="flex flex-col gap-12">
           <div class="flex flex-col gap-2">
-            <span class="text-7xl font-bold"
-              >Crea moduli <br />
+            <span class="text-7xl font-bold">Crea moduli <br />
               in
               <span
-                class="bg-clip-text text-transparent bg-gradient-to-r from-[#30e2eb] to-[#80c1b3] animate-text-shine"
-                >pochissimi</span
-              >
-              minuti</span
-            >
-            <span class="text-lg opacity-50"
-              >Naboo ti aiuta a creare moduli online in modo semplice e veloce</span
-            >
+                class="bg-clip-text text-transparent bg-gradient-to-r from-[#30e2eb] to-[#80c1b3] animate-text-shine">pochissimi</span>
+              minuti</span>
+            <span class="text-lg opacity-50">Naboo ti aiuta a creare moduli online in modo semplice e veloce</span>
           </div>
           <div>
             <Button asChild v-slot="slotProps" rounded raised size="large">
@@ -184,56 +140,39 @@ const howItWorks = [
         </div>
       </div>
       <div class="w-1/3 relative">
-        <img
-          class="circle-1 absolute left-[calc(50%-6rem)] top-1/2 -translate-x-1/2 -translate-y-15 w-3/4"
+        <img class="circle-1 absolute left-[calc(50%-6rem)] top-1/2 -translate-x-1/2 -translate-y-15 w-3/4"
           src="/imgs/landing/circle1.png" />
-        <img
-          class="circle-2 absolute left-[calc(50%+4rem)] top-1/2 -translate-x-1/2 translate-y-15 w-3/4"
+        <img class="circle-2 absolute left-[calc(50%+4rem)] top-1/2 -translate-x-1/2 translate-y-15 w-3/4"
           src="/imgs/landing/circle2.png" />
-        <img
-          class="form absolute shadow-xl rounded-xl left-1/2 top-1/2 -translate-x-1/2"
+        <img class="form absolute shadow-xl rounded-xl left-1/2 top-1/2 -translate-x-1/2"
           src="/imgs/landing/form.png" />
       </div>
     </div>
     <div id="funzionalita" class="flex flex-col px-16 gap-8 bg-[#eafaf6] py-16">
       <div class="flex flex-col gap-2 items-center">
         <span class="text-center font-bold text-4xl">Funzionalit&agrave;</span>
-        <span class="text-lg opacity-50"
-          >Tutto ci&ograve; di cui hai bisogno per creare moduli professionali</span
-        >
+        <span class="text-lg opacity-50">Tutto ci&ograve; di cui hai bisogno per creare moduli professionali</span>
       </div>
       <div class="flex items-center justify-center gap-12 flex-wrap">
-        <GenericCard
-          v-for="(card, index) in functionalities"
-          :key="index"
-          :description="card.description"
-          :emoji="card.emoji"
-          :title="card.title" />
+        <GenericCard v-for="(card, index) in functionalities" :key="index" :description="card.description"
+          :emoji="card.emoji" :title="card.title" />
       </div>
     </div>
     <div id="comefunziona" class="flex flex-col px-16 gap-8 py-16">
       <div class="flex flex-col gap-2 items-center">
         <span class="text-center font-bold text-4xl">Come funziona?</span>
-        <span class="text-lg opacity-50"
-          >Creare un modulo &egrave; facile come qualcosa che devo inventarmi</span
-        >
+        <span class="text-lg opacity-50">Creare un modulo &egrave; facile come qualcosa che devo inventarmi</span>
       </div>
       <div class="flex items-center">
-        <GenericStep
-          v-for="(card, index) in howItWorks"
-          :key="index"
-          :title="card.title"
-          :description="card.description"
-          :step="card.step"
-          :class="{
+        <GenericStep v-for="(card, index) in howItWorks" :key="index" :title="card.title"
+          :description="card.description" :step="card.step" :class="{
             'flex-1': index !== 1, // primo e terzo
             'mx-auto': index === 1, // elemento centrale
           }" />
       </div>
     </div>
     <footer class="bg-[#eafaf6] py-8">
-      <div
-        class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
         <!-- Logo / Titolo -->
         <div class="text-lg font-semibold flex-1">
           <!-- Da sostituire con il tuo logo o nome del sito -->
@@ -284,9 +223,11 @@ const howItWorks = [
   0% {
     transform: rotate(-5deg);
   }
+
   50% {
     transform: rotate(5deg);
   }
+
   100% {
     transform: rotate(-5deg);
   }
@@ -296,17 +237,21 @@ const howItWorks = [
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
+
   100% {
     transform: scale(1);
   }
 }
+
 @keyframes textShine {
   0% {
     background-position: 0% 50%;
   }
+
   100% {
     background-position: 100% 50%;
   }

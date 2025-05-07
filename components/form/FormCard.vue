@@ -1,8 +1,10 @@
 <template>
-  <Card class="max-w-64">
-    <template #header><NuxtImg :src="image" /></template>
+  <Card class="max-w-64 hover:scale-105 transition-transform duration-300 ease-in-out">
+    <template #header>
+      <NuxtImg :src="image" />
+    </template>
     <template #title>{{ title }}</template>
-    <template #subtitle>{{ subtitle }}</template>
+    <template #subtitle>{{ description }}</template>
     <template #content>
       <ButtonGroup>
         <Button icon="pi pi-pencil" @click="$emit('edit', id)" rounded />
@@ -15,14 +17,14 @@
 <script lang="ts" setup>
 defineProps({
   id: {
-    type: Number,
+    type: String,
     required: true,
   },
   title: {
     type: String,
     default: "Form title",
   },
-  subtitle: {
+  description: {
     type: String,
     default: "Descrizione",
   },

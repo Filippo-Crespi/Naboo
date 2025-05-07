@@ -7,7 +7,7 @@ definePageMeta({
 });
 
 // Mapping dei componenti
-const dic = {
+const dic: Record<string, any> = {
   AdminUserView,
   AdminSessionView,
   AdminFormsView,
