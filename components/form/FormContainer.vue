@@ -11,7 +11,7 @@ const toast = useToast();
 
 const forms = ref();
 
-const deleteForm = async (id: Number) => {
+const deleteForm = async (id: String) => {
   try {
     const res: Response = await $fetch("https://andrellaveloise.it/forms/users?" + "Token=" + token + "&ID_Modulo=" + id, {
       method: "DELETE",
@@ -19,7 +19,7 @@ const deleteForm = async (id: Number) => {
         if (response.status === 404) {
           throw new Error(response._data.message);
         } else if (response.status === 500) {
-          throw new Error("Internal Server Error");
+          throw new Error("Errore del server");
         }
       },
     });
@@ -69,7 +69,7 @@ try {
   <div class="!p-8">
     <span class="text-3xl font-bold">Siamo felici di riverderti
       <span class="text-[#68d4bc]">{{ user != undefined ? user.Nome : "" }}</span></span>
-    <div class="w-full flex flex-wrap justify-between gap-4 mt-8">
+    <div class="w-full flex flex-wrap justify-evenly gap-4 mt-8">
       <FormCard v-for="form of forms" :key="form.ID_Modulo" :id="form.ID_Modulo" :title="form.Titolo"
         :description="form.Descrizione" @delete="(id) => deleteForm(id)" />
     </div>
