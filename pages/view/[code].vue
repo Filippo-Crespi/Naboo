@@ -2,7 +2,6 @@
 
 // Modulo iniziale vuoto
 const modulo = ref({
-
   "titolo": "Modulo di Valutazione - Informatica Generale",
   "descrizione": "Questo modulo copre concetti fondamentali di informatica, algoritmi, strutture dati, basi di programmazione e logica.",
   "sezioni": [
@@ -193,7 +192,6 @@ const modulo = ref({
   ]
 });
 
-
 // Tipologie temporanee prese dal database
 const tipologie = ref([
   { id: 1, nome: 'Vero/Falso' },
@@ -207,27 +205,39 @@ function getTipologiaNome(id: number | null): string {
   const tipologia = tipologie.value.find((t) => t.id === id);
   return tipologia ? tipologia.nome : 'Sconosciuta';
 }
+
+const $route = useRoute();
 </script>
 
 <template>
   <div class="p-4">
+    <!-- Cute header con accento verde e pulsanti -->
+    <div class="flex items-center gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4" style="border-color: #10b981;">
+      <Button icon="pi pi-arrow-left" class="p-button-rounded" as="router-link" to="/dashboard" />
+      <Button icon="pi pi-pencil" class="p-button-rounded" as="router-link" :to="`/edit/${$route.params.code}`" />
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Anteprima Modulo</h1>
+        <p class="text-sm text-gray-500">Stai visualizzando la versione di anteprima di questo modulo. Puoi modificarlo
+          cliccando sull'icona matita.</p>
+      </div>
+    </div>
     <!-- Titolo e descrizione del modulo -->
     <div class="mb-4">
       <h1 class="text-2xl font-bold">{{ modulo.titolo }}</h1>
       <h2 class="text-xl">{{ modulo.descrizione }}</h2>
     </div>
-
     <!-- Sezioni -->
-    <div v-for="(sezione, sezioneIndex) in modulo.sezioni" :key="sezioneIndex" class="mb-6 border p-4 rounded">
+    <div v-for="(sezione, sezioneIndex) in modulo.sezioni" :key="sezioneIndex"
+      class="mb-6 border border-gray-400 p-4 rounded">
       <h3 class="text-lg font-semibold">{{ sezione.nome }}</h3>
-
       <!-- Domande -->
-      <div v-for="(domanda, domandaIndex) in sezione.domande" :key="domandaIndex" class="mt-4 border p-4 rounded">
+      <div v-for="(domanda, domandaIndex) in sezione.domande" :key="domandaIndex"
+        class="mt-4 border border-gray-400 p-4 rounded">
         <h4 class="text-md font-medium">Domanda: {{ domanda.testo }}</h4>
         <p class="text-gray-600">{{ domanda.descrizione }}</p>
-
         <!-- Risposte -->
-        <div v-if="domanda.risposte && domanda.tipologia !== 3" class="mt-2 flex flex-col gap-2">
+        <div v-if="domanda.risposte && domanda.tipologia !== 3 && domanda.tipologia !== 2"
+          class="mt-2 flex flex-col gap-2">
           <div v-for="(risposta, rispostaIndex) in domanda.risposte" :key="rispostaIndex"
             class="flex items-center gap-2">
             <RadioButton :inputId="`domanda-${domandaIndex}-risposta-${rispostaIndex}`" :value="risposta.punteggio"
@@ -235,9 +245,9 @@ function getTipologiaNome(id: number | null): string {
             <label :for="`domanda-${domandaIndex}-risposta-${rispostaIndex}`">{{ risposta.testo }}</label>
           </div>
         </div>
-        <Textarea v-else-if="domanda.tipologia === 3" class="w-full mt-2" :auto-resize="true"
-          disabled>Scrivi la tua risposta</Textarea>
-        <input type="text" v-else-if="domanda.tipologia === 2" placeholder="Scrivi la tua risposta" />
+        <Textarea v-else-if="domanda.tipologia === 3" class="w-full mt-2" :auto-resize="true" disabled
+          placeholder="La tua risposta" />
+        <InputText v-else-if="domanda.tipologia === 2" class="w-full mt-2" disabled placeholder="La tua risposta" />
       </div>
     </div>
   </div>

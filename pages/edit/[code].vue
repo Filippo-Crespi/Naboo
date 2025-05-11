@@ -140,6 +140,8 @@ function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
   <div class="p-4">
     <div class="flex items-center gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4" style="border-color: #10b981;">
       <Button icon="pi pi-arrow-left" class="p-button-rounded" as="router-link" to="/dashboard" />
+      <Button icon="pi pi-eye" class="p-button-rounded" as="router-link" :to="`/view/${$route.params.code}`" />
+
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Crea Modulo</h1>
         <p class="text-sm text-gray-500">Crea il tuo modulo personalizzato</p>
