@@ -1,48 +1,198 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 
 // Modulo iniziale vuoto
 const modulo = ref({
-  titolo: 'Titolo di esempio',
-  descrizione: 'Descrizione di esempio',
-  sezioni: [
+
+  "titolo": "Modulo di Valutazione - Informatica Generale",
+  "descrizione": "Questo modulo copre concetti fondamentali di informatica, algoritmi, strutture dati, basi di programmazione e logica.",
+  "sezioni": [
     {
-      nome: 'Sezione 1',
-      domande: [
+      "nome": "Logica e Algoritmi",
+      "domande": [
         {
-          testo: 'Domanda 1',
-          descrizione: 'Descrizione della domanda 1',
-          tipologia: 1, // Tipologia selezionata
-          risposte: [
-            { testo: 'Vero', punteggio: 1 },
-            { testo: 'Falso', punteggio: 0 },
-          ],
+          "testo": "Un algoritmo è una sequenza finita di istruzioni non ambigue.",
+          "descrizione": "Valuta se la definizione di algoritmo è corretta.",
+          "tipologia": 1,
+          "risposte": [
+            {
+              "testo": "Vero",
+              "punteggio": 1
+            },
+            {
+              "testo": "Falso",
+              "punteggio": 0
+            }
+          ]
         },
         {
-          testo: 'Domanda 2',
-          descrizione: 'Descrizione della domanda 2',
-          tipologia: 4, // Scelta Multipla
-          risposte: [
-            { testo: 'Opzione 1', punteggio: 5 },
-            { testo: 'Opzione 2', punteggio: 3 },
-          ],
+          "testo": "Spiega cos’è un diagramma di flusso e a cosa serve.",
+          "descrizione": "Risposta aperta",
+          "tipologia": 3
         },
         {
-          testo: 'Domanda 3',
-          descrizione: 'Descrizione della domanda 3',
-          tipologia: 2, // Risposta Breve
-          risposte: [],
-        },
-        {
-          testo: 'Domanda 4',
-          descrizione: 'Descrizione della domanda 4',
-          tipologia: 3, // Risposta Lunga
-          risposte: [],
-        },
-      ],
+          "testo": "Quali di questi sono strutture di controllo?",
+          "descrizione": "Seleziona tutte le risposte corrette.",
+          "tipologia": 4,
+          "risposte": [
+            {
+              "testo": "if",
+              "punteggio": 1
+            },
+            {
+              "testo": "while",
+              "punteggio": 1
+            },
+            {
+              "testo": "echo",
+              "punteggio": 0
+            },
+            {
+              "testo": "for",
+              "punteggio": 1
+            }
+          ]
+        }
+      ]
     },
-  ],
+    {
+      "nome": "Programmazione in C++",
+      "domande": [
+        {
+          "testo": "Cosa rappresenta il simbolo `::` in C++?",
+          "descrizione": "Risposta aperta, spiegare brevemente l’operatore di risoluzione di ambito.",
+          "tipologia": 3
+        },
+        {
+          "testo": "Quale dei seguenti è un ciclo precondizionale?",
+          "descrizione": "Domanda a scelta singola.",
+          "tipologia": 4,
+          "risposte": [
+            {
+              "testo": "do...while",
+              "punteggio": 0
+            },
+            {
+              "testo": "for",
+              "punteggio": 1
+            },
+            {
+              "testo": "switch",
+              "punteggio": 0
+            }
+          ]
+        },
+        {
+          "testo": "Il C++ supporta la programmazione orientata agli oggetti.",
+          "descrizione": "Domanda vero/falso.",
+          "tipologia": 1,
+          "risposte": [
+            {
+              "testo": "Vero",
+              "punteggio": 1
+            },
+            {
+              "testo": "Falso",
+              "punteggio": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "HTML e CSS",
+      "domande": [
+        {
+          "testo": "Quali di questi sono elementi semantici in HTML5?",
+          "descrizione": "Seleziona tutte le risposte corrette.",
+          "tipologia": 4,
+          "risposte": [
+            {
+              "testo": "<header>",
+              "punteggio": 1
+            },
+            {
+              "testo": "<div>",
+              "punteggio": 0
+            },
+            {
+              "testo": "<section>",
+              "punteggio": 1
+            },
+            {
+              "testo": "<footer>",
+              "punteggio": 1
+            }
+          ]
+        },
+        {
+          "testo": "Spiega a cosa serve il selettore `nth-child()` in CSS.",
+          "descrizione": "Risposta aperta",
+          "tipologia": 3
+        },
+        {
+          "testo": "Un ID può essere utilizzato più volte nella stessa pagina HTML.",
+          "descrizione": "Domanda vero/falso",
+          "tipologia": 1,
+          "risposte": [
+            {
+              "testo": "Vero",
+              "punteggio": 0
+            },
+            {
+              "testo": "Falso",
+              "punteggio": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "JavaScript e TypeScript",
+      "domande": [
+        {
+          "testo": "Cos'è una Promise in JavaScript?",
+          "descrizione": "Spiega brevemente il concetto di Promise e un caso d'uso.",
+          "tipologia": 3
+        },
+        {
+          "testo": "Quale parola chiave permette di dichiarare una variabile che non può essere riassegnata?",
+          "descrizione": "Domanda a scelta singola.",
+          "tipologia": 4,
+          "risposte": [
+            {
+              "testo": "let",
+              "punteggio": 0
+            },
+            {
+              "testo": "const",
+              "punteggio": 1
+            },
+            {
+              "testo": "var",
+              "punteggio": 0
+            }
+          ]
+        },
+        {
+          "testo": "`TypeScript` è un superset tipizzato di `JavaScript`.",
+          "descrizione": "Domanda vero/falso.",
+          "tipologia": 1,
+          "risposte": [
+            {
+              "testo": "Vero",
+              "punteggio": 1
+            },
+            {
+              "testo": "Falso",
+              "punteggio": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
 });
+
 
 // Tipologie temporanee prese dal database
 const tipologie = ref([
@@ -61,46 +211,33 @@ function getTipologiaNome(id: number | null): string {
 
 <template>
   <div class="p-4">
-    <h1 class="text-2xl font-bold mb-4">Visualizza Modulo</h1>
-
     <!-- Titolo e descrizione del modulo -->
     <div class="mb-4">
-      <h2 class="text-lg font-semibold">Titolo</h2>
-      <p class="text-gray-700">{{ modulo.titolo }}</p>
-
-      <h2 class="text-lg font-semibold mt-4">Descrizione</h2>
-      <p class="text-gray-700">{{ modulo.descrizione }}</p>
+      <h1 class="text-2xl font-bold">{{ modulo.titolo }}</h1>
+      <h2 class="text-xl">{{ modulo.descrizione }}</h2>
     </div>
 
     <!-- Sezioni -->
     <div v-for="(sezione, sezioneIndex) in modulo.sezioni" :key="sezioneIndex" class="mb-6 border p-4 rounded">
-      <h3 class="text-lg font-semibold">Sezione: {{ sezione.nome }}</h3>
+      <h3 class="text-lg font-semibold">{{ sezione.nome }}</h3>
 
       <!-- Domande -->
       <div v-for="(domanda, domandaIndex) in sezione.domande" :key="domandaIndex" class="mt-4 border p-4 rounded">
         <h4 class="text-md font-medium">Domanda: {{ domanda.testo }}</h4>
         <p class="text-gray-600">{{ domanda.descrizione }}</p>
 
-        <h5 class="text-sm font-medium mt-2">Tipologia: {{ getTipologiaNome(domanda.tipologia) }}</h5>
-
         <!-- Risposte -->
-        <ul class="list-disc pl-5 mt-2">
-          <li v-for="(risposta, rispostaIndex) in domanda.risposte" :key="rispostaIndex">
-            <template v-if="domanda.tipologia === 4">
-              {{ risposta.testo }} (Punteggio: {{ risposta.punteggio }})
-            </template>
-            <template v-else-if="domanda.tipologia === 2 || domanda.tipologia === 3">
-              <!-- Nascondi input del testo per Risposta Breve o Lunga -->
-              Risposta aperta (nessun testo predefinito)
-            </template>
-            <template v-if="domanda.tipologia === 1">
-              <ul>
-                <li>Vero (Punteggio: {{ domanda.risposte[0]?.punteggio }})</li>
-                <li>Falso (Punteggio: {{ domanda.risposte[1]?.punteggio }})</li>
-              </ul>
-            </template>
-          </li>
-        </ul>
+        <div v-if="domanda.risposte && domanda.tipologia !== 3" class="mt-2 flex flex-col gap-2">
+          <div v-for="(risposta, rispostaIndex) in domanda.risposte" :key="rispostaIndex"
+            class="flex items-center gap-2">
+            <RadioButton :inputId="`domanda-${domandaIndex}-risposta-${rispostaIndex}`" :value="risposta.punteggio"
+              :name="`domanda-${domandaIndex}`" disabled />
+            <label :for="`domanda-${domandaIndex}-risposta-${rispostaIndex}`">{{ risposta.testo }}</label>
+          </div>
+        </div>
+        <Textarea v-else-if="domanda.tipologia === 3" class="w-full mt-2" :auto-resize="true"
+          disabled>Scrivi la tua risposta</Textarea>
+        <input type="text" v-else-if="domanda.tipologia === 2" placeholder="Scrivi la tua risposta" />
       </div>
     </div>
   </div>
