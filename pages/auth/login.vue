@@ -2,6 +2,7 @@
 import type { Response, User, UserLogin } from "~/types";
 import { breakpointsTailwind } from "@vueuse/core";
 
+
 const bp = useBreakpoints(breakpointsTailwind);
 const isMobile = ref(bp.isSmaller("sm"));
 
@@ -50,8 +51,8 @@ async function login() {
     try {
       const { data } = await useFetch(
         "https://andrellaveloise.it/users?Token=" +
-          token +
-          "&stringa=Nome+Cognome+Username+Email+DataReg",
+        token +
+        "&stringa=Nome+Cognome+Username+Email+DataReg",
         {
           method: "GET",
           headers: {
@@ -93,8 +94,7 @@ async function login() {
   <div class="flex items-center justify-center h-[100dvh] w-[100dvw] bg-[#68d4bc]">
     <div v-if="!isMobile">
       <Card class="!py-8 !px-4 !min-w-100">
-        <template #title
-          ><span class="font-bold text-4xl">Accesso</span>
+        <template #title><span class="font-bold text-4xl">Accesso</span>
           <Divider />
         </template>
         <template #content>
@@ -109,12 +109,7 @@ async function login() {
             </FloatLabel>
           </div>
           <Divider />
-          <Button
-            type="button"
-            label="Accedi"
-            icon="pi pi-sign-in"
-            class="w-full"
-            @click="login()"
+          <Button type="button" label="Accedi" icon="pi pi-sign-in" class="w-full" @click="login()"
             :loading="loading" />
         </template>
       </Card>

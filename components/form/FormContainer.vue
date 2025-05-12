@@ -71,7 +71,7 @@ try {
       <span class="text-[#68d4bc]">{{ user != undefined ? user.Nome : "" }}</span></span>
     <div class="w-full flex flex-wrap justify-evenly gap-4 mt-8">
       <FormCard v-for="form of forms" :key="form.ID_Modulo" :id="form.ID_Modulo" :title="form.Titolo"
-        :description="form.Descrizione" @delete="(id) => deleteForm(id)" />
+        :description="form.Descrizione" @delete="(id) => deleteForm(id)" image="https://picsum.photos/600/400" />
     </div>
   </div>
 </template>

@@ -198,9 +198,10 @@ function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
 
       <Button @click="aggiungiDomanda(sezioneIndex)" class="mt-4" label="Aggiungi Domanda" icon="pi pi-plus" />
     </div>
-
-    <Button @click="aggiungiSezione" class="mt-4" label="Aggiungi Sezione" icon="pi pi-plus" />
-    <Button @click="inviaModulo" class="mt-6 p-button-danger" label="Invia Modulo" icon="pi pi-send" />
+    <div class="flex gap-4 mt-4">
+      <Button @click="aggiungiSezione" label="Aggiungi Sezione" icon="pi pi-plus" />
+      <Button @click="inviaModulo" class="p-button-danger" label="Invia Modulo" icon="pi pi-send" />
+    </div>
   </div>
 </template>
 

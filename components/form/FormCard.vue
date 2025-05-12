@@ -41,7 +41,7 @@ const props = defineProps({
   },
   image: {
     type: String,
-    default: "https://placehold.co/600x400",
+    default: "https://picsum.photos/600/400",
   },
 });
 
