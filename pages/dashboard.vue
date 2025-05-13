@@ -31,7 +31,7 @@ const creaModulo = async () => {
         }
       },
     });
-    const code = res.data.ID_Modulo;
+    const code = res.data;
     toast.add({
       severity: "success",
       summary: "Modulo creato",
@@ -52,9 +52,9 @@ const creaModulo = async () => {
 };
 </script>
 <template>
-  <Dialog class="m-w-50" modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm">
-    <div class="px-4 pb-8 flex flex-col gap-6">
-      <span class="text-3xl font-medium">Crea un nuovo modulo</span>
+  <Dialog modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm">
+    <div class="px-4 pb-8 flex flex-col gap-6 min-w-96">
+      <span class="text-4xl font-bold text-[#10b981]">Crea un nuovo modulo</span>
       <FloatLabel variant="on">
         <InputText type="text" fluid v-model="modulo.Titolo" />
         <label>Titolo modulo</label>
@@ -71,7 +71,7 @@ const creaModulo = async () => {
       <DashboardToolbar @open-drawer="isDrawerVisible = true" @create-form="isDialogVisible = true" />
       <FormContainer :key="reloadKey" @refresh="reloadKey++" />
     </div>
-    <Button class="w-full absolute bottom-0 left-0" label="Sincronizza" icon="pi pi-refresh" severity="secondary"
+    <Button class="w-full fixed bottom-0 left-0 mt-8" label="Sincronizza" icon="pi pi-refresh" severity="secondary"
       @click="reloadKey++" />
   </div>
 </template>

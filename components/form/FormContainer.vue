@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Response, User } from "~/types";
+import type { Form, Response, User } from "~/types";
 
 const emit = defineEmits(['refresh']);
 
@@ -9,7 +9,18 @@ const token = useCookie("token").value;
 
 const toast = useToast();
 
-const forms = ref();
+const forms = ref<Form[]>();
+const formsSearch = computed(() => {
+  if (!forms.value) return [];
+  if (!search.value) return forms.value;
+  const searchLower = search.value.toLowerCase();
+  return (forms.value).filter((element: Form) => {
+    return (
+      (element.Titolo?.toLowerCase().includes(searchLower) ?? false) ||
+      (String(element.ID_Modulo ?? '').toLowerCase().includes(searchLower))
+    );
+  });
+});
 
 const deleteForm = async (id: String) => {
   try {
@@ -61,17 +72,26 @@ try {
   });
 }
 
+const search = ref("");
 
 </script>
 
 <template>
   <Toast />
-  <div class="!p-8">
-    <span class="text-3xl font-bold">Siamo felici di riverderti
-      <span class="text-[#68d4bc]">{{ user != undefined ? user.Nome : "" }}</span></span>
-    <div class="w-full flex flex-wrap justify-evenly gap-4 mt-8">
-      <FormCard v-for="form of forms" :key="form.ID_Modulo" :id="form.ID_Modulo" :title="form.Titolo"
-        :description="form.Descrizione" @delete="(id) => deleteForm(id)" image="https://picsum.photos/600/400" />
-    </div>
+  <div class="w-full grid-form place-items-center justify-evenly mt-8 px-8">
+    <span class="text-3xl font-bold col-span-3 place-self-start">Siamo felici di riverderti
+      <span class="text-[#10b981]">{{ user != undefined ? user.Nome : "" }}</span></span>
+    <InputText v-model="search" placeholder="Cerca un modulo per titolo o codice" class="col-span-3" />
+    <FormCard v-for="form in formsSearch" :key="form.ID_Modulo" :form="form" @delete="(id) => deleteForm(id)"
+      image="https://picsum.photos/600/400" />
   </div>
 </template>
+
+<style scoped>
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: stretch;
+  gap: 2rem;
+}
+</style>

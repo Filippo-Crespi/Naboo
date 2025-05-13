@@ -1,22 +1,26 @@
 <script lang="ts" setup>
+definePageMeta({
+  middleware: ["auth"],
+});
+
 const route = useRoute();
 
 const postId = route.params.code;
 
 // Modulo iniziale vuoto
-type Risposta = { testo: string; punteggio: number };
+type Risposta = { Testo: string; Punteggio: number };
 type Domanda = {
-  testo: string;
-  descrizione: string;
-  tipologia: number | null;
-  risposte?: Risposta[];
-  rispostaAperta?: string;
-  rispostaBreve?: string;
+  Testo: string;
+  Descrizione: string;
+  Tipologia: number | null;
+  Risposte?: Risposta[];
+  RispostaAperta?: string;
+  RispostaBreve?: string;
 };
 
 type Sezione = {
-  nome: string;
-  domande: Domanda[];
+  Nome: string;
+  Domande: Domanda[];
 };
 
 const modulo = ref<{ titolo: string; descrizione: string; sezioni: Sezione[] }>({
@@ -24,16 +28,16 @@ const modulo = ref<{ titolo: string; descrizione: string; sezioni: Sezione[] }>(
   descrizione: '',
   sezioni: [
     {
-      nome: '',
-      domande: [
+      Nome: '',
+      Domande: [
         {
-          testo: '',
-          descrizione: '',
-          tipologia: null,
-          risposte: [
+          Testo: '',
+          Descrizione: '',
+          Tipologia: null,
+          Risposte: [
             {
-              testo: '',
-              punteggio: 0,
+              Testo: '',
+              Punteggio: 0,
             },
           ],
         },
@@ -53,16 +57,16 @@ const tipologie = ref([
 // Funzioni per aggiungere sezioni, domande e risposte
 function aggiungiSezione() {
   modulo.value.sezioni.push({
-    nome: '',
-    domande: [
+    Nome: '',
+    Domande: [
       {
-        testo: '',
-        descrizione: '',
-        tipologia: null,
-        risposte: [
+        Testo: '',
+        Descrizione: '',
+        Tipologia: null,
+        Risposte: [
           {
-            testo: '',
-            punteggio: 0,
+            Testo: '',
+            Punteggio: 0,
           },
         ],
       },
@@ -71,25 +75,25 @@ function aggiungiSezione() {
 }
 
 function aggiungiDomanda(sezioneIndex: number) {
-  modulo.value.sezioni[sezioneIndex].domande.push({
-    testo: '',
-    descrizione: '',
-    tipologia: null,
-    risposte: [
+  modulo.value.sezioni[sezioneIndex].Domande.push({
+    Testo: '',
+    Descrizione: '',
+    Tipologia: null,
+    Risposte: [
       {
-        testo: '',
-        punteggio: 0,
+        Testo: '',
+        Punteggio: 0,
       },
     ],
   });
 }
 
 function aggiungiRisposta(sezioneIndex: number, domandaIndex: number) {
-  const domanda = modulo.value.sezioni[sezioneIndex].domande[domandaIndex];
+  const domanda = modulo.value.sezioni[sezioneIndex].Domande[domandaIndex];
 
-  if (domanda.tipologia === 4) { // Scelta Multipla
-    if (!domanda.risposte) domanda.risposte = [];
-    domanda.risposte.push({ testo: '', punteggio: 0 });
+  if (domanda.Tipologia === 4) { // Scelta Multipla
+    if (!domanda.Risposte) domanda.Risposte = [];
+    domanda.Risposte.push({ Testo: '', Punteggio: 0 });
   } else {
     console.warn('Le risposte multiple possono essere aggiunte solo per domande di tipo Scelta Multipla.');
   }
@@ -97,31 +101,31 @@ function aggiungiRisposta(sezioneIndex: number, domandaIndex: number) {
 
 // Funzione per aggiornare la tipologia di una domanda e resettare le risposte
 function aggiornaTipologiaDomanda(sezioneIndex: number, domandaIndex: number, nuovaTipologia: number) {
-  const domanda = modulo.value.sezioni[sezioneIndex].domande[domandaIndex];
+  const domanda = modulo.value.sezioni[sezioneIndex].Domande[domandaIndex];
 
   // Aggiorna la tipologia della domanda
-  domanda.tipologia = nuovaTipologia;
+  domanda.Tipologia = nuovaTipologia;
 
   // Resetta le risposte in base alla nuova tipologia
   if (nuovaTipologia === 4) { // Scelta Multipla
-    domanda.risposte = [{ testo: '', punteggio: 0 }];
-    delete domanda.rispostaAperta;
-    delete domanda.rispostaBreve;
+    domanda.Risposte = [{ Testo: '', Punteggio: 0 }];
+    delete domanda.RispostaAperta;
+    delete domanda.RispostaBreve;
   } else if (nuovaTipologia === 1) { // Vero/Falso
-    domanda.risposte = [
-      { testo: 'Vero', punteggio: 1 },
-      { testo: 'Falso', punteggio: 0 },
+    domanda.Risposte = [
+      { Testo: 'Vero', Punteggio: 1 },
+      { Testo: 'Falso', Punteggio: 0 },
     ];
-    delete domanda.rispostaAperta;
-    delete domanda.rispostaBreve;
+    delete domanda.RispostaAperta;
+    delete domanda.RispostaBreve;
   } else if (nuovaTipologia === 2) { // Risposta Breve
-    domanda.risposte = undefined;
-    domanda.rispostaBreve = '';
-    delete domanda.rispostaAperta;
+    domanda.Risposte = undefined;
+    domanda.RispostaBreve = '';
+    delete domanda.RispostaAperta;
   } else if (nuovaTipologia === 3) { // Risposta Lunga
-    domanda.risposte = undefined;
-    domanda.rispostaAperta = '';
-    delete domanda.rispostaBreve;
+    domanda.Risposte = undefined;
+    domanda.RispostaAperta = '';
+    delete domanda.RispostaBreve;
   }
 }
 
@@ -132,7 +136,7 @@ function inviaModulo() {
 
 // Funzione per rimuovere una domanda
 function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
-  modulo.value.sezioni[sezioneIndex].domande.splice(domandaIndex, 1);
+  modulo.value.sezioni[sezioneIndex].Domande.splice(domandaIndex, 1);
 }
 </script>
 
@@ -161,36 +165,36 @@ function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
     <div v-for="(sezione, sezioneIndex) in modulo.sezioni" :key="sezioneIndex"
       class="mb-6 border border-gray-400 p-4 rounded">
       <label class="block text-sm font-medium text-gray-700">Nome Sezione</label>
-      <InputText v-model="sezione.nome" class="mt-1 block w-full" />
+      <InputText v-model="sezione.Nome" class="mt-1 block w-full" />
 
       <!-- Domande -->
-      <div v-for="(domanda, domandaIndex) in sezione.domande" :key="domandaIndex"
+      <div v-for="(domanda, domandaIndex) in sezione.Domande" :key="domandaIndex"
         class="mt-4 border border-gray-400 p-4 rounded">
         <label class="block text-sm font-medium text-gray-700">Testo Domanda</label>
-        <InputText v-model="domanda.testo" class="mt-1 block w-full" />
+        <InputText v-model="domanda.Testo" class="mt-1 block w-full" />
 
         <label class="block text-sm font-medium text-gray-700 mt-4">Descrizione Domanda</label>
-        <Textarea v-model="domanda.descrizione" class="mt-1 block w-full" auto-resize />
+        <Textarea v-model="domanda.Descrizione" class="mt-1 block w-full" auto-resize />
 
         <label class="block text-sm font-medium text-gray-700 mt-4">Tipologia Domanda</label>
-        <Dropdown v-model="domanda.tipologia" :options="tipologie" optionLabel="nome" optionValue="id"
+        <Dropdown v-model="domanda.Tipologia" :options="tipologie" optionLabel="nome" optionValue="id"
           placeholder="Seleziona tipologia" class="mt-1 block w-full"
-          @change="aggiornaTipologiaDomanda(sezioneIndex, domandaIndex, domanda.tipologia ?? 1)" />
+          @change="aggiornaTipologiaDomanda(sezioneIndex, domandaIndex, domanda.Tipologia ?? 1)" />
 
         <!-- Risposte -->
-        <div v-if="domanda.tipologia && domanda.risposte && domanda.tipologia !== 3 && domanda.tipologia !== 2"
+        <div v-if="domanda.Tipologia && domanda.Risposte && domanda.Tipologia !== 3 && domanda.Tipologia !== 2"
           class="mt-4 flex flex-col gap-2">
-          <div v-for="(risposta, rispostaIndex) in domanda.risposte" :key="rispostaIndex"
+          <div v-for="(risposta, rispostaIndex) in domanda.Risposte" :key="rispostaIndex"
             class="flex items-center gap-2">
-            <RadioButton :inputId="`domanda-${domandaIndex}-risposta-${rispostaIndex}`" :value="risposta.punteggio"
+            <RadioButton :inputId="`domanda-${domandaIndex}-risposta-${rispostaIndex}`" :value="risposta.Punteggio"
               :name="`domanda-${domandaIndex}`" disabled />
-            <InputText v-model="risposta.testo" class="w-1/2" />
-            <InputText :value="risposta.punteggio.toString()" type="number" class="w-24"
-              @input="e => risposta.punteggio = Number((e.target as HTMLInputElement).value)" />
+            <InputText v-model="risposta.Testo" class="w-1/2" />
+            <InputText :value="risposta.Punteggio.toString()" type="number" class="w-24"
+              @input="e => risposta.Punteggio = Number((e.target as HTMLInputElement).value)" />
           </div>
         </div>
 
-        <Button v-if="domanda.tipologia === 4" @click="aggiungiRisposta(sezioneIndex, domandaIndex)" class="mt-4"
+        <Button v-if="domanda.Tipologia === 4" @click="aggiungiRisposta(sezioneIndex, domandaIndex)" class="mt-4"
           label="Aggiungi Risposta" icon="pi pi-plus" />
         <Button @click="rimuoviDomanda(sezioneIndex, domandaIndex)" class="mt-4 ml-2 p-button-danger"
           label="Elimina Domanda" icon="pi pi-trash" />

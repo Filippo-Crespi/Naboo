@@ -62,54 +62,39 @@ async function register() {
   <HomeButton class="!absolute top-4 left-4" />
   <Toast />
   <div class="flex items-center justify-center h-screen w-full bg-[#88b4d4]">
-    <Card class="!py-8 !px-4">
-      <template #title
-        ><span class="font-bold text-4xl">Registrati</span>
-        <Divider />
-      </template>
-      <template #content>
-        <div class="m-0 flex flex-col gap-2">
-          <div class="flex flex-col sm:flex-row gap-4">
-            <FloatLabel variant="on">
-              <InputText inputId="Nome" v-model="user.Nome" />
-              <label for="Nome">Nome</label>
-            </FloatLabel>
-            <FloatLabel variant="on">
-              <InputText inputId="Cognome" v-model="user.Cognome" />
-              <label for="Cognome">Cognome</label>
-            </FloatLabel>
-          </div>
-          <div>
-            <FloatLabel variant="on">
-              <InputText inputId="Email" type="email" class="w-full" v-model="user.Email" />
-              <label for="Email">Email</label>
-            </FloatLabel>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <FloatLabel variant="on">
-              <InputText inputId="username" v-model="user.Username" />
-              <label for="username">Nome utente</label>
-            </FloatLabel>
-            <FloatLabel variant="on">
-              <Password
-                inputId="Password"
-                v-model="user.Password"
-                promptLabel="Scegli una password"
-                weakLabel="Troppo semplice"
-                mediumLabel="Normale"
-                strongLabel="Sicura" />
-              <label for="Password">Password</label>
-            </FloatLabel>
-          </div>
-          <Divider />
-          <Button
-            type="button"
-            label="Registrati"
-            icon="pi pi-user-plus"
-            @click="register()"
-            :loading="loading" />
+    <div class="bg-white rounded-xl shadow-2xl p-10 min-w-[350px] flex flex-col gap-6 border-b-4 border-[#10b981]">
+      <div class="font-bold text-5xl text-center text-[#10b981]">Crea un account</div>
+      <Divider />
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row gap-4">
+          <FloatLabel variant="on">
+            <InputText inputId="Nome" v-model="user.Nome" />
+            <label for="Nome">Nome</label>
+          </FloatLabel>
+          <FloatLabel variant="on">
+            <InputText inputId="Cognome" v-model="user.Cognome" />
+            <label for="Cognome">Cognome</label>
+          </FloatLabel>
         </div>
-      </template>
-    </Card>
+        <FloatLabel variant="on">
+          <InputText inputId="Email" type="email" class="w-full" v-model="user.Email" />
+          <label for="Email">Email</label>
+        </FloatLabel>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <FloatLabel variant="on">
+            <InputText inputId="username" v-model="user.Username" />
+            <label for="username">Nome utente</label>
+          </FloatLabel>
+          <FloatLabel variant="on">
+            <Password inputId="Password" v-model="user.Password" promptLabel="Scegli una password"
+              weakLabel="Troppo semplice" mediumLabel="Normale" strongLabel="Sicura" />
+            <label for="Password">Password</label>
+          </FloatLabel>
+        </div>
+      </div>
+      <Divider />
+      <Button type="button" label="Registrati" icon="pi pi-user-plus" @click="register()" :loading="loading"
+        class="w-full" />
+    </div>
   </div>
 </template>

@@ -93,37 +93,34 @@ async function login() {
   <Toast />
   <div class="flex items-center justify-center h-[100dvh] w-[100dvw] bg-[#68d4bc]">
     <div v-if="!isMobile">
-      <Card class="!py-8 !px-4 !min-w-100">
-        <template #title><span class="font-bold text-4xl">Accesso</span>
-          <Divider />
-        </template>
-        <template #content>
-          <div class="flex flex-col gap-2">
-            <FloatLabel variant="on">
-              <InputText inputId="Email" fluid type="email" v-model="user.Email" />
-              <label for="Email">Email</label>
-            </FloatLabel>
-            <FloatLabel variant="on">
-              <Password inputId="Password" fluid v-model="user.Password" :feedback="false" />
-              <label for="Password">Password</label>
-            </FloatLabel>
-          </div>
-          <Divider />
-          <Button type="button" label="Accedi" icon="pi pi-sign-in" class="w-full" @click="login()"
-            :loading="loading" />
-        </template>
-      </Card>
+      <div class="bg-white rounded-xl shadow-2xl p-10 min-w-128 flex flex-col gap-4 border-b-6 border-[#10b981]">
+        <div class="font-bold text-5xl text-center text-[#10b981]">Login</div>
+        <Divider />
+        <div class="flex flex-col gap-4">
+          <FloatLabel variant="on">
+            <InputText inputId="Email" fluid type="email" v-model="user.Email" />
+            <label for="Email">Email</label>
+          </FloatLabel>
+          <FloatLabel variant="on">
+            <Password inputId="Password" fluid v-model="user.Password" :feedback="false" />
+            <label for="Password">Password</label>
+          </FloatLabel>
+        </div>
+        <Divider />
+        <Button type="button" label="Accedi" icon="pi pi-sign-in" class="w-full" @click="login()" :loading="loading" />
+      </div>
     </div>
     <div v-else>
-      <div class="font-bold text-4xl flex items-center gap-4">
-        <i class="pi pi-sign-in !text-3xl"></i>
-        <span>Accesso</span>
-      </div>
-      <Divider />
-      <div class="flex flex-col items-center justify-center gap-8">
-        <div class="flex flex-col gap-2">
+      <div
+        class="bg-white rounded-xl shadow-2xl p-6 w-[90vw] max-w-[400px] flex flex-col gap-6 border-b-4 border-[#10b981]">
+        <div class="font-bold text-4xl flex items-center gap-4 justify-center">
+          <i class="pi pi-sign-in !text-3xl"></i>
+          <span>Accesso</span>
+        </div>
+        <Divider />
+        <div class="flex flex-col gap-4">
           <FloatLabel variant="on">
-            <InputText inputId="Email" type="email" class="w-[80vw]" v-model="user.Email" />
+            <InputText inputId="Email" type="email" class="w-full" v-model="user.Email" />
             <label for="Email">Email</label>
           </FloatLabel>
           <FloatLabel variant="on">
