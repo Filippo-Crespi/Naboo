@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: m-101.th.seeweb.it
--- Generation Time: May 07, 2025 at 06:15 PM
+-- Generation Time: May 15, 2025 at 12:50 AM
 -- Server version: 5.7.33
 -- PHP Version: 7.4.33
 
@@ -61,54 +61,9 @@ CREATE TABLE `Moduli` (
   `IDF_Utente` int(6) UNSIGNED NOT NULL,
   `Titolo` varchar(30) NOT NULL,
   `Descrizione` text NOT NULL,
-  `DataCreazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `DataCreazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Codice` char(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `Moduli`
---
-
-INSERT INTO `Moduli` (`ID_Modulo`, `IDF_Utente`, `Titolo`, `Descrizione`, `DataCreazione`) VALUES
-(115, 3, 'Il mio primo post', 'Ciao a tutti! Questo è il mio primo post su questa piattaforma.', '2025-04-15 08:03:40'),
-(116, 2, 'Consiglio musicale', 'Avete mai ascoltato gli Arctic Monkeys? Super consigliati!', '2025-04-15 08:03:40'),
-(117, 5, 'Nuova playlist JS!', 'Ho creato una playlist da ascoltare mentre programmo.', '2025-04-15 08:03:40'),
-(118, 9, 'Vue.js', 'Mi sto appassionando a Vue.js, è davvero potente e intuitivo.', '2025-04-15 08:03:40'),
-(119, 2, 'Artwork in arrivo', 'Sto lavorando a un nuovo pezzo digitale, vi aggiorno presto!', '2025-04-15 08:03:40'),
-(120, 5, 'Consiglio film', 'Qualcuno ha visto “The Social Network”? Che ne pensate?', '2025-04-15 08:03:40'),
-(121, 3, 'Post test', 'Sto solo testando la piattaforma', '2025-04-15 08:03:40'),
-(122, 9, 'Problema con Git', 'Sto impazzendo con un merge conflict... qualcuno ha dei consigli?', '2025-04-15 08:03:40'),
-(123, 2, 'React vs Vue', 'Qual è secondo voi il framework migliore per iniziare?', '2025-04-15 08:03:40'),
-(124, 5, 'Prima demo pubblica', 'Ho appena condiviso la prima demo del mio progetto personale.', '2025-04-15 08:03:40'),
-(125, 9, 'Back-end & Node', 'Sto iniziando a studiare Node.js, sembra interessante!', '2025-04-15 08:03:40'),
-(126, 3, 'Dark Mode attiva!', 'Ho appena implementato la modalità scura sul mio blog.', '2025-04-15 08:03:40'),
-(127, 2, 'Canzoni da chill', 'Qualcuno ha suggerimenti per musica chill da usare come sottofondo?', '2025-04-15 08:03:40'),
-(128, 5, 'Errore strano', 'Mi esce \"undefined is not a function\", aiuto!', '2025-04-15 08:03:40'),
-(129, 3, 'Bozza copertina', 'Ecco un\'anteprima della copertina che sto disegnando.', '2025-04-15 08:03:40'),
-(130, 10, 'Focus mode: on', 'Oggi solo focus e studio, niente distrazioni.', '2025-04-15 08:03:40'),
-(131, 5, 'Domanda su async/await', 'Non capisco bene quando usare await dentro una funzione.', '2025-04-15 08:03:40'),
-(132, 3, 'Post motivazionale', 'Ogni giorno è un’opportunità per migliorare', '2025-04-15 08:03:40'),
-(133, 9, 'Musica e codice', 'Mi aiuta tantissimo ascoltare techno mentre sviluppo.', '2025-04-15 08:03:40'),
-(134, 2, 'Work in progress', 'Sto sistemando il responsive del mio sito. Coming soon!', '2025-04-15 08:03:40'),
-(135, 14, 'Prova', 'Modulo di prova', '2025-05-07 07:19:38'),
-(136, 14, 'Prova 1', 'Prova modulo', '2025-05-07 07:22:23'),
-(137, 16, 'lollo', 'sono io uwu', '2025-05-07 09:36:54'),
-(11111, 16, 'modulo nuovo', 'sium', '2025-05-07 09:39:42'),
-(11123, 16, 'gsdhjcg2367', 'yufiow78', '2025-05-07 10:56:23'),
-(11128, 16, 'Modulo 4', 'Descrizione del modulo 4', '2025-05-07 11:42:41'),
-(11129, 16, 'Modulo 5', 'Descrizione del modulo 5', '2025-05-07 11:42:41'),
-(11132, 16, 'Modulo 8', 'Descrizione del modulo 8', '2025-05-07 11:42:41'),
-(11133, 16, 'Modulo 9', 'Descrizione del modulo 9', '2025-05-07 11:42:41'),
-(11134, 16, 'Modulo 10', 'Descrizione del modulo 10', '2025-05-07 11:42:41'),
-(11135, 16, 'Modulo 11', 'Descrizione del modulo 11', '2025-05-07 11:42:41'),
-(11136, 16, 'Modulo 12', 'Descrizione del modulo 12', '2025-05-07 11:42:41'),
-(11137, 16, 'Modulo 13', 'Descrizione del modulo 13', '2025-05-07 11:42:41'),
-(11138, 16, 'Modulo 14', 'Descrizione del modulo 14', '2025-05-07 11:42:41'),
-(11139, 16, 'Modulo 15', 'Descrizione del modulo 15', '2025-05-07 11:42:41'),
-(11140, 16, 'Modulo 16', 'Descrizione del modulo 16', '2025-05-07 11:42:41'),
-(11141, 16, 'Modulo 17', 'Descrizione del modulo 17', '2025-05-07 11:42:41'),
-(11142, 16, 'Modulo 18', 'Descrizione del modulo 18', '2025-05-07 11:42:41'),
-(11143, 16, 'Modulo 19', 'Descrizione del modulo 19', '2025-05-07 11:42:41'),
-(11145, 16, 'modulo fantastico', 'descriione maanfantanistica', '2025-05-07 11:50:54');
 
 -- --------------------------------------------------------
 
@@ -118,8 +73,8 @@ INSERT INTO `Moduli` (`ID_Modulo`, `IDF_Utente`, `Titolo`, `Descrizione`, `DataC
 
 CREATE TABLE `Risposte` (
   `ID_Risposta` int(6) UNSIGNED NOT NULL,
-  `IDF_Domanda` int(6) UNSIGNED DEFAULT NULL,
-  `Testo` text NOT NULL,
+  `IDF_Domanda` int(6) UNSIGNED NOT NULL,
+  `Testo` varchar(100) NOT NULL,
   `Punteggio` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -149,19 +104,6 @@ CREATE TABLE `Sessioni` (
   `Sospeso` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `Sessioni`
---
-
-INSERT INTO `Sessioni` (`ID_Sessione`, `IDF_Utente`, `Token`, `DataInizio`, `Sospeso`) VALUES
-(48, 14, '7d44eb94f323779997e84ddbe914fb5c', '2025-04-10 11:56:43', 1),
-(49, 14, '6bccbd3b6792e4663c26f3534ef95610', '2025-05-07 07:18:36', 0),
-(50, 16, 'a858b59a5673ac8c1ea6751cafc33c18', '2025-05-07 09:36:18', 1),
-(51, 16, '5555df01d86faf7f3ce94b313b5e0dfe', '2025-05-07 09:51:36', 1),
-(52, 16, 'a208a60a60f89ea4fca185671f95b1ac', '2025-05-07 09:51:54', 1),
-(53, 16, '81cdc18369b068b3d6ef5e5ea3f24602', '2025-05-07 09:58:54', 1),
-(54, 16, '2976e20337607257e9d6784d4f971dab', '2025-05-07 10:00:48', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -190,7 +132,12 @@ CREATE TABLE `Tipologie` (
 --
 
 INSERT INTO `Tipologie` (`ID_Tipologia`, `Nome`) VALUES
-(1, 'AutenticazioneEmail');
+(1, 'AutenticazioneEmail'),
+(4, 'RispostaMultipla'),
+(5, 'VeroFalso'),
+(6, 'RispostaBreve'),
+(7, 'RispostaLunga'),
+(8, 'RispostaNoLimiti');
 
 -- --------------------------------------------------------
 
@@ -207,19 +154,6 @@ CREATE TABLE `Utenti` (
   `Password` varchar(100) NOT NULL,
   `DataReg` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `Utenti`
---
-
-INSERT INTO `Utenti` (`ID_Utente`, `Username`, `Nome`, `Cognome`, `Email`, `Password`, `DataReg`) VALUES
-(2, 'sara_b', 'Sara', 'Bianchi', 'sara.bianchi@example.com', 'mypassword', '2025-04-08 17:20:39'),
-(3, 'marco22', 'Marco', 'Verdi', 'marco.verdi@example.com', 'qwerty123', '2025-04-08 17:20:39'),
-(5, 'ale89', 'Alessandro', 'Russo', 'ale.russo@example.com', 'ciaociao', '2025-04-08 17:20:39'),
-(9, 'andre_b', 'Andrea', 'Bruni', 'andrea.bruni@example.com', 'andrea321', '2025-04-08 17:20:39'),
-(10, 'vale_f', 'Valentina', 'Ferrari', 'valentina.f@example.com', 'valepass', '2025-04-08 17:20:39'),
-(14, 'lavelliandrea1964@gmail.com', 'ANDREA', 'LAVELLI', 'lavelliandrea1964@gmail.com', '$2y$10$PGZJgLfu2EK/sggqJyRzUORDfEGajJPBQ9wpchbXHJSNdy6TMT1tC', '2025-04-10 11:56:37'),
-(16, 'Filips', 'Filippo', 'Crespi', 'crespifilippo123@gmail.com', '$2y$10$C3rXuTCvdvxduWnKno.SyucN4jaQjkSt2BOWQO.wHwY7oPap1yaA6', '2025-05-07 09:36:01');
 
 --
 -- Indexes for dumped tables
@@ -247,7 +181,6 @@ ALTER TABLE `Domande`
 ALTER TABLE `Moduli`
   ADD PRIMARY KEY (`ID_Modulo`),
   ADD UNIQUE KEY `Titolo` (`Titolo`),
-  ADD UNIQUE KEY `Titolo_2` (`Titolo`),
   ADD KEY `IDF_Utente` (`IDF_Utente`);
 
 --
@@ -298,31 +231,31 @@ ALTER TABLE `Utenti`
 -- AUTO_INCREMENT for table `Domande`
 --
 ALTER TABLE `Domande`
-  MODIFY `ID_Domanda` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Domanda` int(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Moduli`
 --
 ALTER TABLE `Moduli`
-  MODIFY `ID_Modulo` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11146;
+  MODIFY `ID_Modulo` int(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Risposte`
 --
 ALTER TABLE `Risposte`
-  MODIFY `ID_Risposta` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Risposta` int(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Risultati`
 --
 ALTER TABLE `Risultati`
-  MODIFY `ID_Risultato` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Risultato` int(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Sessioni`
 --
 ALTER TABLE `Sessioni`
-  MODIFY `ID_Sessione` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `ID_Sessione` int(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Sezioni`
@@ -334,13 +267,13 @@ ALTER TABLE `Sezioni`
 -- AUTO_INCREMENT for table `Tipologie`
 --
 ALTER TABLE `Tipologie`
-  MODIFY `ID_Tipologia` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Tipologia` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `Utenti`
 --
 ALTER TABLE `Utenti`
-  MODIFY `ID_Utente` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID_Utente` int(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -395,3 +328,39 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- DATI DI ESEMPIO (ID > 20, associato a IDF_Utente 1)
+
+-- Modulo di esempio
+INSERT INTO `Moduli` (`ID_Modulo`, `IDF_Utente`, `Titolo`, `Descrizione`, `Codice`) VALUES
+(21, 1, 'Modulo Demo', 'Un modulo di esempio con domande di tutti i tipi', 'DEMO-0021-0021-0021-0021');
+
+-- Sezione di esempio
+INSERT INTO `Sezioni` (`ID_Sezione`, `IDF_Modulo`, `Nome`) VALUES
+(21, 21, 'Sezione Unica');
+
+-- Domande di esempio
+INSERT INTO `Domande` (`ID_Domanda`, `IDF_Sezione`, `IDF_Modulo`, `IDF_Tipologia`, `Testo`, `Descrizione`) VALUES
+(21, 21, 21, 4, 'Qual è il colore del cielo?', 'Domanda a scelta multipla'),
+(22, 21, 21, 5, 'Il fuoco è caldo?', 'Domanda vero/falso'),
+(23, 21, 21, 6, 'Come ti chiami?', 'Risposta breve'),
+(24, 21, 21, 7, 'Descrivi la tua giornata tipo', 'Risposta lunga'),
+(25, 21, 21, 8, 'Scrivi liberamente un pensiero', 'Risposta senza limiti');
+
+-- Risposte per domande a scelta multipla e vero/falso
+INSERT INTO `Risposte` (`ID_Risposta`, `IDF_Domanda`, `Testo`, `Punteggio`) VALUES
+(21, 21, 'Blu', 1),
+(22, 21, 'Verde', 0),
+(23, 21, 'Rosso', 0),
+(24, 21, 'Giallo', 0),
+(25, 22, 'Vero', 1),
+(26, 22, 'Falso', 0);
+
+-- Esempio di risultato e dettaglio risultato (opzionale, per test)
+INSERT INTO `Risultati` (`ID_Risultato`, `IDF_Modulo`) VALUES (21, 21);
+INSERT INTO `DettRisultati` (`IDF_Risultato`, `IDF_Risposta`, `RispostaBreve`, `RispostaLunga`, `RispostaNoLimiti`) VALUES
+(21, 21, NULL, NULL, NULL), -- Risposta multipla: Blu
+(21, 25, NULL, NULL, NULL), -- Vero/Falso: Vero
+(21, NULL, 'Luca', NULL, NULL), -- Risposta breve
+(21, NULL, NULL, 'Mi sveglio, lavoro, faccio sport.', NULL), -- Risposta lunga
+(21, NULL, NULL, NULL, 'Questo è un pensiero libero.'); -- Risposta senza limiti

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { v4 } from "uuid";
 import { type Form, type Response } from "~/types";
 definePageMeta({
   middleware: ["auth"],
@@ -24,6 +25,7 @@ const creaModulo = async () => {
         Token: token,
         Titolo: modulo.value.Titolo,
         Descrizione: modulo.value.Descrizione,
+        Codice: v4()
       },
       onResponseError({ response }) {
         if (response.status === 404) {
@@ -31,7 +33,7 @@ const creaModulo = async () => {
         }
       },
     });
-    const code = res.data;
+    const code = res.data.Codice;
     toast.add({
       severity: "success",
       summary: "Modulo creato",

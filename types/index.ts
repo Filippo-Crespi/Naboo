@@ -44,14 +44,15 @@ export interface Form {
   Token?: string;
   Titolo?: string;
   Descrizione?: string;
+  Codice?: string;
 }
 
 export interface FormData {
-  Titolo: string;
-  Descrizione: string;
+  Titolo?: string;
+  Descrizione?: string;
+  Codice?: string;
 }
 
-// Types per ogni tabella del database (tutti i campi facoltativi)
 export interface DettRisultati {
   IDF_Risultato?: number;
   IDF_Risposta?: number;

@@ -17,7 +17,7 @@ const formsSearch = computed(() => {
   return (forms.value).filter((element: Form) => {
     return (
       (element.Titolo?.toLowerCase().includes(searchLower) ?? false) ||
-      (String(element.ID_Modulo ?? '').toLowerCase().includes(searchLower))
+      (String(element.Codice ?? '').toLowerCase().includes(searchLower))
     );
   });
 });
@@ -78,12 +78,16 @@ const search = ref("");
 
 <template>
   <Toast />
-  <div class="w-full grid-form place-items-center justify-evenly mt-8 px-8">
-    <span class="text-3xl font-bold col-span-3 place-self-start">Siamo felici di riverderti
+  <div class="w-full grid-form  place-items-center justify-evenly mt-8 px-8">
+    <span class="text-2xl font-bold col-span-3 place-self-start">Siamo felici di riverderti
       <span class="text-[#10b981]">{{ user != undefined ? user.Nome : "" }}</span></span>
     <InputText v-model="search" placeholder="Cerca un modulo per titolo o codice" class="col-span-3" />
-    <FormCard v-for="form in formsSearch" :key="form.ID_Modulo" :form="form" @delete="(id) => deleteForm(id)"
-      image="https://picsum.photos/600/400" />
+    <div class="max-w-full col-span-3 flex flex-col gap-8 md:grid md:grid-cols-3">
+
+      <FormCard v-for="form in formsSearch" :key="form.ID_Modulo" :form="form" @delete="(id) => deleteForm(id)"
+        image="https://picsum.photos/600/400" />
+    </div>
+
   </div>
 </template>
 

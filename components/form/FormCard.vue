@@ -8,23 +8,23 @@
       <h3 class="text-lg font-semibold text-gray-800 truncate flex justify-between">
         <span>{{ form.Titolo }}</span>
         <span v-if="isSupported" class="text-[#10b981] flex items-center gap-2 cursor-pointer select-none"
-          @click="copy(form.ID_Modulo ?? '')">
+          @click="copy(form.Codice ?? '')">
           <span v-if="!copied" class="text-xs ml-1">
-            <Icon name="material-symbols:content-copy-outline-rounded" />
+            <Icon class="text-xl" name="material-symbols:content-copy-outline-rounded" />
           </span>
-          <span v-else class="text-xs ml-1 text-[#10b981]">Copiato!</span>
-          <span class="hover:cursor-pointer ml-2 text-xl">{{ form.ID_Modulo }}</span>
+          <span v-else class="text-xl ml-1 text-[#10b981]">Copiato!</span>
+          <span class="hover:cursor-pointer ml-2 text-xs hidden">{{ form.Codice }}</span>
         </span>
-        <span v-else class="text-[#10b981]">{{ form.ID_Modulo }}</span>
+        <span v-else class="text-[#10b981] text-xs hidden md:block">{{ form.Codice }}</span>
       </h3>
       <p class="text-sm text-gray-600 mt-2 truncate">{{ form.Descrizione }}</p>
     </div>
     <div class="mt-4 flex gap-4">
-      <Button as="router-link" icon="pi pi-pencil" :to="`/edit/${form.ID_Modulo}`" rounded />
+      <Button as="router-link" icon="pi pi-pencil" :to="`/edit/${form.Codice}`" rounded />
       <Button icon="pi pi-trash" @click="showDeleteDialog = true" outlined severity="danger" />
     </div>
-    <Dialog v-model:visible="showDeleteDialog" pt:mask:class="backdrop-blur-sm" header="Conferma Eliminazione"
-      :modal="true" :closable="false" :style="{ width: '30vw' }">
+    <Dialog v-model:visible="showDeleteDialog" pt:mask:class="backdrop-blur-sm" class="!w-7/9"
+      header="Conferma Eliminazione" :modal="true" :closable="false" :style="{ width: '30vw' }">
       <p>Sei sicuro di voler eliminare questo elemento?</p>
       <template #footer>
         <div class="w-full flex gap-4">

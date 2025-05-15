@@ -10,8 +10,6 @@ const setTab = (name: string) => {
 const items = ref([
   { component: "AdminUserView", label: "Utenti", icon: "gridicons:multiple-users" },
   { component: "AdminSessionView", label: "Sessioni", icon: "radix-icons:tokens" },
-  { component: "AdminFormsView", label: "Moduli", icon: "mingcute:report-forms-line" },
-  { component: "AdminReportsView", label: "Report", icon: "majesticons:file-report" },
 ]);
 </script>
 <template>
@@ -21,11 +19,7 @@ const items = ref([
       <div>
         <Tabs :value="tab">
           <TabList>
-            <Tab
-              v-for="tab in items"
-              :key="tab.label"
-              :value="tab.component"
-              @click="setTab(tab.component)">
+            <Tab v-for="tab in items" :key="tab.label" :value="tab.component" @click="setTab(tab.component)">
               <div class="flex items-center gap-2">
                 <Icon :name="tab.icon" size="1.5rem" />
                 <span>{{ tab.label }}</span>
@@ -35,13 +29,7 @@ const items = ref([
         </Tabs>
       </div>
     </div>
-    <Button
-      to="/dashboard"
-      as="router-link"
-      label="Torna alla dashboard"
-      fluid
-      icon="pi pi-sign-out"
-      severity="warn"
+    <Button to="/dashboard" as="router-link" label="Torna alla dashboard" fluid icon="pi pi-sign-out" severity="warn"
       class="!w-full" />
   </nav>
 </template>

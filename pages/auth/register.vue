@@ -62,17 +62,17 @@ async function register() {
   <HomeButton class="!absolute top-4 left-4" />
   <Toast />
   <div class="flex items-center justify-center h-screen w-full bg-[#88b4d4]">
-    <div class="bg-white rounded-xl shadow-2xl p-10 min-w-[350px] flex flex-col gap-6 border-b-4 border-[#10b981]">
+    <div class="bg-white rounded-xl shadow-2xl p-10 md:min-w-[350px] flex flex-col gap-6 border-b-4 border-[#10b981]">
       <div class="font-bold text-5xl text-center text-[#10b981]">Crea un account</div>
       <Divider />
       <div class="flex flex-col gap-4">
-        <div class="flex flex-col sm:flex-row gap-4">
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 place-items-stretch  gap-4">
           <FloatLabel variant="on">
-            <InputText inputId="Nome" v-model="user.Nome" />
+            <InputText inputId="Nome" v-model="user.Nome" class="w-full" />
             <label for="Nome">Nome</label>
           </FloatLabel>
           <FloatLabel variant="on">
-            <InputText inputId="Cognome" v-model="user.Cognome" />
+            <InputText inputId="Cognome" v-model="user.Cognome" class="w-full" />
             <label for="Cognome">Cognome</label>
           </FloatLabel>
         </div>
@@ -82,12 +82,12 @@ async function register() {
         </FloatLabel>
         <div class="flex flex-col sm:flex-row gap-4">
           <FloatLabel variant="on">
-            <InputText inputId="username" v-model="user.Username" />
+            <InputText inputId="username" v-model="user.Username" class="w-full" />
             <label for="username">Nome utente</label>
           </FloatLabel>
-          <FloatLabel variant="on">
+          <FloatLabel variant="on" class="w-full">
             <Password inputId="Password" v-model="user.Password" promptLabel="Scegli una password"
-              weakLabel="Troppo semplice" mediumLabel="Normale" strongLabel="Sicura" />
+              weakLabel="Troppo semplice" mediumLabel="Normale" strongLabel="Sicura" class="w-full" />
             <label for="Password">Password</label>
           </FloatLabel>
         </div>

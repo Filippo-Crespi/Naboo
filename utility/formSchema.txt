@@ -1,18 +1,18 @@
-id_modulo: string
-titolo: string
-descrizione: string
-sezioni: array of {
-  id_sezione: string
-  nome: string
-  domande: array of {
-    id_domanda: string
-    testo: string
-    descrizione: string
-    tipologia: number (1 = vero/falso, 2 = multipla, 3 = aperta, 4 = singola)
-    risposte?: array of {
-      id_risposta: string
-      testo: string
-      punteggio: number
+Titolo: string
+Descrizione: string
+ID_Modulo: string
+Sezioni: array of {
+  ID_Sezione: string
+  Nome: string
+  Domande: array of {
+    ID_Domanda: string
+    Testo: string
+    Descrizione: string
+    Tipologia: number 
+    Risposte?: array of {
+      ID_Risposta: string
+      Testo: string
+      Punteggio: number
     }
   }
 }

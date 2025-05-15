@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { AdminUserView, AdminSessionView, AdminFormsView, AdminReportsView } from "#components";
+import { AdminUserView, AdminSessionView } from "#components";
 
 definePageMeta({
   middleware: ["auth"],
@@ -9,8 +9,8 @@ definePageMeta({
 const dic: Record<string, any> = {
   AdminUserView,
   AdminSessionView,
-  AdminFormsView,
-  AdminReportsView,
+  // AdminFormsView,
+  // AdminReportsView,
 };
 
 const tab = ref(AdminUserView);
