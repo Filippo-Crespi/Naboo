@@ -19,15 +19,18 @@
       </h3>
       <p class="text-sm text-gray-600 mt-2 truncate">{{ form.Descrizione }}</p>
     </div>
-    <div class="mt-4 flex gap-4">
-      <Button as="router-link" icon="pi pi-pencil" :to="`/edit/${form.Codice}`" rounded />
-      <Button icon="pi pi-trash" @click="showDeleteDialog = true" outlined severity="danger" />
+    <div class="mt-4 flex justify-between gap-4">
+      <div>
+        <Button as="router-link" icon="pi pi-pencil" :to="`/edit/${form.Codice}`" rounded />
+        <Button class="ml-4" icon="pi pi-trash" @click="showDeleteDialog = true" outlined severity="danger" />
+      </div>
+      <Button as="router-link" outlined severity="info" icon="pi pi-file" :to="`/report/${form.Codice}`" rounded />
     </div>
-    <Dialog v-model:visible="showDeleteDialog" pt:mask:class="backdrop-blur-sm" class="!w-7/9"
-      header="Conferma Eliminazione" :modal="true" :closable="false" :style="{ width: '30vw' }">
+    <Dialog v-model:visible="showDeleteDialog" pt:mask:class="backdrop-blur-sm" header="Conferma Eliminazione"
+      :modal="true" :closable="false" class="w-5/6 md:w-[unset]">
       <p>Sei sicuro di voler eliminare questo elemento?</p>
       <template #footer>
-        <div class="w-full flex gap-4">
+        <div class=" w-full flex flex-col-reverse md:flex-row gap-4">
           <Button label="Annulla" icon="pi pi-times" @click="showDeleteDialog = false" severity="secondary" />
           <Button label="Conferma" icon="pi pi-check" @click="confirmDelete" severity="danger" />
         </div>

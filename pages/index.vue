@@ -120,7 +120,7 @@ const howItWorks = [
         </Button>
       </div>
     </div>
-    <div class="flex md:mt-16 md:pt-24 pt-0 items-start justify-start px-16 h-[calc(100vh-11.5rem)]">
+    <div class="flex mt-30 md:mt-16 md:pt-24 pt-0 items-start justify-start px-16 h-[calc(100vh-11.5rem)]">
       <div class="flex flex-col gap-6 items-start w-2/3">
         <Button label="User Friendly" icon="pi pi-sparkles" rounded raised outlined severity="secondary" disabled />
         <div class="flex flex-col gap-12">

@@ -54,9 +54,10 @@ const creaModulo = async () => {
 };
 </script>
 <template>
-  <Dialog modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm">
-    <div class="px-4 pb-8 flex flex-col gap-6 min-w-96">
-      <span class="text-4xl font-bold text-[#10b981]">Crea un nuovo modulo</span>
+  <Toast />
+  <Dialog modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm" class="w-5/6 md:w-[unset]">
+    <div class="px-4 pb-8 flex flex-col gap-6">
+      <span class="text-3xl text-center md:text-left md:text-4xl font-bold text-[#10b981]">Crea un nuovo modulo</span>
       <FloatLabel variant="on">
         <InputText type="text" fluid v-model="modulo.Titolo" />
         <label>Titolo modulo</label>
@@ -73,7 +74,10 @@ const creaModulo = async () => {
       <DashboardToolbar @open-drawer="isDrawerVisible = true" @create-form="isDialogVisible = true" />
       <FormContainer :key="reloadKey" @refresh="reloadKey++" />
     </div>
-    <Button class="w-full fixed bottom-0 left-0 mt-8" label="Sincronizza" icon="pi pi-refresh" severity="secondary"
-      @click="reloadKey++" />
+    <div class="hidden md:block w-full fixed bottom-0 left-0 mt-8">
+      <Button label="Sincronizza" fluid icon="pi pi-refresh" severity="secondary" @click="reloadKey++" />
+    </div>
   </div>
 </template>
+
+<style></style>

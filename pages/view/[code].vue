@@ -44,12 +44,17 @@ function isRispostaTestuale(tipologia: number | string) {
 <template>
   <div class="p-4">
     <!-- Cute header con accento verde e pulsanti -->
-    <div class="flex items-center gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4" style="border-color: #10b981;">
-      <Button icon="pi pi-arrow-left" class="p-button-rounded" as="router-link" to="/dashboard" />
-      <Button icon="pi pi-pencil" class="p-button-rounded" as="router-link" :to="`/edit/${route.params.code}`" />
-      <div>
+    <div class="flex items-center justify-start gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4"
+      style="border-color: #10b981;">
+      <div class="flex gap-2">
+        <Button icon="pi pi-arrow-left" class="p-button-rounded" as="router-link" to="/dashboard" />
+        <Button icon="pi pi-pencil" severity="warn" outlined class="p-button-rounded" as="router-link"
+          :to="`/edit/${route.params.code}`" />
+      </div>
+      <div class="flex-1">
         <h1 class="text-2xl font-bold text-gray-800">Anteprima Modulo</h1>
-        <p class="text-sm text-gray-500">Stai visualizzando la versione di anteprima di questo modulo. Puoi modificarlo
+        <p class="hidden md:block text-sm text-gray-500">Stai visualizzando la versione di anteprima di questo modulo.
+          Puoi modificarlo
           cliccando sull'icona matita.</p>
       </div>
     </div>
@@ -70,7 +75,7 @@ function isRispostaTestuale(tipologia: number | string) {
           <h4 class="text-md font-medium">Domanda: {{ domanda.Testo }}</h4>
           <p class="text-gray-600">{{ domanda.Descrizione }}</p>
           <div class="text-xs text-gray-400 mb-2">Tipo: {{ getTipologiaNome(domanda.Tipologia || domanda.IDF_Tipologia)
-            }}</div>
+          }}</div>
           <!-- Risposte -->
           <div
             v-if="isRispostaMultipla(domanda.Tipologia || domanda.IDF_Tipologia) || isVeroFalso(domanda.Tipologia || domanda.IDF_Tipologia)"

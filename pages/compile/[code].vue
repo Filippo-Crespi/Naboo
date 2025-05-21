@@ -200,20 +200,40 @@ async function inviaModulo() {
       if (isRispostaMultipla(tipologia) && typeof rispostaUtente === 'number') {
         risposte.push({
           ID_Risposta: domanda.Risposte[rispostaUtente]?.ID_Risposta,
-          ID_Tipologia: tipologia
+          ID_Tipologia: tipologia,
+          Testo: null // campo testo sempre null per scelta multipla
         });
       } else if (isVeroFalso(tipologia) && typeof rispostaUtente === 'number') {
         risposte.push({
           ID_Risposta: domanda.Risposte[rispostaUtente]?.ID_Risposta,
-          ID_Tipologia: tipologia
-        });
-      } else if (isRispostaBreve(tipologia) || isRispostaLunga(tipologia) || isRispostaNoLimiti(tipologia)) {
-        // Usa sempre l'ID_Risposta reale se presente, anche per risposte aperte
-        const idRisposta = domanda.Risposte && domanda.Risposte[0]?.ID_Risposta ? domanda.Risposte[0].ID_Risposta : domanda.ID_Domanda;
-        risposte.push({
-          ID_Risposta: idRisposta,
           ID_Tipologia: tipologia,
-          Testo: rispostaUtente !== undefined ? rispostaUtente : null
+          Testo: null // campo testo sempre null per vero/falso
+        });
+      } else if (isRispostaBreve(tipologia) && domanda.Risposte && domanda.Risposte.length > 0) {
+        // Gestione risposte brevi: una per ogni risposta prevista (es. domande con più campi brevi)
+        (domanda.Risposte as any[]).forEach((risposta: any, rispostaIndex: number) => {
+          const keyBreve = `${sezioneIndex}-${domandaIndex}-${rispostaIndex}`;
+          risposte.push({
+            ID_Risposta: risposta.ID_Risposta,
+            ID_Tipologia: tipologia,
+            Testo: risposteUtente.value[keyBreve] !== undefined ? risposteUtente.value[keyBreve] : null
+          });
+        });
+      } else if (isRispostaLunga(tipologia) && domanda.Risposte && domanda.Risposte.length > 0) {
+        // Gestione risposte lunghe: usa la chiave senza indice risposta (come da v-model)
+        const keyLunga = `${sezioneIndex}-${domandaIndex}`;
+        risposte.push({
+          ID_Risposta: domanda.Risposte[0].ID_Risposta,
+          ID_Tipologia: tipologia,
+          Testo: risposteUtente.value[keyLunga] !== undefined ? risposteUtente.value[keyLunga] : null
+        });
+      } else if (isRispostaNoLimiti(tipologia) && domanda.Risposte && domanda.Risposte.length > 0) {
+        // Gestione risposte senza limiti: usa la chiave senza indice risposta (come da v-model)
+        const keyNoLimiti = `${sezioneIndex}-${domandaIndex}`;
+        risposte.push({
+          ID_Risposta: domanda.Risposte[0].ID_Risposta,
+          ID_Tipologia: tipologia,
+          Testo: risposteUtente.value[keyNoLimiti] !== undefined ? risposteUtente.value[keyNoLimiti] : null
         });
       } else if (isAutenticazioneEmail(tipologia)) {
         risposte.push({
@@ -252,7 +272,7 @@ async function inviaModulo() {
         detail: 'Le risposte sono state inviate con successo',
         life: 2500,
       });
-      useRouter().push('/home');
+      // useRouter().push('/home');
     }
   } catch (error) {
     toast.add({

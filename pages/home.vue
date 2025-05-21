@@ -22,6 +22,17 @@ const code = ref("");
 const loading = ref(false);
 const search = async () => {
   loading.value = true;
+  code.value = code.value.replace(/\s/g, "");
+  if (code.value.length < 5) {
+    toast.add({
+      severity: "warn",
+      summary: "Attenzione",
+      detail: "Il codice deve essere lungo almeno 5 caratteri",
+      life: 2500,
+    });
+    loading.value = false;
+    return;
+  }
   try {
     const res: Response = await $fetch(
       `https://andrellaveloise.it/forms/users?Codice=${code.value}&data=Titolo+Descrizione`,
@@ -51,7 +62,7 @@ const search = async () => {
 
 <template>
   <Toast />
-  <Dialog class="m-w-50" modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm"
+  <Dialog class="w-5/6 md:w-[unset]" modal v-model:visible="isDialogVisible" pt:mask:class="backdrop-blur-sm"
     header="Modulo trovato">
     <div>
       <p class="text-lg">

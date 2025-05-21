@@ -62,7 +62,7 @@ CREATE TABLE `Moduli` (
   `Titolo` varchar(30) NOT NULL,
   `Descrizione` text NOT NULL,
   `DataCreazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Codice` char(36) NOT NULL
+  `Codice` char(36) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

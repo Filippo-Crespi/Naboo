@@ -1,26 +1,25 @@
 <script setup lang="ts">
 import type { User } from "~/types";
 
-// @ts-ignore
 const user = useCookie("user").value as User;
+
 </script>
 
 <template>
-  <div>
-    <Toolbar>
-      <template #start>
-        <img src="/imgs/logo.png" class="h-8 ml-2" alt="" />
-      </template>
-      <template #center>
-        <Button label="Crea" icon="pi pi-plus" class="mr-2" severity="primary" raised @click="$emit('create-form')" />
-        <!-- <Button label="Carica" icon="pi pi-upload" severity="secondary" text disabled /> -->
-        <Button label="Esporta" icon="pi pi-file-pdf" severity="secondary" text disabled />
-      </template>
-      <template #end>
-        <Avatar class="hover:cursor-pointer mr-2" @click="$emit('open-drawer')" size="large" shape="circle" :image="`https://ui-avatars.com/api/?name=${user.Nome || ''}+${user.Cognome || ''
-          }&rounded=true&bold=true&background=random`" />
-      </template>
-    </Toolbar>
+  <div class="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
+    <Button label="Crea" icon="pi pi-plus" severity="primary" raised @click="$emit('create-form')" />
+  </div>
+  <div class="flex items-center w-full justify-between bg-white shadow-md p-4 rounded-b-lg">
+    <span class="text-3xl font-black flex-1">NABOO</span>
+    <div class="mx-auto my-0 hidden md:block">
+      <Button label="Crea" icon="pi pi-plus" severity="primary" raised @click="$emit('create-form')" />
+      <!-- <Button label="Carica" icon="pi pi-upload" severity="secondary" text disabled /> -->
+      <!-- <Button label="Esporta" icon="pi pi-file-pdf" severity="secondary" text disabled /> -->
+    </div>
+    <div class="flex-1 flex justify-end">
+      <Avatar class="hover:cursor-pointer" @click="$emit('open-drawer')" size="large" shape="circle" :image="`https://ui-avatars.com/api/?name=${user.Nome || ''}+${user.Cognome || ''
+        }&rounded=true&bold=true&background=random`" />
+    </div>
   </div>
 </template>
 

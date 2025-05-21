@@ -264,17 +264,23 @@ async function inviaModulo() {
 function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
   modulo.value.Sezioni[sezioneIndex].Domande.splice(domandaIndex, 1);
 }
+
+// Funzione per rimuovere una sezione
+function rimuoviSezione(sezioneIndex: number) {
+  modulo.value.Sezioni.splice(sezioneIndex, 1);
+}
 </script>
 
 <template>
   <div class="p-4">
     <div class="flex items-center gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4" style="border-color: #10b981;">
-      <Button icon="pi pi-arrow-left" class="p-button-rounded" as="router-link" to="/dashboard" />
-      <Button icon="pi pi-eye" class="p-button-rounded" as="router-link" :to="`/view/${$route.params.code}`" />
+      <Button icon="pi pi-arrow-left" class="p-button-rounded p-button-secondary" as="router-link" to="/dashboard" />
+      <Button icon="pi pi-eye" outlined class="p-button-rounded p-button-info" as="router-link"
+        :to="`/view/${$route.params.code}`" />
 
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Crea Modulo</h1>
-        <p class="text-sm text-gray-500">Crea il tuo modulo personalizzato</p>
+        <p class="hidden md:block text-sm text-gray-500">Crea il tuo modulo personalizzato</p>
       </div>
     </div>
 
@@ -290,7 +296,11 @@ function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
     <!-- Sezioni -->
     <div v-for="(sezione, sezioneIndex) in modulo.Sezioni" :key="sezioneIndex"
       class="mb-6 border border-gray-400 p-4 rounded">
-      <label class="block text-sm font-medium text-gray-700">Nome Sezione</label>
+      <div class="flex justify-between items-center mb-2">
+        <label class="block text-sm font-medium text-gray-700">Nome Sezione</label>
+        <Button icon="pi pi-trash" severity="danger" text rounded size="small" @click="rimuoviSezione(sezioneIndex)"
+          label="Rimuovi sezione" class="ml-2 p-button-danger" />
+      </div>
       <InputText v-model="sezione.Nome" class="mt-1 block w-full" />
 
       <!-- Domande -->
@@ -317,10 +327,10 @@ function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
               @input="e => risposta.Punteggio = Number((e.target as HTMLInputElement).value)" placeholder="Punteggio" />
             <Button v-if="domanda.IDF_Tipologia === 4 && domanda.Risposte && domanda.Risposte.length > 1"
               icon="pi pi-trash" severity="danger" text rounded size="small"
-              @click="domanda.Risposte.splice(rispostaIndex, 1)" />
+              @click="domanda.Risposte.splice(rispostaIndex, 1)" class="p-button-danger" />
           </div>
           <Button v-if="domanda.IDF_Tipologia === 4" @click="aggiungiRisposta(sezioneIndex, domandaIndex)"
-            class="mt-2 w-fit" label="Aggiungi Risposta" icon="pi pi-plus" />
+            class="mt-2 w-fit p-button-success" outlined label="Aggiungi Risposta" icon="pi pi-plus" />
 
           <!-- ANTEPRIMA RISPOSTE -->
           <div class="mt-4 p-3 rounded border border-blue-300 bg-blue-50">
@@ -355,15 +365,16 @@ function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
           <InputText type="number" class="w-40" placeholder="Punteggio" v-model.number="domanda.PunteggioNoLimiti" />
         </div>
 
-        <Button @click="rimuoviDomanda(sezioneIndex, domandaIndex)" class="mt-4 ml-2 p-button-danger"
-          label="Elimina Domanda" icon="pi pi-trash" />
+        <Button @click="rimuoviDomanda(sezioneIndex, domandaIndex)" class="mt-4  p-button-danger"
+          label="Elimina Domanda" icon="pi pi-trash" outlined />
       </div>
 
-      <Button @click="aggiungiDomanda(sezioneIndex)" class="mt-4" label="Aggiungi Domanda" icon="pi pi-plus" />
+      <Button @click="aggiungiDomanda(sezioneIndex)" class="mt-4 p-button-success" outlined label="Aggiungi Domanda"
+        icon="pi pi-plus" />
     </div>
     <div class="flex gap-4 mt-4">
-      <Button @click="aggiungiSezione" label="Aggiungi Sezione" icon="pi pi-plus" />
-      <Button @click="inviaModulo" class="p-button-danger" label="Invia Modulo" icon="pi pi-send" />
+      <Button @click="aggiungiSezione" label="Aggiungi Sezione" outlined icon="pi pi-plus" class="p-button-success" />
+      <Button @click="inviaModulo" class="!bg-[#10b981]" label="Invia Modulo" icon="pi pi-send" />
     </div>
   </div>
 </template>
