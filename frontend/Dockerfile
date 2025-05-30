@@ -1,0 +1,32 @@
+FROM node:18
+
+# Imposta la working directory nel container
+WORKDIR /app
+
+# Copia solo i file package.json e lockfile per la fase di installazione
+COPY package*.json ./
+
+# Installa le dipendenze
+RUN npm install
+
+# Copia tutto il codice nel container (verrà sovrascritto dal volume live)
+COPY . .
+
+# Espone la porta usata da Nuxt in dev
+EXPOSE 3000
+
+# Comando di default se non sovrascritto in docker-compose.yml
+CMD ["npm", "run", "dev"]
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
