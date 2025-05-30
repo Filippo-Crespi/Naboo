@@ -14,18 +14,24 @@ const user = ref(<UserRegister>{
 });
 
 async function register() {
-  for (const key in user.value) {
-    if (!user.value[key as keyof UserRegister]) {
-      toast.add({
-        severity: "error",
-        summary: "Errore",
-        detail: "Compilare tutti i campi",
-        life: 2500,
-      });
-      return;
+  // Validazione lato client
+  if (!user.value.Nome || !user.value.Cognome || !user.value.Email || !user.value.Password || !user.value.Username) {
+    let campoMancante = Object.entries(user.value).find(([_, v]) => !v)?.[0] || "";
+    let msg = "Compilare tutti i campi";
+    if (campoMancante) {
+      msg = `Inserisci il campo: ${campoMancante}`;
     }
+    toast.add({
+      severity: "error",
+      summary: "Errore",
+      detail: msg,
+      life: 2500,
+    });
+    setTimeout(() => {
+      document.getElementById(campoMancante)?.focus();
+    }, 100);
+    return;
   }
-
   try {
     loading.value = true;
     const res: Response = await $fetch("https://andrellaveloise.it/register", {
@@ -35,7 +41,7 @@ async function register() {
       },
       body: user.value,
       onResponseError({ response }) {
-        throw new Error(response._data.message);
+        throw new Error(response._data?.message || "Errore durante la registrazione. Riprova.");
       },
     });
     toast.add({
@@ -49,7 +55,7 @@ async function register() {
     toast.add({
       severity: "error",
       summary: "Errore",
-      detail: (err as Error).message,
+      detail: (err as Error).message || "Registrazione non riuscita. Riprova.",
       life: 2500,
     });
   } finally {

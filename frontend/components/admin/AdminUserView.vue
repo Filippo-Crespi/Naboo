@@ -62,29 +62,19 @@ const deleteUser = async (id: string) => {
       </template>
     </Dialog>
     <ScrollPanel class="w-4/5" style="height: calc(100vh - 60px)">
-      <DataTable
-        v-model:selection="selectedUser"
-        selection-mode="single"
-        dataKey="ID_Utente"
-        sort-field="ID_Utente"
-        striped-rows
-        :value="users"
-        paginator
-        :rows="20">
+      <DataTable v-model:selection="selectedUser" selection-mode="single" dataKey="ID_Utente" sort-field="ID_Utente"
+        striped-rows :value="users" paginator :rows="20">
         <Column sortable field="ID_Utente" header="ID" />
         <Column sortable field="Nome" header="Nome" />
         <Column sortable field="Cognome" header="Cognome" />
         <Column sortable field="Email" header="Email" />
       </DataTable>
     </ScrollPanel>
-    <AdminUserDetail
-      v-if="selectedUser"
-      :user="selectedUser"
-      @delete-user="
-        (id) => {
-          deleteUser(id);
-        }
-      " />
+    <AdminUserDetail v-if="selectedUser" :user="selectedUser" @delete-user="
+      (id) => {
+        deleteUser(id);
+      }
+    " />
   </div>
 </template>
 

@@ -7,15 +7,15 @@
     <div>
       <h3 class="text-lg font-semibold text-gray-800 truncate flex justify-between">
         <span>{{ form.Titolo }}</span>
-        <span v-if="isSupported" class="text-[#10b981] flex items-center gap-2 cursor-pointer select-none"
-          @click="copy(form.Codice ?? '')">
-          <span v-if="!copied" class="text-xs ml-1">
+        <span class="text-[#10b981] flex items-center gap-2 cursor-pointer select-none"
+          @click.stop="copyCodice(form.Codice ?? '')" title="Copia codice">
+          <template v-if="!copied">
             <Icon class="text-xl" name="material-symbols:content-copy-outline-rounded" />
-          </span>
-          <span v-else class="text-xl ml-1 text-[#10b981]">Copiato!</span>
-          <span class="hover:cursor-pointer ml-2 text-xs hidden">{{ form.Codice }}</span>
+          </template>
+          <template v-else>
+            <span class="text-xs ml-1 text-[#10b981]">Codice copiato!</span>
+          </template>
         </span>
-        <span v-else class="text-[#10b981] text-xs hidden md:block">{{ form.Codice }}</span>
       </h3>
       <p class="text-sm text-gray-600 mt-2 truncate">{{ form.Descrizione }}</p>
     </div>
@@ -42,7 +42,6 @@
 
 
 <script lang="ts" setup>
-import { useClipboard } from '@vueuse/core';
 import type { Form } from "../../types"
 
 const props = defineProps({
@@ -61,7 +60,43 @@ const emit = defineEmits<{
 }>();
 
 const showDeleteDialog = ref(false);
-const { text: copiedId, copy, copied, isSupported } = useClipboard();
+const copied = ref(false);
+let copyTimeout: any = null;
+
+function copyCodice(codice: string) {
+  if (!codice) return;
+  // Usa l'API Clipboard standard se disponibile
+  if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(codice).then(() => {
+      copied.value = true;
+      if (copyTimeout) clearTimeout(copyTimeout);
+      copyTimeout = setTimeout(() => copied.value = false, 1500);
+    }, () => {
+      fallbackCopyTextToClipboard(codice);
+    });
+  } else {
+    fallbackCopyTextToClipboard(codice);
+  }
+}
+
+function fallbackCopyTextToClipboard(text: string) {
+  // Fallback per browser che non supportano navigator.clipboard
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';  // Evita scroll
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    copied.value = true;
+    if (copyTimeout) clearTimeout(copyTimeout);
+    copyTimeout = setTimeout(() => copied.value = false, 1500);
+  } catch (err) {
+    // Se anche il fallback fallisce, non mostrare nulla
+  }
+  document.body.removeChild(textArea);
+}
 
 function confirmDelete() {
   showDeleteDialog.value = false;

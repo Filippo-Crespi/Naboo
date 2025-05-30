@@ -19,7 +19,7 @@
       Caricamento...
     </div>
     <template v-else>
-      <div class="mb-4 flex gap-4 items-center">
+      <div class="mb-4 flex flex-col md:flex-row gap-4 items-center">
         <label class="font-medium">Visualizzazione:</label>
         <Select v-model="groupByPerson" :options="viewOptions" optionLabel="label" optionValue="value" class="w-72" />
       </div>
@@ -94,8 +94,12 @@
             </div>
             <div>
               <DataTable :value="compilazione.risposte" class="mb-2" size="small" stripedRows>
-                <Column field="domanda" header="Domanda" />
-                <Column field="risposta" header="Risposta" style="width: 350px" />
+                <Column field="domanda" header="Domanda"
+                  :body="(row: any) => h('div', { class: 'block md:inline' }, row.domanda)" :style="{ width: 'auto' }"
+                  :class="'!p-2'" />
+                <Column field="risposta" header="Risposta"
+                  :body="(row: any) => h('div', { class: 'block md:inline font-semibold' }, row.risposta)"
+                  :style="{ width: 'auto' }" :class="'!p-2'" />
               </DataTable>
             </div>
           </div>

@@ -61,9 +61,9 @@ onMounted(async () => {
       method: "GET",
       onResponseError({ response }) {
         if (response.status === 404) {
-          throw new Error(response._data.message);
+          throw new Error(response._data?.message || "Nessun modulo trovato.");
         } else if (response.status === 500) {
-          throw new Error("Internal Server Error");
+          throw new Error("Errore del server. Riprova più tardi.");
         }
       },
     });
@@ -72,9 +72,11 @@ onMounted(async () => {
     toast.add({
       severity: "error",
       summary: "Errore",
-      detail: (error as Error).message,
+      detail: (error as Error).message || "Impossibile caricare i moduli. Riprova più tardi.",
       life: 2500,
     });
+    // Fallback: lista vuota
+    forms.value = [];
   } finally {
     loading.value = false;
   }

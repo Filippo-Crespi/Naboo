@@ -13,13 +13,9 @@ const token = useCookie("token").value;
     <div class="flex flex-col items-center gap-2">
       <span class="text-red-400" v-if="token == session.Token">Sei tu!</span>
       <span class="text-gray-400">{{ session.ID_Sessione }}</span>
-      <Avatar
-        shape="circle"
-        size="xlarge"
-        :alt="`${session.nome} ${session.cognome}`"
+      <Avatar shape="circle" size="xlarge" :alt="`${session.nome} ${session.cognome}`"
         :image="`https://ui-avatars.com/api/?name=${session.Nome}+${session.Cognome}&rounded=true&bold=true&background=random`"
-        class="w-24 h-24 rounded-full"
-        style="background-color: #f3f4f6" />
+        class="w-24 h-24 rounded-full" style="background-color: #f3f4f6" />
     </div>
     <div class="flex flex-col items-center">
       <span class="text-xl font-bold">{{ session.Nome }} {{ session.Cognome }}</span>
@@ -31,16 +27,11 @@ const token = useCookie("token").value;
       <span class="text-gray-400 font-thin">{{ session.DataInizio }}</span>
     </div>
     <div class="flex flex-col items-center">
-      <Button
-        v-if="session.Sospeso == 0"
-        :disabled="token == session.Token"
-        @click="$emit('delete-session', session.Token)"
-        icon="pi pi-trash"
-        class="w-full mt-4"
-        size="small"
-        label="Sospendi"
-        severity="warn"
-        rounded
+      <Button v-if="session.Sospeso == 0 && token != session.Token" :disabled="false"
+        @click="$emit('delete-session', session.Token)" icon="pi pi-trash" class="w-full mt-4" size="small"
+        label="Sospendi" severity="warn" rounded />
+      <Button v-if="session.Sospeso == 0 && token == session.Token" :disabled="true" icon="pi pi-trash"
+        class="w-full mt-4 opacity-50 cursor-not-allowed" size="small" label="Sospendi" severity="warn" rounded
         v-tooltip.left="{
           value: 'Non puoi sospenderti da solo',
           pt: {

@@ -3,18 +3,18 @@
     <div class="flex items-center gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4" style="border-color: #10b981;">
       <Button icon="pi pi-arrow-left" class="p-button-rounded" as="router-link" to="/dashboard" />
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">Compila Modulo</h1>
-        <p class="text-sm text-gray-500">Rispondi alle domande e invia il modulo</p>
+        <h1 class="text-2xl font-bold">{{ modulo?.Titolo }}</h1>
+        <h2 class="text-xl">{{ modulo?.Descrizione }}</h2>
       </div>
     </div>
     <div v-if="loading" class="text-center text-lg">Caricamento...</div>
     <template v-else>
       <div class="mb-4">
-        <h1 class="text-2xl font-bold">{{ modulo.Titolo }}</h1>
-        <h2 class="text-xl">{{ modulo.Descrizione }}</h2>
+        <h1 class="text-2xl font-bold">{{ modulo?.Titolo }}</h1>
+        <h2 class="text-xl">{{ modulo?.Descrizione }}</h2>
       </div>
       <div>
-        <div v-for="(sezione, sezioneIndex) in modulo.Sezioni" :key="sezioneIndex"
+        <div v-for="(sezione, sezioneIndex) in modulo?.Sezioni || []" :key="sezioneIndex"
           class="mb-6 py-4 px-6 rounded bg-[#10b981]/20">
           <h3 class="text-lg font-semibold">
             {{ sezione.Nome }}
@@ -27,57 +27,61 @@
             <p class="text-gray-600">{{ domanda.Descrizione }}</p>
 
             <!-- Autenticazione Email -->
-            <InputText v-if="isAutenticazioneEmail(domanda.Tipologia || domanda.IDF_Tipologia)" type="email"
+            <InputText v-if="isAutenticazioneEmail(domanda.Tipologia ?? domanda.IDF_Tipologia ?? 0)" type="email"
               class="w-full mt-2" placeholder="Inserisci la tua email"
-              v-model="risposteUtente[`${sezioneIndex}-${domandaIndex}`]" />
+              :modelValue="typeof risposteUtente[`${sezioneIndex}-${domandaIndex}`] === 'string' ? risposteUtente[`${sezioneIndex}-${domandaIndex}`] : ''"
+              @update:modelValue="val => risposteUtente[`${sezioneIndex}-${domandaIndex}`] = typeof val === 'string' ? val : ''" />
             <!-- Risposta Multipla -->
-            <div v-else-if="isRispostaMultipla(domanda.Tipologia || domanda.IDF_Tipologia) && domanda.Risposte"
+            <div v-else-if="isRispostaMultipla(domanda.Tipologia ?? domanda.IDF_Tipologia ?? 0) && domanda.Risposte"
               class="mt-2 flex flex-col gap-2">
               <div v-for="(risposta, rispostaIndex) in domanda.Risposte" :key="rispostaIndex"
                 class="flex items-center gap-2">
                 <RadioButton :inputId="`d${sezioneIndex}-${domandaIndex}-${rispostaIndex}`" :value="rispostaIndex"
                   :name="`d${sezioneIndex}-${domandaIndex}`"
-                  v-model="risposteUtente[`${sezioneIndex}-${domandaIndex}`]" />
+                  :modelValue="typeof risposteUtente[`${sezioneIndex}-${domandaIndex}`] === 'number' ? risposteUtente[`${sezioneIndex}-${domandaIndex}`] : null"
+                  @update:modelValue="val => risposteUtente[`${sezioneIndex}-${domandaIndex}`] = typeof val === 'number' ? val : null" />
                 <label :for="`d${sezioneIndex}-${domandaIndex}-${rispostaIndex}`">
                   {{ risposta.Testo }}
                 </label>
               </div>
             </div>
             <!-- Vero/Falso -->
-            <div v-else-if="isVeroFalso(domanda.Tipologia || domanda.IDF_Tipologia) && domanda.Risposte"
+            <div v-else-if="isVeroFalso(domanda.Tipologia ?? domanda.IDF_Tipologia ?? 0) && domanda.Risposte"
               class="mt-2 flex flex-col gap-2">
               <div v-for="(risposta, rispostaIndex) in domanda.Risposte" :key="rispostaIndex"
                 class="flex items-center gap-2">
                 <RadioButton :inputId="`d${sezioneIndex}-${domandaIndex}-${rispostaIndex}`" :value="rispostaIndex"
                   :name="`d${sezioneIndex}-${domandaIndex}`"
-                  v-model="risposteUtente[`${sezioneIndex}-${domandaIndex}`]" />
+                  :modelValue="typeof risposteUtente[`${sezioneIndex}-${domandaIndex}`] === 'number' ? risposteUtente[`${sezioneIndex}-${domandaIndex}`] : null"
+                  @update:modelValue="val => risposteUtente[`${sezioneIndex}-${domandaIndex}`] = typeof val === 'number' ? val : null" />
                 <label :for="`d${sezioneIndex}-${domandaIndex}-${rispostaIndex}`">
                   {{ risposta.Testo }}
-
                 </label>
               </div>
             </div>
             <!-- Risposta Breve -->
-            <div v-else-if="isRispostaBreve(domanda.Tipologia || domanda.IDF_Tipologia) && domanda.Risposte"
+            <div v-else-if="isRispostaBreve(domanda.Tipologia ?? domanda.IDF_Tipologia ?? 0) && domanda.Risposte"
               class="w-full mt-2 flex flex-col gap-2">
               <div v-for="(risposta, rispostaIndex) in domanda.Risposte" :key="risposta.ID_Risposta"
                 class="flex items-center gap-2">
                 <InputText class="w-full" placeholder="Risposta breve"
-                  v-model="risposteUtente[`${sezioneIndex}-${domandaIndex}-${rispostaIndex}`]" />
-
+                  :modelValue="typeof risposteUtente[`${sezioneIndex}-${domandaIndex}-${rispostaIndex}`] === 'string' ? risposteUtente[`${sezioneIndex}-${domandaIndex}-${rispostaIndex}`] : ''"
+                  @update:modelValue="val => risposteUtente[`${sezioneIndex}-${domandaIndex}-${rispostaIndex}`] = typeof val === 'string' ? val : ''" />
               </div>
             </div>
             <!-- Risposta Lunga -->
-            <div v-else-if="isRispostaLunga(domanda.Tipologia || domanda.IDF_Tipologia)"
+            <div v-else-if="isRispostaLunga(domanda.Tipologia ?? domanda.IDF_Tipologia ?? 0)"
               class="w-full mt-2 flex items-center gap-2">
               <Textarea class="w-full" auto-resize placeholder="Risposta lunga"
-                v-model="risposteUtente[`${sezioneIndex}-${domandaIndex}`]" />
+                :modelValue="typeof risposteUtente[`${sezioneIndex}-${domandaIndex}`] === 'string' ? risposteUtente[`${sezioneIndex}-${domandaIndex}`] : ''"
+                @update:modelValue="val => risposteUtente[`${sezioneIndex}-${domandaIndex}`] = typeof val === 'string' ? val : ''" />
             </div>
             <!-- Risposta No Limiti -->
-            <div v-else-if="isRispostaNoLimiti(domanda.Tipologia || domanda.IDF_Tipologia)"
+            <div v-else-if="isRispostaNoLimiti(domanda.Tipologia ?? domanda.IDF_Tipologia ?? 0)"
               class="w-full mt-2 flex items-center gap-2">
               <Textarea class="w-full" auto-resize placeholder="Risposta senza limiti"
-                v-model="risposteUtente[`${sezioneIndex}-${domandaIndex}`]" />
+                :modelValue="typeof risposteUtente[`${sezioneIndex}-${domandaIndex}`] === 'string' ? risposteUtente[`${sezioneIndex}-${domandaIndex}`] : ''"
+                @update:modelValue="val => risposteUtente[`${sezioneIndex}-${domandaIndex}`] = typeof val === 'string' ? val : ''" />
             </div>
           </div>
         </div>
@@ -90,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Response } from '~/types';
+import type { Response, ModuloCompleto, RispostaUtente, SezioneModulo, DomandaModulo, RispostaOpzione } from '~/types';
 
 // definePageMeta({
 //   middleware: ["auth"],
@@ -101,25 +105,25 @@ const formCode = route.params.code;
 const token = useCookie('token').value;
 const toast = useToast();
 
-const modulo = ref<any>(null);
+const modulo = ref<ModuloCompleto | null>(null);
 const loading = ref(true);
-const risposteUtente = ref<any>({});
+const risposteUtente = ref<RispostaUtente>({});
 
 // Funzione per normalizzare il modulo secondo lo schema richiesto
-function normalizzaModulo(data: any) {
+function normalizzaModulo(data: any): ModuloCompleto {
   return {
     Titolo: data.Titolo || data.titolo || '',
     Descrizione: data.Descrizione || data.descrizione || '',
     ID_Modulo: data.ID_Modulo || data.id_modulo || data.IdModulo || '',
-    Sezioni: (data.Sezioni || data.sezioni || []).map((sez: any) => ({
+    Sezioni: (data.Sezioni || data.sezioni || []).map((sez: any): SezioneModulo => ({
       ID_Sezione: sez.ID_Sezione || sez.id_sezione || '',
       Nome: sez.Nome || sez.nome || '',
-      Domande: (sez.Domande || sez.domande || []).map((dom: any) => ({
+      Domande: (sez.Domande || sez.domande || []).map((dom: any): DomandaModulo => ({
         ID_Domanda: dom.ID_Domanda || dom.id_domanda || '',
         Testo: dom.Testo || dom.testo || '',
         Descrizione: dom.Descrizione || dom.descrizione || '',
         Tipologia: dom.Tipologia || dom.tipologia || dom.IDF_Tipologia || dom.idf_tipologia || 0,
-        Risposte: (dom.Risposte || dom.risposte || []).map((ris: any) => ({
+        Risposte: (dom.Risposte || dom.risposte || []).map((ris: any): RispostaOpzione => ({
           ID_Risposta: ris.ID_Risposta || ris.id_risposta || '',
           Testo: ris.Testo || ris.testo || '',
           Punteggio: ris.Punteggio ?? ris.punteggio ?? 0
@@ -176,14 +180,14 @@ function isAutenticazioneEmail(tipologia: number | string) {
 }
 
 function getTipologiaNome(id: number | string | null) {
-  const t = Tipologie.find((el: any) => String(el.ID_Tipologia) === String(id));
+  const t = Tipologie.find((el: { ID_Tipologia: number }) => String(el.ID_Tipologia) === String(id));
   return t ? t.Nome : 'Sconosciuta';
 }
 
 function selezionaRispostaMultipla(sezioneIdx: number, domandaIdx: number, rispostaIdx: number) {
   const key = `${sezioneIdx}-${domandaIdx}`;
   if (!Array.isArray(risposteUtente.value[key])) risposteUtente.value[key] = [];
-  const arr = risposteUtente.value[key];
+  const arr = risposteUtente.value[key] as number[];
   const i = arr.indexOf(rispostaIdx);
   if (i === -1) arr.push(rispostaIdx);
   else arr.splice(i, 1);
@@ -191,67 +195,65 @@ function selezionaRispostaMultipla(sezioneIdx: number, domandaIdx: number, rispo
 
 async function inviaModulo() {
   // Costruzione risposte secondo lo schema richiesto dal backend
-  const risposte: any[] = [];
-  modulo.value.Sezioni.forEach((sezione: any, sezioneIndex: number) => {
-    sezione.Domande.forEach((domanda: any, domandaIndex: number) => {
+  const risposte: Array<{ ID_Risposta: string | number | undefined; ID_Tipologia: string | number; Testo: string | null }> = [];
+  modulo.value?.Sezioni.forEach((sezione: SezioneModulo, sezioneIndex: number) => {
+    sezione.Domande.forEach((domanda: DomandaModulo, domandaIndex: number) => {
       const tipologia = String(domanda.Tipologia);
       const key = `${sezioneIndex}-${domandaIndex}`;
       const rispostaUtente = risposteUtente.value[key];
       if (isRispostaMultipla(tipologia) && typeof rispostaUtente === 'number') {
         risposte.push({
-          ID_Risposta: domanda.Risposte[rispostaUtente]?.ID_Risposta,
+          ID_Risposta: domanda.Risposte?.[rispostaUtente]?.ID_Risposta,
           ID_Tipologia: tipologia,
-          Testo: null // campo testo sempre null per scelta multipla
+          Testo: null
         });
       } else if (isVeroFalso(tipologia) && typeof rispostaUtente === 'number') {
         risposte.push({
-          ID_Risposta: domanda.Risposte[rispostaUtente]?.ID_Risposta,
+          ID_Risposta: domanda.Risposte?.[rispostaUtente]?.ID_Risposta,
           ID_Tipologia: tipologia,
-          Testo: null // campo testo sempre null per vero/falso
+          Testo: null
         });
       } else if (isRispostaBreve(tipologia) && domanda.Risposte && domanda.Risposte.length > 0) {
-        // Gestione risposte brevi: una per ogni risposta prevista (es. domande con più campi brevi)
-        (domanda.Risposte as any[]).forEach((risposta: any, rispostaIndex: number) => {
+        (domanda.Risposte as RispostaOpzione[]).forEach((risposta: RispostaOpzione, rispostaIndex: number) => {
           const keyBreve = `${sezioneIndex}-${domandaIndex}-${rispostaIndex}`;
           risposte.push({
             ID_Risposta: risposta.ID_Risposta,
             ID_Tipologia: tipologia,
-            Testo: risposteUtente.value[keyBreve] !== undefined ? risposteUtente.value[keyBreve] : null
+            Testo: risposteUtente.value[keyBreve] !== undefined ? String(risposteUtente.value[keyBreve]) : null
           });
         });
       } else if (isRispostaLunga(tipologia) && domanda.Risposte && domanda.Risposte.length > 0) {
-        // Gestione risposte lunghe: usa la chiave senza indice risposta (come da v-model)
         const keyLunga = `${sezioneIndex}-${domandaIndex}`;
         risposte.push({
           ID_Risposta: domanda.Risposte[0].ID_Risposta,
           ID_Tipologia: tipologia,
-          Testo: risposteUtente.value[keyLunga] !== undefined ? risposteUtente.value[keyLunga] : null
+          Testo: risposteUtente.value[keyLunga] !== undefined ? String(risposteUtente.value[keyLunga]) : null
         });
       } else if (isRispostaNoLimiti(tipologia) && domanda.Risposte && domanda.Risposte.length > 0) {
-        // Gestione risposte senza limiti: usa la chiave senza indice risposta (come da v-model)
         const keyNoLimiti = `${sezioneIndex}-${domandaIndex}`;
         risposte.push({
           ID_Risposta: domanda.Risposte[0].ID_Risposta,
           ID_Tipologia: tipologia,
-          Testo: risposteUtente.value[keyNoLimiti] !== undefined ? risposteUtente.value[keyNoLimiti] : null
+          Testo: risposteUtente.value[keyNoLimiti] !== undefined ? String(risposteUtente.value[keyNoLimiti]) : null
         });
       } else if (isAutenticazioneEmail(tipologia)) {
         risposte.push({
           ID_Risposta: domanda.ID_Domanda,
           ID_Tipologia: tipologia,
-          Testo: rispostaUtente
+          Testo: typeof rispostaUtente === 'string' ? rispostaUtente : null
         });
       } else if (rispostaUtente !== undefined && rispostaUtente !== null && rispostaUtente !== "") {
         risposte.push({
           ID_Risposta: domanda.ID_Domanda,
-          ID_Tipologia: tipologia
+          ID_Tipologia: tipologia,
+          Testo: null
         });
       }
     });
   });
 
   const payload = {
-    ID_Modulo: modulo.value.ID_Modulo,
+    ID_Modulo: modulo.value?.ID_Modulo,
     Risposte: risposte
   };
   try {
@@ -272,7 +274,7 @@ async function inviaModulo() {
         detail: 'Le risposte sono state inviate con successo',
         life: 2500,
       });
-      // useRouter().push('/home');
+      useRouter().push('/home');
     }
   } catch (error) {
     toast.add({

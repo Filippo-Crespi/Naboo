@@ -175,3 +175,56 @@ export interface CreateUtenti {
   Email?: string;
   Password?: string;
 }
+
+// Interfaccia per una risposta utente (compilazione)
+export interface RispostaUtente {
+  [key: string]: string | number | null | Array<number>;
+}
+
+// Interfaccia per una risposta (opzione di domanda)
+export interface RispostaOpzione {
+  ID_Risposta?: string | number;
+  Testo?: string;
+  Punteggio?: number;
+}
+
+// Interfaccia per una domanda (annidata in sezione)
+export interface DomandaModulo {
+  ID_Domanda?: string | number;
+  Testo: string;
+  Descrizione?: string;
+  Tipologia?: number;
+  IDF_Tipologia?: number;
+  Risposte?: RispostaOpzione[];
+  RispostaBreve?: string;
+  RispostaLunga?: string;
+  RispostaNoLimiti?: string;
+  PunteggioBreve?: number;
+  PunteggioLunga?: number;
+  PunteggioNoLimiti?: number;
+}
+
+// Interfaccia per una sezione del modulo
+export interface SezioneModulo {
+  ID_Sezione?: string | number;
+  Nome: string;
+  Domande: DomandaModulo[];
+}
+
+// Interfaccia per il modulo completo (usata in edit/compile/view)
+export interface ModuloCompleto {
+  ID_Modulo?: string | number;
+  Titolo: string;
+  Descrizione?: string;
+  Sezioni: SezioneModulo[];
+}
+
+// Interfaccia per oggetto di aggregazione report (esempio base)
+export interface ReportCompilazione {
+  ID_Risultato: string | number;
+  risposte: Array<{
+    domanda: string;
+    risposta: string | null;
+    punteggio: number;
+  }>;
+}

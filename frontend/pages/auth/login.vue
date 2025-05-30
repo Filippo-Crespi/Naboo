@@ -17,16 +17,20 @@ const user = ref<UserLogin>({
 });
 
 async function login() {
-  for (const key in user.value) {
-    if (!user.value[key as keyof UserLogin]) {
-      toast.add({
-        severity: "error",
-        summary: "Errore",
-        detail: "Compilare tutti i campi",
-        life: 2500,
-      });
-      return;
-    }
+  // Validazione lato client
+  if (!user.value.Email || !user.value.Password) {
+    toast.add({
+      severity: "error",
+      summary: "Errore",
+      detail: !user.value.Email ? "Inserisci l'email" : "Inserisci la password",
+      life: 2500,
+    });
+    // Focus automatico sul campo mancante
+    setTimeout(() => {
+      if (!user.value.Email) document.getElementById('Email')?.focus();
+      else document.getElementById('Password')?.focus();
+    }, 100);
+    return;
   }
   try {
     loading.value = true;
@@ -37,10 +41,10 @@ async function login() {
       },
       body: user.value,
       onResponseError({ response }) {
-        throw new Error(response._data.message);
+        // Mostra solo messaggi user-friendly
+        throw new Error(response._data?.message || "Errore di autenticazione. Riprova.");
       },
     });
-
     token = res.data.token;
     const cookieToken = useCookie("token", {
       maxAge: 60 * 60 * 24 * 30, // 30 giorni
@@ -59,7 +63,7 @@ async function login() {
             "Content-Type": "application/json",
           },
           onResponseError({ response }) {
-            throw new Error(response._data.message);
+            throw new Error(response._data?.message || "Errore nel recupero dati utente");
           },
         }
       );
@@ -72,14 +76,19 @@ async function login() {
       });
       cookieUser.value = userData.data[0];
     } catch (err) {
-      console.error(err);
+      toast.add({
+        severity: "warn",
+        summary: "Attenzione",
+        detail: "Impossibile recuperare i dati utente. Riprova dal menu account.",
+        life: 2500,
+      });
     }
     router.push("/dashboard");
   } catch (error) {
     toast.add({
       severity: "error",
       summary: "Errore",
-      detail: (error as Error).message,
+      detail: (error as Error).message || "Credenziali non valide o server non disponibile.",
       life: 2500,
     });
   } finally {
@@ -113,8 +122,8 @@ async function login() {
     <div v-else>
       <div
         class="bg-white rounded-xl shadow-2xl p-6 w-[90vw] max-w-[400px] flex flex-col gap-6 border-b-4 border-[#10b981]">
-        <div class="font-bold text-4xl flex items-center gap-4 justify-center">
-          <i class="pi pi-sign-in !text-3xl"></i>
+        <div class="font-bold text-4xl flex items-center gap-4 justify-center text-[#10b981]">
+          <i class="pi pi-sign-in !text-3xl "></i>
           <span>Accesso</span>
         </div>
         <Divider />

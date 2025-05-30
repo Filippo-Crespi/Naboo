@@ -13,7 +13,7 @@ const items = ref([
 ]);
 </script>
 <template>
-  <nav class="min-w-60 h-screen py-4 px-2 flex flex-col justify-between border-r-1 border-gray-200">
+  <nav class="min-w-60 h-screen py-4 px-2 flex flex-col border-r-1 border-gray-200">
     <div class="flex flex-col gap-12">
       <Logo />
       <div>
@@ -30,7 +30,7 @@ const items = ref([
       </div>
     </div>
     <Button to="/dashboard" as="router-link" label="Torna alla dashboard" fluid icon="pi pi-sign-out" severity="warn"
-      class="!w-full" />
+      class="!w-full mt-8" />
   </nav>
 </template>
 

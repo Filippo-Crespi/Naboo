@@ -67,16 +67,8 @@ const deleteSession = async (token: string) => {
   <Toast />
   <div class="flex">
     <ScrollPanel class="w-4/5" style="height: calc(100vh - 60px)">
-      <DataTable
-        v-model:selection="selectedSession"
-        selection-mode="single"
-        dataKey="ID_Sessione"
-        sort-field="Sospeso"
-        :sort-order="1"
-        striped-rows
-        :value="sessions"
-        paginator
-        :rows="20">
+      <DataTable v-model:selection="selectedSession" selection-mode="single" dataKey="ID_Sessione" sort-field="Sospeso"
+        :sort-order="1" striped-rows :value="sessions" paginator :rows="20">
         <Column sortable field="Sospeso" header="Attiva">
           <template #body="slotProps">
             <Badge size="small" :severity="slotProps.data.Sospeso == 1 ? 'danger' : 'success'" />
@@ -87,9 +79,7 @@ const deleteSession = async (token: string) => {
         <Column field="Token" header="Token" />
       </DataTable>
     </ScrollPanel>
-    <AdminSessionDetail
-      v-if="selectedSession"
-      :session="selectedSession"
+    <AdminSessionDetail v-if="selectedSession" :session="selectedSession"
       @delete-session="(token) => deleteSession(token)" />
   </div>
 </template>
