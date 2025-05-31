@@ -1,20 +1,15 @@
 FROM php:8.2-apache
 
-# Abilita mod_rewrite per Apache (necessario per routing dinamico)
+# Abilita mod_rewrite per Apache
 RUN a2enmod rewrite
 
-# ✅ Installa estensione PDO per MySQL
+# Installa estensione PDO e PDO_MYSQL per PHP
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Copia eventuali file di configurazione Apache personalizzati (es. virtual host)
-# COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
-
-# Copia tutto il codice nella cartella servita da Apache
-# (verrà sovrascritto dal volume in fase di sviluppo)
+# Copia i file PHP nel container
 COPY . /var/www/html/
 
-# Dai i permessi corretti alla cartella (se serve)
+# Imposta permessi corretti
 RUN chown -R www-data:www-data /var/www/html
 
-# Espone la porta 80 del container (mappata a 8080 nel docker-compose)
 EXPOSE 80

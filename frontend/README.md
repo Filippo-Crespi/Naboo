@@ -1,67 +1,75 @@
-# Naboo
+# Nuxt Minimal Starter
 
-" La piattaforma consente la creazione e la compilazione di moduli online, garantendo un’esperienza
-semplice e sicura. Gli utenti registrati possono progettare questionari personalizzati, con la
-possibilità di rendere le risposte anonime. Ognuno di essi sarà compilabile tramite un codice
-univoco. I risultati saranno consultabili tramite email o in un file scaricabile. L’interfaccia
-intuitiva rende il processo di gestione dei moduli alla portata di tutti."
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-"La piattaforma permette di creare e compilare moduli online in modo semplice e sicuro, permettendo
-di personalizzarli e accedervi tramite codici univoci. I risultati saranno poi resi disponibili via
-email o download."
+## Setup
 
-## Modello ER
+Make sure to install dependencies:
 
-<p align="center">
-  <img src="https://i.ibb.co/B5sPqCjV/Modello-ER.jpg" alt="Modello-ER" border="0">
-</p>
+```bash
+# npm
+npm install
 
-## Funzionalità principali
+# pnpm
+pnpm install
 
-### Creazione Moduli
+# yarn
+yarn install
 
-- Anteprima in tempo reale del modulo creato
-- Personalizzazione del layout e del design
-- Validazione dei campi
-- Salvataggio delle modifiche
-- Possibilità di aggiungere puntaggi alle risposte
-- Supporto per vari tipi di input (testo, scelta multipla, checkbox, ecc.)
-- Accessibilità migliorata
-- Ottimizzazione per dispositivi mobili
+# bun
+bun install
+```
 
-### Compilazione Moduli
+## Development Server
 
-- Interfaccia utente
-- Navigazione tra le diverse sezioni del modulo
-- Notifiche in tempo reale per campi obbligatori non compilati
-- Feedback immediato sugli errori di validazione
-- Possibilità di allegare file alle risposte (se richiesto dal modulo)
-- ~~Timer per la compilazione dei moduli a tempo~~
-- ~~Possibilità di salvare le risposte in bozza~~
+Start the development server on `http://localhost:3000`:
 
-### Risultati
+```bash
+# npm
+npm run dev
 
-- Consultazione dei risultati via email
-- Download dei risultati
-  - Esportazione dei risultati in vari formati (CSV, PDF, ecc.)
-  - Condivisione dei risultati
-- Filtraggio dei risultati
-- ~~Archiviazione dei risultati~~
-- ~~Analisi dei dati con grafici e statistiche~~
+# pnpm
+pnpm dev
 
-### Gestione Database
+# yarn
+yarn dev
 
-- Creazione di un utente
-- Creazione di una survey
-  - Creazione di domande e sotto domande con specifiche
-- Riepilogo dei completamenti del survey
-  - Risposte maggiormente selezionate
-- Accesso e compilazione di un modulo/survey in base al codice di accesso
-- Creazione del report finale per gli utenti che completano il sondaggio
-- Ricerca sui moduli creati
+# bun
+bun run dev
+```
 
----
+## Production
 
-<p align="center">
-  <img src="https://i.ibb.co/sw0N4xK/New-Project-1.png"/>
-</p>
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
