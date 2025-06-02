@@ -1,16 +1,17 @@
 <?php
-require_once("../cors.php");
-require_once("../../database/Connection.php");
+require_once "../cors.php";
+require_once "../../database/connect.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $input = json_decode(file_get_contents("php://input"), true);
-  $nome = $input['Nome'] ?? '';
-  $cognome = $input['Cognome'] ?? '';
-  $email = $input['Email'] ?? '';
-  $password = $input['Password'] ?? '';
-  $username = $input['Username'] ?? '';
+  $input = json_decode(file_get_contents("php://input"), associative: true);
+  $first_name = $input['first_name'] ?? '';
+  $last_name = $input['last_name'] ?? '';
+  $email = $input['email'] ?? '';
+  $password = $input['password'] ?? '';
+  $username = $input['username'] ?? '';
 
-  if (!$nome || !$cognome || !$email || !$password || !$username) {
+  // Controllo campi tutti compilati
+  if (!$first_name || !$last_name || !$email || !$password || !$username) {
     http_response_code(400);
     echo json_encode([
       "success" => false,
@@ -19,9 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
     exit;
   }
-  $sql = "SELECT * FROM Utenti WHERE Email = '" . mysqli_real_escape_string($conn, $email) . "' OR Username = '" . mysqli_real_escape_string($conn, $username) . "' LIMIT 1";
-  $result = mysqli_query($conn, $sql);
-  if ($result && mysqli_num_rows($result) > 0) {
+
+  // Controllo esistenza email o username
+  $stmt = $pdo->prepare("SELECT id_user FROM users WHERE email = :email OR username = :username LIMIT 1");
+  $stmt->bindParam(":email", $email);
+  $stmt->bindParam(":username", $username);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  if ($result) {
     http_response_code(409);
     echo json_encode([
       "success" => false,
@@ -30,9 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
     exit;
   }
+  // Hash della password inserita
   $hash = password_hash($password, PASSWORD_DEFAULT);
-  $sql = "INSERT INTO Utenti (Nome, Cognome, Email, Password, Username, DataReg) VALUES ('" . mysqli_real_escape_string($conn, $nome) . "', '" . mysqli_real_escape_string($conn, $cognome) . "', '" . mysqli_real_escape_string($conn, $email) . "', '$hash', '" . mysqli_real_escape_string($conn, $username) . "', NOW())";
-  if (mysqli_query($conn, $sql)) {
+  // Creazione dell'utente
+  $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, username, password, email) VALUES (:first_name, :last_name, :username, :password, :email)");
+  $stmt->bindParam(":first_name", $first_name);
+  $stmt->bindParam(":last_name", $last_name);
+  $stmt->bindParam(":username", $username);
+  $stmt->bindParam(":password", $hash);
+  $stmt->bindParam(":email", $email);
+  if ($stmt->execute()) {
     http_response_code(201);
     echo json_encode([
       "success" => true,
@@ -40,10 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       "data" => null
     ]);
   } else {
+    // Errore generico
     http_response_code(500);
     echo json_encode([
       "success" => false,
-      "message" => "Errore durante la registrazione",
+      "message" => "Errore durante la registrazione, riprovare",
       "data" => null
     ]);
   }

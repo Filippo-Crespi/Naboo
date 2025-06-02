@@ -1,11 +1,11 @@
 <?php
-require_once("../cors.php");
-require_once("../../database/Connection.php");
+require_once "../cors.php";
+require_once "../../database/connect.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $input = json_decode(file_get_contents("php://input"), true);
-  $email = $input['Email'] ?? '';
-  $password = $input['Password'] ?? '';
+  $input = json_decode(file_get_contents("php://input"), associative: true);
+  $email = $input['email'] ?? '';
+  $password = $input['password'] ?? '';
 
   if (!$email || !$password) {
     http_response_code(400);
@@ -17,38 +17,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
   }
 
-  $sql = "SELECT * FROM Utenti WHERE Email = '" . mysqli_real_escape_string($conn, $email) . "' LIMIT 1";
-  $result = mysqli_query($conn, $sql);
-  if (!$result || mysqli_num_rows($result) === 0) {
+  // Controllo se l'utente è registrato
+  $stmt = $pdo->prepare("SELECT password FROM users WHERE email = :email");
+  $stmt->bindParam(":email", $email);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  // Utente non registrato
+  if (!$result) {
     http_response_code(401);
     echo json_encode([
       "success" => false,
-      "message" => "Credenziali non valide",
+      "message" => "Utente non registrato",
       "data" => null
     ]);
     exit;
   }
-  $user = mysqli_fetch_assoc($result);
-  if (!password_verify($password, $user['Password'])) {
-    http_response_code(401);
+  // Verifica corrispondenza password
+  $hashedPassword = $result['password'];
+  // Password errata
+  if (!password_verify($password, $hashedPassword)) {
+    http_response_code(403);
     echo json_encode([
       "success" => false,
-      "message" => "Credenziali non valide",
+      "message" => "Email o password errate",
       "data" => null
     ]);
     exit;
   }
-  // Genera token sessione
-  $token = bin2hex(random_bytes(32));
-  $sql = "INSERT INTO Sessioni (IDF_Utente, Token, DataInizio, Sospeso) VALUES ('{$user['ID_Utente']}', '$token', NOW(), 0)";
-  mysqli_query($conn, $sql);
-  // Sospendi tutte le altre sessioni di quell'utente
-  $sql = "UPDATE Sessioni SET Sospeso=1 WHERE IDF_Utente='{$user['ID_Utente']}' AND Token != '$token'";
-  mysqli_query($conn, $sql);
+  // Dati dell'utente da restituire
+  $stmt = $pdo->prepare("SELECT id_user, first_name, last_name, username, email FROM users WHERE email = :email");
+  $stmt->bindParam(":email", $email);
+  $stmt->execute();
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  // Generazione uuid di sessione
+  $stmt = $pdo->query("SELECT UUID() AS uuid");
+  $uuid = $stmt->fetchColumn();
+  // Creazione della sessione
+  $stmt = $pdo->prepare("INSERT INTO sessions (session_uuid, user_id, expires_at) VALUES (:session_uuid, :user_id, DATE_ADD(NOW(), INTERVAL 24 HOUR))");
+  $stmt->bindParam(":session_uuid", $uuid);
+  $stmt->bindParam(":user_id", $user['id_user']);
+  $stmt->execute();
+  // Risposta al client con uuid sessione e dati
   echo json_encode([
     "success" => true,
     "message" => "Login effettuato",
-    "data" => ["token" => $token]
+    "data" => [
+      "user" => $user,
+      "session_uuid" => $uuid
+    ]
   ]);
   exit;
 }

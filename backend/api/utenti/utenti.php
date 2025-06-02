@@ -1,211 +1,218 @@
 <?php
 
-require("../cors.php");
-require_once('../../database/Connection.php');
+require_once "../cors.php";
+require_once '../../database/connect.php';
 
 //FUNZIONI-------------------------------------------
 
-function verificaToken($token, $conn){
-    $sql = "SELECT Sospeso FROM Sessioni WHERE Token='$token' AND NOT Sospeso";
-    $result = mysqli_query($conn, $sql);
-    if (!$result) {
-        http_response_code(500);
-        die("'Errore nella query verifica token'");
+function verificaSessione($pdo, $session_uuid): bool
+{
+    $stmt = $pdo->prepare("SELECT expires_at FROM sessions WHERE session_uuid = ?");
+    $stmt->execute([$session_uuid]);
+    $res = $stmt->fetchColumn();
+    // Se il token non esiste
+    if ($res == NULL) {
+        return false;
     }
-    return $result;
+    // Se il token è scaduto
+    if ($res < date("Y-m-d H:i:s")) {
+        return false;
+    }
+    // Se il token è valido
+    return true;
 }
 
-//METODO GET --------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
+    $arr = [];
     $IsID = false;
-    //se è presente l'id nella richiesta
-    if(isset($_GET["ID_Utente"])){
-        $id=$_GET["ID_Utente"];
-        $sql = "SELECT * FROM Utenti WHERE ID_Utente=$id";
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            http_response_code(500);
-            die("GET | errore nella query");
-        }
-        $res = mysqli_fetch_assoc($result);
-        if($res==NULL){
+    if (isset($_GET["id_user"])) {
+        $id = intval($_GET["id_user"]);
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id_user = ?");
+        $stmt->execute([$id]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($res == NULL) {
             http_response_code(404);
             die("utente non trovato");
         }
-
+        $arr[] = $res;
         $IsID = true;
-    }
-
-    //se è presente il token nella richiesta
-    else if(isset($_GET["Token"])){
-        $token=$_GET["Token"];
-        verificaToken($token, $conn);
-
-        $sql = "SELECT ID_Utente FROM Utenti INNER JOIN Sessioni 
-            ON Utenti.ID_Utente=Sessioni.IDF_Utente 
-            WHERE Sessioni.Token='$token' ";
-
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            http_response_code(500);
-            die("GET | errore nella query");
-        }
-        $res = mysqli_fetch_assoc($result);
-        if($res==NULL){
+    } else if (isset($_GET["token"])) {
+        $token = $_GET["token"];
+        $stmt = $pdo->prepare("SELECT id_user FROM users INNER JOIN sessions ON users.id_user = sessions.user_id WHERE sessions.session_uuid = ?");
+        $stmt->execute([$token]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($res == NULL) {
             http_response_code(404);
             die("utente non trovato");
         }
-        $id=$res["ID_Utente"];
+        $id = $res["id_user"];
         $IsID = true;
     }
-    
+
     $sql = "SELECT ";
-    //se specifica i paramametri da visualizzare modifico la query
-    if(isset($_GET["stringa"])){
-        $dati=$_GET["stringa"];
-
-        $richieste=explode(' ', $dati);
-        foreach ($richieste as $key => $valore) {
-            $sql .= "Utenti.$valore, ";
+    $params = [];
+    if (isset($_GET["fields"])) {
+        $fields = $_GET["fields"];
+        $requested = explode(',', $fields);
+        foreach ($requested as $key => $val) {
+            $sql .= "users." . trim($val) . ", ";
         }
         $sql = substr($sql, 0, -2);
-    }
-    //se non specifica i parametri da visualizzare li aggiungo tutti
-    else{
+    } else {
         $sql .= "*";
     }
 
-    //se specifica il limite di righe da visualizzare modifico la query
-    if(isset($_GET["limit"])){
-        $limit=$_GET["limit"];
-        $sql.=" FROM Utenti LIMIT $limit";
-
-    }
-    else{
-        if($IsID){
-            $sql.=" FROM Utenti WHERE ID_Utente=$id";
-        }else{
-             $sql.=" FROM Utenti";
+    if (isset($_GET["limit"])) {
+        $limit = intval($_GET["limit"]);
+        $sql .= " FROM users LIMIT $limit";
+    } else {
+        if ($IsID) {
+            $sql .= " FROM users WHERE id_user = ?";
+            $params[] = $id;
+        } else {
+            $sql .= " FROM users";
         }
-        
-        
     }
 
-    //echo $sql;
-    $result = mysqli_query($conn, $sql);
-    if (!$result) {
-        http_response_code(500);
-        die("GET | errore nella query");
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    if (!$IsID) {
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    $i = 0;
-    while($res =  mysqli_fetch_assoc($result)){
-        $arr[$i] = $res;
-        $i++;
-    }
-    $risposta=array(
+    $risposta = array(
         "success" => true,
         "message" => NULL,
-        "data"=>$arr
+        "data" => $arr
     );
     http_response_code(200);
 }
 
 //METODO PATCH --------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
-    $uri =  $_SERVER['REQUEST_URI'];
-    $uri = explode("?", $uri);
+    $input = json_decode(file_get_contents("php://input"), associative: true);
+    $session_uuid = $input['session_uuid'];
 
-    //prendo l'uri della richiesta così da ricavarne il token
-    $uri[1] = urldecode($uri[1]);
-    $uri[1] = explode("=", $uri[1]);
-    $token = $uri[1][1];
-
-    verificaToken($token, $conn);
-
-
-    //ricavo l'ID dell'utente associato al token
-    $sql = "SELECT Utenti.ID_Utente FROM Utenti INNER JOIN Sessioni
-    ON Utenti.ID_Utente=Sessioni.IDF_Utente
-    WHERE Sessioni.Token='" . $token . "' ";
-
-    $result = mysqli_query($conn, $sql);
-    if (!$result) {
-        http_response_code(500);
-        die("'DELETE | errore nella query token'");
+    // Verifica sessione con PDO
+    if (!verificaSessione($pdo, $session_uuid)) {
+        http_response_code(401);
+        echo json_encode([
+            "success" => false,
+            "message" => "Sessione non valida o scaduta",
+            "data" => null
+        ]);
+        exit;
     }
 
-    $res = mysqli_fetch_assoc($result);
-    $ID_Utente = $res["ID_Utente"]; 
+    // Ricava l'ID utente associato al session id
+    $stmt = $pdo->prepare("SELECT users.id_user FROM users INNER JOIN sessions ON users.id_user = sessions.user_id WHERE sessions.session_uuid = ?");
+    $stmt->execute([$session_uuid]);
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$res) {
+        http_response_code(404);
+        echo json_encode([
+            "success" => false,
+            "message" => "Utente non trovato",
+            "data" => null
+        ]);
+        exit;
+    }
+    $id_user = $res["id_user"];
 
-    //ricavo i dati da modificare
-    $dati = json_decode(file_get_contents('php://input'), true);
+    // Ricava i dati da modificare
+    if (!$input || !is_array($input)) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "message" => "Modifiche non valide",
+            "data" => null
+        ]);
+        exit;
+    }
 
-    foreach ($dati as $key => $valore) {
-        $sql = "UPDATE Utenti SET $key='$valore' WHERE ID_Utente=" . $ID_Utente . " ";
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            http_response_code(500);
-            die("'UPDATE | errore nella query'");
+    // Costruisci query dinamica e parametri
+    $input['session_uuid'] = null;
+    $params = [];
+    $fields = [];
+    foreach ($input as $key => $newValue) {
+        if ($newValue !== null) {
+            $fields[] = "`$key` = ?";
+            $params[] = $newValue;
         }
     }
+    // Aggiungi id_user alla fine dei parametri
+    $params[] = $id_user;
 
-    http_response_code(200);
-    $risposta=array(
-        "success" => true,
-        "message" => "dati aggiornati con successo",
-        "data"=>NULL
-    );
-
+    // Prepara ed esegui la query di UPDATE
+    $sql = "UPDATE `users` SET " . implode(", ", $fields) . " WHERE `id_user` = ?";
+    $stmt = $pdo->prepare($sql);
+    if ($stmt->execute($params)) {
+        http_response_code(200);
+        $risposta = [
+            "success" => true,
+            "message" => "Dati aggiornati con successo",
+            "data" => null
+        ];
+    } else {
+        http_response_code(500);
+        $risposta = [
+            "success" => false,
+            "message" => "Errore durante l'aggiornamento dei dati",
+            "data" => null
+        ];
+    }
 }
 
 //METODO DELETE --------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $uri =  $_SERVER['REQUEST_URI'];
+    $uri = $_SERVER['REQUEST_URI'];
     $uri = explode("?", $uri);
-
-    //prendo l'uri della richiesta così da ricavarne il token
     $uri[1] = urldecode($uri[1]);
     $uri[1] = explode("=", $uri[1]);
 
-    if($uri[1][0]=="id"){
-        //se il paramentro dell'uri è ID
-        $ID_Utente = $uri[1][1];
-    }else{
-        //se il parametro dell'uri è Token
-        $token = $uri[1][1];
-        verificaToken($token, $conn);
-
-        //ricavo l'ID dell'utente associato al token
-        $sql = "SELECT Utenti.ID_Utente FROM Utenti INNER JOIN Sessioni
-        ON Utenti.ID_Utente=Sessioni.IDF_Utente
-        WHERE Sessioni.Token='" . $token . "' ";
-
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            http_response_code(500);
-            die("'DELETE | errore nella query token'");
+    if ($uri[1][0] == "id") {
+        $id_user = intval($uri[1][1]);
+    } else {
+        $session_uuid = $uri[1][1];
+        if (!verificaSessione($pdo, $session_uuid)) {
+            http_response_code(401);
+            echo json_encode([
+                "success" => false,
+                "message" => "Sessione non valida o scaduta",
+                "data" => null
+            ]);
+            exit;
         }
-
-        $res = mysqli_fetch_assoc($result);
-        $ID_Utente = $res["ID_Utente"]; 
-
+        $stmt = $pdo->prepare("SELECT users.id_user FROM users INNER JOIN sessions ON users.id_user = sessions.user_id WHERE sessions.session_uuid = ?");
+        $stmt->execute([$session_uuid]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$res) {
+            http_response_code(404);
+            echo json_encode([
+                "success" => false,
+                "message" => "Utente non trovato",
+                "data" => null
+            ]);
+            exit;
+        }
+        $id_user = $res["id_user"];
     }
 
-
-    $sql = "DELETE FROM Utenti WHERE ID_Utente=" . $ID_Utente . " ";
-    $result = mysqli_query($conn, $sql);
-    if (!$result) {
+    $stmt = $pdo->prepare("DELETE FROM users WHERE id_user = ?");
+    if ($stmt->execute([$id_user])) {
+        http_response_code(200);
+        $risposta = [
+            "success" => true,
+            "message" => "Utente eliminato con successo",
+            "data" => null
+        ];
+    } else {
         http_response_code(500);
-        die("'DELETE | errore nella query eliminazione utente'");
+        $risposta = [
+            "success" => false,
+            "message" => "Errore durante l'eliminazione dell'utente",
+            "data" => null
+        ];
     }
-
-    http_response_code(200);
-    $risposta=array(
-        "success" => true,
-        "message" => "Utente eliminato con successo",
-        "data"=>NULL
-    );  
 }
 
-    echo json_encode($risposta);
+echo json_encode($risposta);

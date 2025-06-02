@@ -13,7 +13,13 @@
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "^1.13.0",
     "@nuxt/image": "^1.10.0",
+    "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
+    "@primeuix/themes": "^1.1.1",
+    "@primevue/forms": "^4.3.4",
+    "@primevue/nuxt-module": "^4.3.4",
+    "@vueuse/nuxt": "^13.3.0",
     "nuxt": "^3.17.4",
+    "primevue": "^4.3.4",
     "vue": "^3.5.15",
     "vue-router": "^4.5.1"
   }

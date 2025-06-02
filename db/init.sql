@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `forms` (
     `id_form` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
     `code` VARCHAR(255) NOT NULL,
     `data` JSON NOT NULL,
     `anonymous` BOOLEAN DEFAULT FALSE,
@@ -64,7 +66,6 @@ CREATE TABLE IF NOT EXISTS `sessions` (
     `user_id` INT NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `expires_at` TIMESTAMP NOT NULL,
-    `is_active` BOOLEAN DEFAULT TRUE,
     `notes` VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id_user`) ON DELETE CASCADE
 );

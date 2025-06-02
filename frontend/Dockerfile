@@ -1,16 +1,19 @@
 FROM node:18
 
-# Imposta la working directory nel container
+# Setta la working directory
 WORKDIR /app
 
-# Copia solo i file package.json e lockfile per la fase di installazione
+# Copia package.json e lockfile
 COPY package*.json ./
 
 # Installa le dipendenze
 RUN npm install
 
-# Copia tutto il codice nel container (verrà sovrascritto dal volume live)
+# Copia il resto del codice
 COPY . .
 
 # Espone la porta usata da Nuxt in dev
 EXPOSE 3000
+
+# Comando per avviare Nuxt in modalità sviluppo (con HMR)
+CMD ["npm", "run", "dev"]
