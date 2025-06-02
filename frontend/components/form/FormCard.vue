@@ -1,14 +1,13 @@
 <template>
-  <div
-    class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 ease-in-out p-4 flex flex-col justify-between border-b-4 border-[#10b981]">
-    <!-- <div>
-      <NuxtImg :src="image" class="w-full h-full object-cover" />
-    </div> -->
+  <div :class="[
+    'bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 ease-in-out p-4 flex flex-col justify-between border-b-4',
+    form.anonymous ? 'border-gray-400' : 'border-[#10b981]'
+  ]">
     <div>
       <h3 class="text-lg font-semibold text-gray-800 truncate flex justify-between">
-        <span>{{ form.Titolo }}</span>
+        <span>{{ form.title }}</span>
         <span class="text-[#10b981] flex items-center gap-2 cursor-pointer select-none"
-          @click.stop="copyCodice(form.Codice ?? '')" title="Copia codice">
+          @click.stop="copyCodice(form.code ?? '')" title="Copia codice">
           <template v-if="!copied">
             <Icon class="text-xl" name="material-symbols:content-copy-outline-rounded" />
           </template>
@@ -17,14 +16,20 @@
           </template>
         </span>
       </h3>
-      <p class="text-sm text-gray-600 mt-2 truncate">{{ form.Descrizione }}</p>
+      <p class="text-sm text-gray-600 mt-2 truncate">{{ form.description }}</p>
     </div>
-    <div class="mt-4 flex justify-between gap-4">
-      <div>
-        <Button as="router-link" icon="pi pi-pencil" :to="`/edit/${form.Codice}`" rounded />
-        <Button class="ml-4" icon="pi pi-trash" @click="showDeleteDialog = true" outlined severity="danger" />
+    <div class="mt-6 flex justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <Button as="router-link" :to="`/edit/${form.code}`" rounded>
+          <Icon name="solar:pen-bold-duotone" />
+        </Button>
+        <Button severity="danger" @click="showDeleteDialog = true">
+          <Icon name="solar:trash-bin-2-bold-duotone" />
+        </Button>
       </div>
-      <Button as="router-link" outlined severity="info" icon="pi pi-file" :to="`/report/${form.Codice}`" rounded />
+      <Button as="router-link" outlined severity="info" :to="`/report/${form.code}`" rounded>
+        <Icon name="solar:documents-bold-duotone" class="text-[#10b981]" />
+      </Button>
     </div>
     <Dialog v-model:visible="showDeleteDialog" pt:mask:class="backdrop-blur-sm" header="Conferma Eliminazione"
       :modal="true" :closable="false" class="w-5/6 md:w-[unset]">
@@ -100,8 +105,8 @@ function fallbackCopyTextToClipboard(text: string) {
 
 function confirmDelete() {
   showDeleteDialog.value = false;
-  if (props.form.ID_Modulo)
-    emit('delete', props.form.ID_Modulo);
+  if (props.form.id_form)
+    emit('delete', String(props.form.id_form));
 }
 </script>
 

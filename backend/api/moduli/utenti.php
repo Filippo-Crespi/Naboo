@@ -1,7 +1,7 @@
 <?php
 
-require("../cors.php");
-require_once('../../database/connect.php');
+require_once "../cors.php";
+require_once '../../database/connect.php';
 
 //funzione per verificare che la sessione sia ativa e che il token sia valido 
 function verificaSessione($pdo, $session_uuid): bool
@@ -34,17 +34,14 @@ function verificaModulo($pdo, $id_form)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-  require_once('../../database/Connection.php');
-  // Conversione dei dati in JSON in un array associativo
-  $dati = json_decode(file_get_contents("php://input"), true);
+  $input = json_decode(file_get_contents("php://input"), true);
 
-  if (!isset($dati["Titolo"]) && !isset($dati["Descrizione"])) { // CREAZIONE NUOVO MODULO CON TUTTI I DATI
+  if (!isset($input["title"]) || !isset($input["description"])) {
+    // CREAZIONE NUOVO MODULO CON TUTTI I DATI
 
-    $session_uuid = $dati["session_uuid"];
-    $modulo = $dati["Codice"];
-    $result = verificaToken($token, $conn);
-    $utente = mysqli_fetch_assoc($result);
-    if ($utente == NULL) { //se il token non è valido 
+    $session_uuid = $input["session_uuid"];
+
+    if (!$result = verificaSessione($pdo, $session_uuid)) { //se il token non è valido 
 
       $msg = "Sessione scaduta, effettua il login";
       http_response_code(404);
@@ -56,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
       );
     } else {
       //query per trovare il modulo richiesto 
-      $sql = "SELECT ID_Modulo FROM Moduli WHERE Codice='$modulo'";
+      $sql = "SELECT ID_Modulo FROM Moduli WHERE Codice='$'";
       $result = mysqli_query($conn, $sql);
       if (!$result) {
         die("'Errore nella query'");
@@ -164,45 +161,48 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
   } else {
 
     // CREAZIONE NUOVO MODULO TIOLO E DESCRZIONE 
-
-    $token = $dati["Token"];
-    $titolo = $dati["Titolo"];
-    $descrizione = $dati["Descrizione"];
-    $codice = $dati["Codice"];
-    $result = verificaToken($token, $conn);
-    $utente = mysqli_fetch_assoc($result);
-    if ($utente == NULL) { //se il token non è valido 
-      $msg = "Sessione scaduta, effettua il login";
-      http_response_code(404);
-      $risposta = array(
+    $session_uuid = $input["session_uuid"];
+    $title = $input["title"];
+    $is_anonymous = $input["anonymous"];
+    $description = $input["description"];
+    if (!verificaSessione($pdo, $session_uuid)) {
+      echo json_encode([
         "success" => false,
-        "message" => $msg,
-        "data" => NULL
-      );
-    } else {
-      //creo il nuovo modulo
-      $sql = "INSERT INTO Moduli (IDF_Utente, Titolo, Descrizione, Codice) VALUES ('" . $utente['IDF_Utente'] . "', '" . $titolo . "', '" . $descrizione . "','" . $codice . "')";
-      $result = mysqli_query($conn, $sql);
-      //estrapolo l'id del nuovo modulo
-      $id = mysqli_insert_id($conn);
-      $data = array(
-        "Codice" => $codice,
-        "ID_Moduli" => $id
-      );
-      $msg = "Modulo creato";
-      http_response_code(200);
-      $risposta = array(
-        "success" => true,
-        "message" => $msg,
-        "data" => $data
-      );
+        "message" => "Sessione scaduta, effettua il login",
+        "data" => null
+      ]);
+      exit;
     }
+    // Creo il nuovo modulo
+    $user_id = tokenToId($session_uuid);
+    $stmt = $pdo->prepare("SELECT UUID()");
+    $stmt->execute();
+    $code = $stmt->fetchColumn();
+    $sql = "INSERT INTO forms (user_id, title, description, code, anonymous) VALUES (:user_id, :title, :description, :code, :is_anonymous)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":user_id", $user_id);
+    $stmt->bindParam(":title", $title);
+    $stmt->bindParam(":description", $description);
+    $stmt->bindParam(":code", $code);
+    $stmt->bindParam(":is_anonymous", $is_anonymous, PDO::PARAM_BOOL);
+    $stmt->execute();
+    //estrapolo l'id del nuovo modulo
+    $id = $pdo->lastInsertId();
+    $data = [
+      "code" => $code,
+      "id_form" => $id,
+    ];
+    http_response_code(200);
+    $risposta = [
+      "success" => true,
+      "message" => "Modulo creato con successo con codice: $code",
+      "data" => $data
+    ];
   }
 
   echo json_encode($risposta); //invio della risposta
-  $conn->close(); //chiusura connessione 
+  exit;
 } else if ($_SERVER['REQUEST_METHOD'] === "GET") {
-  // Recupera parametri solo da $_GET (query string)
   if (isset($_GET["code"])) {
     $code = $_GET["code"];
     $fields = isset($_GET["fields"]) ? explode(",", $_GET["fields"]) : ["id_form", "title", "description", "code", "created_at", "updated_at"];
@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
       exit;
     }
     $id_user = tokenToId($session_uuid);
-    $sql = "SELECT f.description, f.title, f.id_form, f.code, f.created_at, f.updated_at
+    $sql = "SELECT f.description, f.title, f.id_form, f.code, f.created_at, f.updated_at, f.anonymous
             FROM users u INNER JOIN forms f ON u.id_user = f.user_id
             WHERE u.id_user = :id_user ORDER BY f.created_at DESC";
     $stmt = $pdo->prepare($sql);
@@ -261,7 +261,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
   }
 } else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
 
-  require_once('../../database/Connection.php');
 
   $dati = $_SERVER['QUERY_STRING']; //ricevo i dati nell'url, questa funzione permette di avere i parametri 
 
@@ -323,7 +322,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 } else if ($_SERVER['REQUEST_METHOD'] === "PACTH") {
 
-  require_once('../../database/Connection.php');
 
   $dati = $_SERVER['QUERY_STRING']; //ricevo i dati nell'url, questa funzione permette di avere i parametri 
 

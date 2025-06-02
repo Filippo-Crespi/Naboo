@@ -5,7 +5,7 @@ export interface Response {
 }
 
 export interface User {
-  id_user: number;
+  id_user: string | number;
   first_name: string;
   last_name: string;
   username: string;

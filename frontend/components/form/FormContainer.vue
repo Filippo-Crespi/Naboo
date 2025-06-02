@@ -95,7 +95,7 @@ onMounted(async () => {
     Caricamento moduli...
   </div>
   <div v-else>
-    <div v-if="formsSearch.length === 0" class="flex flex-col items-center justify-center text-lg min-h-[200px]">
+    <div v-if="!forms" class="flex flex-col items-center justify-center text-lg min-h-[200px]">
       <Icon class="text-6xl mb-4 text-[#10b981]" name="solar:square-alt-arrow-up-bold-duotone" />
       <p class="text-gray-500">Nessun modulo trovato.</p>
       <p class="text-gray-500">Crea il tuo primo modulo!</p>
