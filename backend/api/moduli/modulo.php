@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
   try {
     // Prepara la query per recuperare il modulo tramite il codice
-    $stmt = $pdo->prepare("SELECT id_form, code, data, anonymous, needs_authentication, is_active, created_at, updated_at FROM forms WHERE code = :code LIMIT 1");
+    $stmt = $pdo->prepare("SELECT id_form, data, anonymous, created_at, updated_at FROM forms WHERE code = :code LIMIT 1");
     $stmt->bindParam(":code", $code, PDO::PARAM_STR);
     $stmt->execute();
     $form = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
     // Decodifica il campo JSON della struttura modulo
     $formData = json_decode($form["data"], true);
+
     if (json_last_error() !== JSON_ERROR_NONE) {
       http_response_code(500);
       echo json_encode([
@@ -52,17 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
       "message" => null,
       "data" => [
         "id_form" => $form["id_form"],
-        "code" => $form["code"],
         "anonymous" => (bool)$form["anonymous"],
-        "needs_authentication" => (bool)$form["needs_authentication"],
-        "is_active" => (bool)$form["is_active"],
         "created_at" => $form["created_at"],
         "updated_at" => $form["updated_at"],
-        "structure" => $formData
+        "data" => $formData
       ]
     ];
-    header('Content-Type: application/json; charset=utf-8');
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    exit;
   } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([

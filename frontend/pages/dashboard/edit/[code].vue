@@ -33,9 +33,7 @@ const modulo = ref<Form>({
             label: '',
             description: '',
             type: 4,
-            options: [
-              { label: '', score: 0 },
-            ],
+            options: [],
           },
         ],
       },
@@ -44,53 +42,54 @@ const modulo = ref<Form>({
 });
 
 
-// try {
-//   const res: Response = await $fetch('https://andrellaveloise.it/forms?Codice=' + formCode, {
-//     method: 'get',
-//     onResponseError({ response }) {
-//       if (response.status === 404) {
-//         modulo.value = {
-//           Titolo: response._data.data?.Titolo || '',
-//           Descrizione: response._data.data?.Descrizione || '',
-//           Sezioni: [
-//             {
-//               Nome: '',
-//               Domande: [
-//                 {
-//                   Testo: '',
-//                   Descrizione: '',
-//                   Tipologia: null,
-//                   Risposte: [
-//                     {
-//                       Testo: '',
-//                       Punteggio: 0,
-//                     },
-//                   ],
-//                 },
-//               ],
-//             },
-//           ],
-//         };
-//         throw new Error('Modulo non trovato, creato oggetto vuoto con titolo e descrizione.');
-//       }
-//     },
-//   })
-//   modulo.value = res.data
-// } catch (error) {
-//   // Se modulo.value non è già stato impostato dal 404, fallback generico
-//   if (!modulo.value) {
-//     modulo.value = {
-//       Titolo: '',
-//       Descrizione: '',
-//       Sezioni: [], // <-- Inizializza sempre come array vuoto
-//     }
-//   } else if (!modulo.value.Sezioni) {
-//     // Se per qualche motivo Sezioni non è stato impostato
-//     modulo.value.Sezioni = [];
-//   }
-// } finally {
-//   console.log(modulo.value)
-// }
+try {
+  const res: Response = await $fetch('http://localhost:8085/api/moduli/modulo.php?code=' + formCode, {
+    method: 'get',
+    onResponseError({ response }) {
+      if (response.status === 404) {
+        modulo.value = {
+          title: response._data.data?.title || '',
+          description: response._data.data?.description || '',
+          data: {
+            sections: [
+              {
+                title: '',
+                questions: [
+                  {
+                    label: '',
+                    description: '',
+                    type: '4',
+                    options: [
+                      {
+                        label: '',
+                        score: 0,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          }
+        }
+        throw new Error('Modulo non trovato, creato oggetto vuoto con titolo e descrizione.');
+      }
+    }
+  })
+  // Assegna title e description se presenti nella struttura dati
+  modulo.value = {
+    ...res.data,
+    title: res.data.data?.title ?? res.data.title ?? '',
+    description: res.data.data?.description ?? res.data.description ?? '',
+  }
+} catch (error) {
+  // Se modulo.value non è già stato impostato dal 404, fallback generico
+  toast.add({
+    severity: 'error',
+    summary: 'Errore',
+    detail: (error as Error).message || "Impossibile caricare il modulo.",
+    life: 2500,
+  })
+}
 
 // Dopo il caricamento del modulo, assicura che le risposte siano coerenti con la tipologia
 if (modulo.value && Array.isArray(modulo.value.data?.sections)) {
@@ -152,18 +151,20 @@ function aggiornaTipologiaDomanda(sezioneIndex: number, domandaIndex: number, nu
     if (!Array.isArray(domanda.options) || domanda.options.length === 0) {
       domanda.options = [{ label: '', score: 0 }];
     }
-    // Risposte testuali non previste
   } else if (typeNum === 5) {
     domanda.options = [
       { label: 'Vero', score: 1 },
       { label: 'Falso', score: 0 },
     ];
-  } else if (typeNum === 6) {
-    domanda.options = [{ label: '', score: 0 }];
-  } else if (typeNum === 7) {
-    domanda.options = [{ label: '', score: 0 }];
-  } else if (typeNum === 8) {
-    domanda.options = [{ label: '', score: 0 }];
+  } else if (typeNum === 6 || typeNum === 7 || typeNum === 8) {
+    // Se già esiste una opzione, mantieni label e score
+    if (!Array.isArray(domanda.options) || domanda.options.length === 0) {
+      domanda.options = [{ label: '', score: 0 }];
+    } else if (domanda.options.length > 1) {
+      // Se per errore ci sono più opzioni, tieni solo la prima
+      domanda.options = [domanda.options[0]];
+    }
+    // Altrimenti lascia invariato label e score
   } else {
     domanda.options = [];
   }
@@ -171,8 +172,6 @@ function aggiornaTipologiaDomanda(sezioneIndex: number, domandaIndex: number, nu
 
 async function inviaModulo() {
   const moduloDaInviare = {
-    title: modulo.value.title,
-    description: modulo.value.description,
     sections: modulo.value.data?.sections.map((sezione: Section) => ({
       title: sezione.title,
       questions: sezione.questions.map((domanda) => {
@@ -192,15 +191,13 @@ async function inviaModulo() {
       })
     }))
   };
-  console.log(moduloDaInviare);
-  return
   try {
-    const res: Response = await $fetch('https://andrellaveloise.it/forms/users', {
+    const res: Response = await $fetch('http://localhost:8085/api/moduli/utenti.php', {
       method: 'POST',
       body: {
         session_uuid,
-        Codice: formCode,
-        ...moduloDaInviare,
+        code: formCode,
+        data: moduloDaInviare,
       },
       onResponseError({ response }) {
         if (response.status === 404) {
@@ -307,9 +304,8 @@ function rimuoviRisposta(sezioneIndex: number, domandaIndex: number, rispostaInd
             <InputText v-model="risposta.label" class="w-1/2" placeholder="Testo risposta" />
             <InputText :value="risposta.score?.toString() ?? ''" type="number" class="w-24"
               @input="e => risposta.score = Number((e.target as HTMLInputElement).value)" placeholder="Punteggio" />
-            <Button v-if="domanda.options && domanda.options.length > 1" icon="pi pi-trash" severity="danger" text
-              rounded size="small" @click="rimuoviRisposta(sezioneIndex, domandaIndex, rispostaIndex)"
-              class="p-button-danger">
+            <Button v-if="domanda.options && domanda.options.length > 1" severity="danger" text rounded size="small"
+              @click="rimuoviRisposta(sezioneIndex, domandaIndex, rispostaIndex)" class="p-button-danger">
               <Icon name="solar:trash-bin-2-bold-duotone" />
             </Button>
           </div>

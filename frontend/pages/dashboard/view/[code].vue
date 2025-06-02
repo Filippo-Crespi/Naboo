@@ -7,7 +7,7 @@ definePageMeta({
 
 const route = useRoute();
 const formCode = route.params.code;
-const token = useCookie('token').value;
+const session_uuid = useCookie('session_uuid').value;
 
 const modulo = ref<Form | null>(null);
 const loading = ref(true);
@@ -15,7 +15,7 @@ const toast = useToast();
 
 // Carica modulo dal backend
 try {
-  const res: Response = await $fetch('https://andrellaveloise.it/forms?Codice=' + formCode, {
+  const res: Response = await $fetch('http://localhost:8085/api/moduli/modulo.php?code=' + formCode, {
     method: 'get',
   });
   modulo.value = res.data;

@@ -27,7 +27,7 @@ interface Question {
 interface Answers {
   id_answer?: number;
   label: string;
-  score: string | number;
+  score: number;
 }
 
 export interface Section {

@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $session_uuid = $input["session_uuid"];
     $code = $input['code'];
-    $form_data = $input['data'];
+    $form_data = json_encode($input['data']);
 
     if (!$result = verificaSessione($pdo, $session_uuid)) {
       //se il token non è valido 
