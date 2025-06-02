@@ -16,18 +16,41 @@ export interface User {
   updated_at?: string;
 }
 
-export interface Form {
-  id_form: number;
-  user_id: number;
+interface Question {
+  id_question?: number;
+  type: string | number;
+  label: string;
+  description?: string;
+  options?: Array<Answers>;
+}
+
+interface Answers {
+  id_answer?: number;
+  label: string;
+  score: string | number;
+}
+
+export interface Section {
+  id_section?: number;
   title: string;
-  description: string;
-  code: string;
-  data: JSON;
-  anonymous: boolean;
-  needs_authentication: boolean;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  description?: string;
+  questions: Array<Question>;
+}
+
+export interface Form {
+  id_form?: number;
+  user_id?: number;
+  title?: string;
+  description?: string;
+  code?: string;
+  data?: {
+    sections: Array<Section>;
+  };
+  anonymous?: boolean;
+  needs_authentication?: boolean;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface FormOwnership {

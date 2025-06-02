@@ -1,11 +1,10 @@
 <?php
-require_once("../cors.php");
-require_once("../../database/Connection.php");
+require_once "../cors.php";
+require_once "../../database/connect.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   // Validità sessione
-  $input = json_decode(file_get_contents("php://input"), associative: true);
-  $session_uuid = $input['session_uuid'] ?? '';
+  $session_uuid = $_GET['session_uuid'] ?? '';
   $stmt = $pdo->prepare("SELECT 1 AS valid FROM sessions WHERE expires_at > NOW() AND session_uuid = :session_uuid");
   $stmt->bindParam(":session_uuid", $session_uuid);
   $stmt->execute();
@@ -23,9 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   http_response_code(200);
   echo json_encode([
     "success" => true,
-    "message" => null,
+    "message" => "Sessione valida",
     "data" => null
   ]);
+  exit;
 }
 
 

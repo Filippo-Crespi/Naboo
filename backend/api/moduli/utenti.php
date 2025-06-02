@@ -40,123 +40,52 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     // CREAZIONE NUOVO MODULO CON TUTTI I DATI
 
     $session_uuid = $input["session_uuid"];
+    $code = $input['code'];
+    $form_data = $input['data'];
 
-    if (!$result = verificaSessione($pdo, $session_uuid)) { //se il token non è valido 
+    if (!$result = verificaSessione($pdo, $session_uuid)) {
+      //se il token non è valido 
 
       $msg = "Sessione scaduta, effettua il login";
       http_response_code(404);
 
-      $risposta = array(
+      $risposta = [
         "success" => false,
         "message" => $msg,
         "data" => NULL
-      );
+      ];
+      exit;
     } else {
       //query per trovare il modulo richiesto 
-      $sql = "SELECT ID_Modulo FROM Moduli WHERE Codice='$'";
-      $result = mysqli_query($conn, $sql);
-      if (!$result) {
-        die("'Errore nella query'");
-      }
+      $sql = "SELECT id_form FROM forms WHERE code=:code";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindParam(":code", $code);
+      $result = $stmt->execute();
+      $id_form = $stmt->fetchColumn();
 
-      if (mysqli_num_rows($result) < 1) { //se non esiste il modulo 
+      if ($id_form === false) { //se non esiste il modulo 
         $msg = "Modulo non trovato";
         http_response_code(404);
-        $risposta = array(
+        $risposta = [
           "success" => false,
           "message" => $msg,
           "data" => NULL
-        );
+        ];
         echo json_encode($risposta);
-        $conn->close();
         exit;
       }
-      $idModulo = mysqli_fetch_assoc($result)["ID_Modulo"];
-      //query per trovare le sezioni del modulo 
-      $sql = "SELECT ID_Sezione FROM Sezioni WHERE IDF_Modulo='$idModulo'";
-      $result = mysqli_query($conn, $sql);
-      if (!$result) {
-        die("'Errore nella query'");
-      }
-      if (mysqli_num_rows($result) > 0) { //se esistono delle sezioni 
-        $msg = "Esistono già delle sezioni per questo modulo, impossibile continuare";
-        http_response_code(400);
+
+      $stmt = $pdo->prepare('UPDATE forms SET data = :data WHERE code = :code');
+      $stmt->bindParam(':data', $form_data);
+      $stmt->bindParam(':code', $code);
+      if ($stmt->execute()) {
+        http_response_code(201);
         $risposta = array(
-          "success" => false,
-          "message" => $msg,
+          "success" => true,
+          "message" => "Modulo aggiornato con successo",
           "data" => NULL
         );
-        echo json_encode($risposta);
-        $conn->close();
-        exit;
       }
-      $sezioni = $dati["Sezioni"];
-      foreach ($sezioni as $sezione) {
-
-        $testo = $sezione["Nome"];
-        //inserisco le seioni nel database
-        $sql = "INSERT INTO Sezioni (IDF_Modulo, Nome) VALUES ('" . $idModulo . "','" . $testo . "')";
-        $result = mysqli_query($conn, $sql);
-
-        if (!$result) {
-
-          die("'Errore nella query'");
-        }
-        //estrapolo il nuovo id delle sezioni appena create 
-        $id_sezione = mysqli_insert_id($conn);
-
-        foreach ($sezione["Domande"] as $domanda) {
-          //query per ricavare la tipologia di domanda 
-          $sql = "SELECT ID_Tipologia FROM Tipologie WHERE ID_Tipologia = '" . $domanda["Tipologia"] . "'";
-          $result = mysqli_query($conn, $sql);
-          if (!$result || mysqli_num_rows($result) < 1) { //se la tipologia non esiste 
-            http_response_code(500);
-            $msg = "Tipologia non esiste";
-            $risposta = array(
-              "success" => false,
-              "message" => $msg,
-              "data" => NULL
-            );
-            echo json_encode($risposta); ///funzione per convedrtire da array associativo a json e inviarla 
-            $conn->close(); //chiudo la connessione
-          }
-          //query er inserire la doamnda nel database 
-          $sql = "INSERT INTO Domande (IDF_Sezione, IDF_Modulo, IDF_Tipologia, Testo, Descrizione) VALUES ('" . $id_sezione . "', '" . $idModulo . "','" . $domanda["Tipologia"] . "', '" . mysqli_real_escape_string($conn, $domanda["Testo"]) . "','" . mysqli_real_escape_string($conn, $domanda["Descrizione"]) . "')";
-          $result = mysqli_query($conn, $sql);
-
-          if (!$result) {
-
-            die("'Errore nella query'");
-          }
-          //ricavo il nuovo id della nuova domanda 
-          $id_domanda = mysqli_insert_id($conn);
-          foreach ($domanda["Risposte"] as $risposta) {
-            //se la domanda è a risposta aperta allora non inserisco alcun testo nelle risposte nel database 
-            if ($domanda["Tipologia"] == 1 || $domanda["Tipologia"] == 6 || $domanda["Tipologia"] == 7) {
-
-              $testo_risposta = NULL;
-            } else {
-
-              $testo_risposta = $risposta["Testo"];
-            }
-            //query per inserire le possibili risposte nel database 
-            $sql = "INSERT INTO Risposte (IDF_Domanda, Testo, Punteggio) VALUES ('" . $id_domanda . "', '" . $testo_risposta . "','" . $risposta["Punteggio"] . "')";
-            $result = mysqli_query($conn, $sql);
-            if (!$result) {
-
-              die("'Errore nella query'");
-            }
-          }
-        }
-      }
-      $msg = "Modulo creato con successo";
-      http_response_code(201);
-
-      $risposta = array(
-        "success" => true,
-        "message" => $msg,
-        "data" => NULL
-      );
     }
   } else {
 

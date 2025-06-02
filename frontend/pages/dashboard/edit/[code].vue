@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { ModuloCompleto, SezioneModulo, DomandaModulo, RispostaOpzione } from '~/types';
-import type { Response } from '~/types';
+import { type Form, type Response, type Section } from '~/types';
 
 
 definePageMeta({
@@ -8,74 +7,99 @@ definePageMeta({
 });
 
 const route = useRoute();
-const token = useCookie('token').value
+const session_uuid = useCookie('session_uuid').value
 const toast = useToast();
 
 const formCode = route.params.code;
 
-const res1: Response = await $fetch('https://andrellaveloise.it/forms/types?Token=' + token, {
-  method: 'get',
-})
+const types = [
+  { id_type: 1, text: 'Autenticazione' },
+  { id_type: 4, text: 'Risposta Multipla' },
+  { id_type: 5, text: 'Vero Falso' },
+  { id_type: 6, text: 'Risposta breve' },
+  { id_type: 7, text: 'Risposta lunga' },
+  { id_type: 8, text: 'Risposta senza limiti' },
+];
 
-const Tipologie = res1.data
-console.log(Tipologie)
+const modulo = ref<Form>({
+  title: '',
+  description: '',
+  data: {
+    sections: [
+      {
+        title: '',
+        questions: [
+          {
+            label: '',
+            description: '',
+            type: 4,
+            options: [
+              { label: '', score: 0 },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+});
 
-const modulo = ref<ModuloCompleto | null>(null);
-try {
-  const res: Response = await $fetch('https://andrellaveloise.it/forms?Codice=' + formCode, {
-    method: 'get',
-    onResponseError({ response }) {
-      if (response.status === 404) {
-        modulo.value = {
-          Titolo: response._data.data?.Titolo || '',
-          Descrizione: response._data.data?.Descrizione || '',
-          Sezioni: [
-            {
-              Nome: '',
-              Domande: [
-                {
-                  Testo: '',
-                  Descrizione: '',
-                  Tipologia: null,
-                  Risposte: [
-                    {
-                      Testo: '',
-                      Punteggio: 0,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        };
-        throw new Error('Modulo non trovato, creato oggetto vuoto con titolo e descrizione.');
-      }
-    },
-  })
-  modulo.value = res.data
-} catch (error) {
-  // Se modulo.value non è già stato impostato dal 404, fallback generico
-  if (!modulo.value) {
-    modulo.value = {
-      Titolo: '',
-      Descrizione: '',
-      Sezioni: [], // <-- Inizializza sempre come array vuoto
-    }
-  } else if (!modulo.value.Sezioni) {
-    // Se per qualche motivo Sezioni non è stato impostato
-    modulo.value.Sezioni = [];
-  }
-} finally {
-  console.log(modulo.value)
-}
+
+// try {
+//   const res: Response = await $fetch('https://andrellaveloise.it/forms?Codice=' + formCode, {
+//     method: 'get',
+//     onResponseError({ response }) {
+//       if (response.status === 404) {
+//         modulo.value = {
+//           Titolo: response._data.data?.Titolo || '',
+//           Descrizione: response._data.data?.Descrizione || '',
+//           Sezioni: [
+//             {
+//               Nome: '',
+//               Domande: [
+//                 {
+//                   Testo: '',
+//                   Descrizione: '',
+//                   Tipologia: null,
+//                   Risposte: [
+//                     {
+//                       Testo: '',
+//                       Punteggio: 0,
+//                     },
+//                   ],
+//                 },
+//               ],
+//             },
+//           ],
+//         };
+//         throw new Error('Modulo non trovato, creato oggetto vuoto con titolo e descrizione.');
+//       }
+//     },
+//   })
+//   modulo.value = res.data
+// } catch (error) {
+//   // Se modulo.value non è già stato impostato dal 404, fallback generico
+//   if (!modulo.value) {
+//     modulo.value = {
+//       Titolo: '',
+//       Descrizione: '',
+//       Sezioni: [], // <-- Inizializza sempre come array vuoto
+//     }
+//   } else if (!modulo.value.Sezioni) {
+//     // Se per qualche motivo Sezioni non è stato impostato
+//     modulo.value.Sezioni = [];
+//   }
+// } finally {
+//   console.log(modulo.value)
+// }
 
 // Dopo il caricamento del modulo, assicura che le risposte siano coerenti con la tipologia
-if (modulo.value && Array.isArray(modulo.value.Sezioni)) {
-  modulo.value.Sezioni.forEach((sezione: SezioneModulo, sezioneIndex: number) => {
-    if (Array.isArray(sezione.Domande)) {
-      sezione.Domande.forEach((domanda: DomandaModulo, domandaIndex: number) => {
-        if (domanda.IDF_Tipologia) {
-          aggiornaTipologiaDomanda(sezioneIndex, domandaIndex, domanda.IDF_Tipologia);
+if (modulo.value && Array.isArray(modulo.value.data?.sections)) {
+  // Itera su ogni sezione e domanda per aggiornare le tipologie
+  modulo.value.data?.sections.forEach((sezione, sezioneIndex) => {
+    if (Array.isArray(sezione.questions)) {
+      sezione.questions.forEach((domanda, domandaIndex) => {
+        if (domanda.type) {
+          aggiornaTipologiaDomanda(sezioneIndex, domandaIndex, domanda.type);
         }
       });
     }
@@ -84,141 +108,97 @@ if (modulo.value && Array.isArray(modulo.value.Sezioni)) {
 
 // Funzioni per aggiungere sezioni, domande e risposte
 
-function aggiungiSezione() {
-  modulo.value!.Sezioni = [
-    ...modulo.value!.Sezioni,
-    {
-      Nome: '',
-      Domande: [
-        {
-          Testo: '',
-          Descrizione: '',
-          // Tipologia non inizializzata
-          Risposte: [
-            {
-              Testo: '',
-              Punteggio: 0,
-            },
-          ],
-        },
-      ],
-    },
-  ];
+// aggiungi risposta
+function aggiungiRisposta(sezioneIndex: number, domandaIndex: number) {
+  const domanda = modulo.value.data?.sections[sezioneIndex]?.questions[domandaIndex];
+  if (!domanda) return;
+  if (!Array.isArray(domanda.options)) domanda.options = [];
+  domanda.options.push({ label: '', score: 0 });
 }
 
-function aggiungiDomanda(sezioneIndex: number) {
-  const sezioni = [...modulo.value!.Sezioni];
-  sezioni[sezioneIndex] = {
-    ...sezioni[sezioneIndex],
-    Domande: [
-      ...sezioni[sezioneIndex].Domande,
+function aggiungiSezione() {
+  modulo.value.data?.sections.push({
+    title: '',
+    questions: [
       {
-        Testo: '',
-        Descrizione: '',
-        Risposte: [
-          {
-            Testo: '',
-            Punteggio: 0,
-          },
+        label: '',
+        description: '',
+        type: 4,
+        options: [
+          { label: '', score: 0 },
         ],
       },
     ],
-  };
-  modulo.value!.Sezioni = sezioni;
+  });
+}
+
+function aggiungiDomanda(sezioneIndex: number) {
+  modulo.value.data?.sections[sezioneIndex].questions.push({
+    label: '',
+    description: '',
+    type: 4,
+    options: [
+      { label: '', score: 0 },
+    ],
+  });
 }
 
 function aggiornaTipologiaDomanda(sezioneIndex: number, domandaIndex: number, nuovaTipologia: number | string) {
-  const tipologiaNum = typeof nuovaTipologia === 'string' ? parseInt(nuovaTipologia) : nuovaTipologia;
-  const domanda = modulo.value!.Sezioni[sezioneIndex].Domande[domandaIndex];
-  domanda.Tipologia = tipologiaNum;
-  domanda.IDF_Tipologia = tipologiaNum;
-
-  if (tipologiaNum === 4) {
-    if (!Array.isArray(domanda.Risposte) || domanda.Risposte.length === 0) {
-      domanda.Risposte = [{ Testo: '', Punteggio: 0 }];
+  const typeNum = typeof nuovaTipologia === 'string' ? parseInt(nuovaTipologia) : nuovaTipologia;
+  const domanda = modulo.value.data?.sections[sezioneIndex]?.questions[domandaIndex];
+  if (!domanda) return;
+  domanda.type = typeNum;
+  if (typeNum === 4) {
+    if (!Array.isArray(domanda.options) || domanda.options.length === 0) {
+      domanda.options = [{ label: '', score: 0 }];
     }
-    delete domanda.RispostaBreve;
-  } else if (tipologiaNum === 5) {
-    domanda.Risposte = [
-      { Testo: 'Vero', Punteggio: 1 },
-      { Testo: 'Falso', Punteggio: 0 },
+    // Risposte testuali non previste
+  } else if (typeNum === 5) {
+    domanda.options = [
+      { label: 'Vero', score: 1 },
+      { label: 'Falso', score: 0 },
     ];
-    delete domanda.RispostaBreve;
-  } else if (tipologiaNum === 6) {
-    domanda.Risposte = undefined;
-    domanda.RispostaBreve = '';
-  } else if (tipologiaNum === 7) {
-    domanda.Risposte = undefined;
-    domanda.RispostaLunga = '';
-  } else if (tipologiaNum === 8) {
-    domanda.Risposte = undefined;
-    domanda.RispostaNoLimiti = '';
+  } else if (typeNum === 6) {
+    domanda.options = [{ label: '', score: 0 }];
+  } else if (typeNum === 7) {
+    domanda.options = [{ label: '', score: 0 }];
+  } else if (typeNum === 8) {
+    domanda.options = [{ label: '', score: 0 }];
   } else {
-    domanda.Risposte = undefined;
-    delete domanda.RispostaBreve;
-    delete domanda.RispostaLunga;
-    delete domanda.RispostaNoLimiti;
+    domanda.options = [];
   }
 }
 
 async function inviaModulo() {
   const moduloDaInviare = {
-    Sezioni: modulo.value!.Sezioni.map((sezione: SezioneModulo) => ({
-      Nome: sezione.Nome,
-      Domande: sezione.Domande.map((domanda: DomandaModulo) => {
+    title: modulo.value.title,
+    description: modulo.value.description,
+    sections: modulo.value.data?.sections.map((sezione: Section) => ({
+      title: sezione.title,
+      questions: sezione.questions.map((domanda) => {
         const base = {
-          Testo: domanda.Testo,
-          Descrizione: domanda.Descrizione,
-          Tipologia: domanda.IDF_Tipologia || domanda.Tipologia
+          label: domanda.label,
+          description: domanda.description,
+          type: domanda.type
         };
-        if (domanda.IDF_Tipologia === 4 || domanda.IDF_Tipologia === 5) {
-          return {
-            ...base,
-            Risposte: (domanda.Risposte || []).map((r: RispostaOpzione) => ({
-              Testo: r.Testo,
-              Punteggio: r.Punteggio
-            }))
-          };
-        }
-        if (domanda.IDF_Tipologia === 6 && domanda.RispostaBreve) {
-          return {
-            ...base,
-            Risposte: [{ Testo: domanda.RispostaBreve, Punteggio: domanda.PunteggioBreve }]
-          };
-        }
-        if (domanda.IDF_Tipologia === 7 && domanda.RispostaLunga) {
-          return {
-            ...base,
-            Risposte: [{ Testo: domanda.RispostaLunga, Punteggio: domanda.PunteggioLunga }]
-          };
-        }
-        if (domanda.IDF_Tipologia === 8 && domanda.RispostaNoLimiti) {
-          return {
-            ...base,
-            Risposte: [{ Testo: domanda.RispostaNoLimiti, Punteggio: domanda.PunteggioNoLimiti }]
-          };
-        }
-        if ((domanda.IDF_Tipologia === 6 && !domanda.RispostaBreve) ||
-          (domanda.IDF_Tipologia === 7 && !domanda.RispostaLunga) ||
-          (domanda.IDF_Tipologia === 8 && !domanda.RispostaNoLimiti)) {
-          let punteggio = domanda.PunteggioBreve ?? 0;
-          if (domanda.IDF_Tipologia === 7) punteggio = domanda.PunteggioLunga ?? 0;
-          if (domanda.IDF_Tipologia === 8) punteggio = domanda.PunteggioNoLimiti ?? 0;
-          return {
-            ...base,
-            Risposte: [{ Testo: null, Punteggio: punteggio }]
-          };
-        }
-        return base;
+        // Tutte le risposte sono in options, anche per domande testuali
+        return {
+          ...base,
+          options: (domanda.options || []).map((r) => ({
+            label: r.label,
+            score: r.score
+          }))
+        };
       })
     }))
   };
-
+  console.log(moduloDaInviare);
+  return
   try {
     const res: Response = await $fetch('https://andrellaveloise.it/forms/users', {
       method: 'POST',
       body: {
-        Token: token,
+        session_uuid,
         Codice: formCode,
         ...moduloDaInviare,
       },
@@ -250,26 +230,20 @@ async function inviaModulo() {
 
 // Funzione per rimuovere una domanda
 function rimuoviDomanda(sezioneIndex: number, domandaIndex: number) {
-  const sezioni = [...modulo.value!.Sezioni];
-  const domande = sezioni[sezioneIndex].Domande.filter((_: DomandaModulo, idx: number) => idx !== domandaIndex);
-  sezioni[sezioneIndex] = { ...sezioni[sezioneIndex], Domande: domande };
-  modulo.value!.Sezioni = sezioni;
+  modulo.value.data?.sections[sezioneIndex]?.questions.splice(domandaIndex, 1);
 }
 
 // Funzione per rimuovere una sezione
 function rimuoviSezione(sezioneIndex: number) {
-  modulo.value!.Sezioni = modulo.value!.Sezioni.filter((_: SezioneModulo, idx: number) => idx !== sezioneIndex);
+  modulo.value.data?.sections.splice(sezioneIndex, 1);
 }
 
 // Funzione per rimuovere una risposta
 function rimuoviRisposta(sezioneIndex: number, domandaIndex: number, rispostaIndex: number) {
-  const sezioni = [...modulo.value!.Sezioni];
-  const domande = [...sezioni[sezioneIndex].Domande];
-  const domanda = { ...domande[domandaIndex] };
-  domanda.Risposte = domanda.Risposte?.filter((_: RispostaOpzione, idx: number) => idx !== rispostaIndex);
-  domande[domandaIndex] = domanda;
-  sezioni[sezioneIndex] = { ...sezioni[sezioneIndex], Domande: domande };
-  modulo.value!.Sezioni = sezioni;
+  const domanda = modulo.value.data?.sections[sezioneIndex]?.questions[domandaIndex];
+  if (domanda && Array.isArray(domanda.options)) {
+    domanda.options.splice(rispostaIndex, 1);
+  }
 }
 </script>
 
@@ -277,9 +251,13 @@ function rimuoviRisposta(sezioneIndex: number, domandaIndex: number, rispostaInd
   <Toast />
   <div class="p-4">
     <div class="flex items-center gap-3 mb-8 p-4 rounded-lg shadow bg-white border-b-4" style="border-color: #10b981;">
-      <Button icon="pi pi-arrow-left" class="p-button-rounded p-button-secondary" as="router-link" to="/dashboard" />
+      <Button icon="pi pi-arrow-left" class="p-button-rounded p-button-secondary" as="router-link" to="/dashboard">
+        <Icon name="solar:arrow-left-bold-duotone" />
+      </Button>
       <Button icon="pi pi-eye" outlined class="p-button-rounded p-button-info" as="router-link"
-        :to="`/view/${$route.params.code}`" />
+        :to="`/dashboard/view/${$route.params.code}`">
+        <Icon name="solar:eye-bold-duotone" />
+      </Button>
 
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Crea Modulo</h1>
@@ -288,63 +266,66 @@ function rimuoviRisposta(sezioneIndex: number, domandaIndex: number, rispostaInd
     </div>
 
     <!-- Titolo e descrizione del modulo -->
-    <div class="mb-4">
+    <!-- <div class="mb-4">
       <label class="block text-sm font-medium text-gray-700">Titolo</label>
-      <InputText v-model="modulo.Titolo" class="mt-1 block w-full" disabled />
+      <InputText v-model="modulo?.title" class="mt-1 block w-full" disabled />
 
       <label class="block text-sm font-medium text-gray-700 mt-4">Descrizione</label>
-      <Textarea v-model="modulo.Descrizione" class="mt-1 block w-full" auto-resize disabled />
-    </div>
+      <Textarea v-model="modulo?.description" class="mt-1 block w-full" auto-resize disabled />
+    </div> -->
 
     <!-- Sezioni -->
-    <div v-for="(sezione, sezioneIndex) in modulo.Sezioni" :key="sezioneIndex"
+    <div v-for="(sezione, sezioneIndex) in modulo.data?.sections" :key="sezioneIndex"
       class="mb-6 border border-gray-400 p-4 rounded">
       <div class="flex justify-between items-center mb-2">
         <label class="block text-sm font-medium text-gray-700">Nome Sezione</label>
-        <Button icon="pi pi-trash" severity="danger" text rounded size="small" @click="rimuoviSezione(sezioneIndex)"
-          label="Rimuovi sezione" class="ml-2 p-button-danger" />
+        <Button severity="danger" text @click="rimuoviSezione(sezioneIndex)" class="ml-2">
+          <Icon name="solar:trash-bin-2-bold-duotone" />
+          <span class="font-semibold">Rimuovi sezione</span>
+        </Button>
       </div>
-      <InputText v-model="sezione.Nome" class="mt-1 block w-full" />
+      <InputText v-model="sezione.title" class="mt-1 block w-full" />
 
       <!-- Domande -->
-      <div v-for="(domanda, domandaIndex) in sezione.Domande" :key="domandaIndex"
+      <div v-for="(domanda, domandaIndex) in sezione.questions" :key="domandaIndex"
         class="mt-4 border border-gray-400 p-4 rounded">
         <label class="block text-sm font-medium text-gray-700">Testo Domanda</label>
-        <InputText v-model="domanda.Testo" class="mt-1 block w-full" />
+        <InputText v-model="domanda.label" class="mt-1 block w-full" />
 
         <label class="block text-sm font-medium text-gray-700 mt-4">Descrizione Domanda</label>
-        <Textarea v-model="domanda.Descrizione" class="mt-1 block w-full" auto-resize />
+        <Textarea v-model="domanda.description" class="mt-1 block w-full" auto-resize />
 
         <label class="block text-sm font-medium text-gray-700 mt-4">Tipologia Domanda</label>
-        <Dropdown v-model.number="domanda.IDF_Tipologia" :options="Tipologie" optionLabel="Nome"
-          optionValue="ID_Tipologia" placeholder="Seleziona tipologia" class="mt-1 block w-full"
-          @change="aggiornaTipologiaDomanda(sezioneIndex, domandaIndex, domanda.IDF_Tipologia)" />
+        <Select v-model.number="domanda.type" :options="types" optionLabel="text" optionValue="id_type"
+          placeholder="Seleziona tipologia" class="mt-1 block w-full"
+          @change="aggiornaTipologiaDomanda(sezioneIndex, domandaIndex, domanda.type)" />
 
         <!-- Risposte -->
-        <div v-if="domanda.IDF_Tipologia && (domanda.IDF_Tipologia === 4 || domanda.IDF_Tipologia === 5)"
-          class="mt-4 flex flex-col gap-2">
-          <div v-for="(risposta, rispostaIndex) in domanda.Risposte ?? []" :key="rispostaIndex"
+        <div v-if="domanda.type && (domanda.type === 4 || domanda.type === 5)" class="mt-4 flex flex-col gap-2">
+          <div v-for="(risposta, rispostaIndex) in domanda.options ?? []" :key="rispostaIndex"
             class="flex items-center gap-2">
-            <InputText v-model="risposta.Testo" class="w-1/2" placeholder="Testo risposta" />
-            <InputText :value="risposta.Punteggio?.toString() ?? ''" type="number" class="w-24"
-              @input="e => risposta.Punteggio = Number((e.target as HTMLInputElement).value)" placeholder="Punteggio" />
-            <Button v-if="domanda.IDF_Tipologia === 4 && domanda.Risposte && domanda.Risposte.length > 1"
-              icon="pi pi-trash" severity="danger" text rounded size="small"
-              @click="rimuoviRisposta(sezioneIndex, domandaIndex, rispostaIndex)" class="p-button-danger" />
+            <InputText v-model="risposta.label" class="w-1/2" placeholder="Testo risposta" />
+            <InputText :value="risposta.score?.toString() ?? ''" type="number" class="w-24"
+              @input="e => risposta.score = Number((e.target as HTMLInputElement).value)" placeholder="Punteggio" />
+            <Button v-if="domanda.options && domanda.options.length > 1" icon="pi pi-trash" severity="danger" text
+              rounded size="small" @click="rimuoviRisposta(sezioneIndex, domandaIndex, rispostaIndex)"
+              class="p-button-danger">
+              <Icon name="solar:trash-bin-2-bold-duotone" />
+            </Button>
           </div>
-          <Button v-if="domanda.IDF_Tipologia === 4" @click="aggiungiRisposta(sezioneIndex, domandaIndex)"
-            class="mt-2 w-fit p-button-success" outlined label="Aggiungi Risposta" icon="pi pi-plus" />
+          <Button v-if="domanda.type === 4" @click="aggiungiRisposta(sezioneIndex, domandaIndex)"
+            class="mt-2 w-fit p-button-success" outlined label="Aggiungi Risposta" />
 
           <!-- ANTEPRIMA RISPOSTE -->
           <div class="mt-4 p-3 rounded border border-blue-300 bg-blue-50">
             <div class="font-semibold mb-2 text-blue-800">Anteprima risposte:</div>
             <ul class="list-disc pl-5">
-              <li v-for="(risposta, idx) in domanda.Risposte ?? []" :key="'preview-' + idx">
-                <span class="text-gray-800">{{ risposta.Testo }}</span>
-                <span v-if="domanda.IDF_Tipologia === 4" class="text-xs text-gray-500 ml-2">(Punteggio: {{
-                  risposta.Punteggio }})</span>
-                <span v-if="domanda.IDF_Tipologia === 5" class="text-xs text-gray-500 ml-2">(Punteggio: {{
-                  risposta.Punteggio }})</span>
+              <li v-for="(risposta, idx) in domanda.options ?? []" :key="'preview-' + idx">
+                <span class="text-gray-800">{{ risposta.label }}</span>
+                <span v-if="domanda.type === 4" class="text-xs text-gray-500 ml-2">(Punteggio: {{
+                  risposta.score }})</span>
+                <span v-if="domanda.type === 5" class="text-xs text-gray-500 ml-2">(Punteggio: {{
+                  risposta.score }})</span>
               </li>
             </ul>
           </div>
@@ -352,32 +333,45 @@ function rimuoviRisposta(sezioneIndex: number, domandaIndex: number, rispostaInd
         </div>
 
         <!-- Risposta Breve -->
-        <div v-else-if="domanda.IDF_Tipologia === 6" class="w-full mt-2 flex items-center gap-2">
-          <InputText class="w-full" placeholder="Risposta breve" v-model="domanda.RispostaBreve" disabled />
-          <InputText type="number" class="w-40" placeholder="Punteggio" v-model.number="domanda.PunteggioBreve" />
+        <div v-else-if="domanda.type === 6" class="w-full mt-2 flex items-center gap-2">
+          <InputText disabled class="w-full" placeholder="Risposta breve" :value="domanda.options?.[0]?.label ?? ''"
+            @input="e => domanda.options && (domanda.options[0].label = (e.target as HTMLInputElement).value)" />
+          <InputText type="number" class="w-40" placeholder="Punteggio"
+            :value="String(domanda.options?.[0]?.score ?? '')"
+            @input="e => domanda.options && (domanda.options[0].score = Number((e.target as HTMLInputElement).value))" />
         </div>
         <!-- Risposta Lunga -->
-        <div v-else-if="domanda.IDF_Tipologia === 7" class="w-full mt-2 flex items-center gap-2">
-          <Textarea class="w-full" auto-resize placeholder="Risposta lunga" v-model="domanda.RispostaLunga" disabled />
-          <InputText type="number" class="w-40" placeholder="Punteggio" v-model.number="domanda.PunteggioLunga" />
+        <div v-else-if="domanda.type === 7" class="w-full mt-2 flex items-center gap-2">
+          <Textarea disabled class="w-full" auto-resize placeholder="Risposta lunga"
+            :modelValue="domanda.options?.[0]?.label ?? ''"
+            @update:modelValue="val => domanda.options && (domanda.options[0].label = val)" />
+          <InputText type="number" class="w-40" placeholder="Punteggio"
+            :value="String(domanda.options?.[0]?.score ?? '')"
+            @input="e => domanda.options && (domanda.options[0].score = Number((e.target as HTMLInputElement).value))" />
         </div>
         <!-- Risposta No Limiti -->
-        <div v-else-if="domanda.IDF_Tipologia === 8" class="w-full mt-2 flex items-center gap-2">
-          <Textarea class="w-full" auto-resize placeholder="Risposta senza limiti" v-model="domanda.RispostaNoLimiti"
-            disabled />
-          <InputText type="number" class="w-40" placeholder="Punteggio" v-model.number="domanda.PunteggioNoLimiti" />
+        <div v-else-if="domanda.type === 8" class="w-full mt-2 flex items-center gap-2">
+          <Textarea disabled class="w-full" auto-resize placeholder="Risposta senza limiti"
+            :modelValue="domanda.options?.[0]?.label ?? ''"
+            @update:modelValue="val => domanda.options && (domanda.options[0].label = val)" />
+          <InputText type="number" class="w-40" placeholder="Punteggio"
+            :value="String(domanda.options?.[0]?.score ?? '')"
+            @input="e => domanda.options && (domanda.options[0].score = Number((e.target as HTMLInputElement).value))" />
         </div>
 
-        <Button @click="rimuoviDomanda(sezioneIndex, domandaIndex)" class="mt-4  p-button-danger"
-          label="Elimina Domanda" icon="pi pi-trash" outlined />
+        <Button @click="rimuoviDomanda(sezioneIndex, domandaIndex)" class="mt-4  p-button-danger" outlined>
+          <Icon name="solar:trash-bin-2-bold-duotone" />
+          <span class="font-semibold">Rimuovi Domanda</span>
+        </Button>
       </div>
 
-      <Button @click="aggiungiDomanda(sezioneIndex)" class="mt-4 p-button-success" outlined label="Aggiungi Domanda"
-        icon="pi pi-plus" />
+      <Button @click="aggiungiDomanda(sezioneIndex)" class="mt-4 p-button-success" outlined>
+        <span class="font-semibold">Aggiungi domanda</span>
+      </Button>
     </div>
     <div class="flex gap-4 mt-4">
-      <Button @click="aggiungiSezione" label="Aggiungi Sezione" outlined icon="pi pi-plus" class="p-button-success" />
-      <Button @click="inviaModulo" class="!bg-[#10b981]" label="Invia Modulo" icon="pi pi-send" />
+      <Button @click="aggiungiSezione" label="Aggiungi Sezione" outlined class="p-button-success" />
+      <Button @click="inviaModulo" class="!bg-[#10b981]" label="Invia Modulo" />
     </div>
   </div>
 </template>

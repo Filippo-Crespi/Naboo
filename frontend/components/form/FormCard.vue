@@ -20,14 +20,14 @@
     </div>
     <div class="mt-6 flex justify-between gap-4">
       <div class="flex items-center gap-2">
-        <Button as="router-link" :to="`/edit/${form.code}`" rounded>
+        <Button as="router-link" :to="`/dashboard/edit/${form.code}`" rounded>
           <Icon name="solar:pen-bold-duotone" />
         </Button>
         <Button severity="danger" @click="showDeleteDialog = true">
           <Icon name="solar:trash-bin-2-bold-duotone" />
         </Button>
       </div>
-      <Button as="router-link" outlined severity="info" :to="`/report/${form.code}`" rounded>
+      <Button as="router-link" outlined severity="info" :to="`/dashboard/report/${form.code}`" rounded>
         <Icon name="solar:documents-bold-duotone" class="text-[#10b981]" />
       </Button>
     </div>
